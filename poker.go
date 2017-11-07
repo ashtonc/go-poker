@@ -2,12 +2,13 @@ package main
 
 import (
 	"database/sql"
-	"html/template"
 	"log"
 	"net/http"
+	//"html/template"
 
 	_ "github.com/lib/pq"
 	"github.com/gorilla/mux"
+	//golang.org/x/crypto/scrypt
 )
 
 const (
@@ -17,8 +18,8 @@ const (
 	DB_NAME     = "pokerdb"
 )
 
-func main() {
-	r := mux.NewRouter()
+func main() {	
+	// todo: don't use DB globals: http://www.alexedwards.net/blog/organising-database-access
 	
 	// Create a new database and save information about the database in a string
 	var db *sql.DB
@@ -39,9 +40,10 @@ func main() {
 		log.Fatal(err)
 	}
 	
+	// Create a new router
+	r := mux.NewRouter()
 	
 	// -- Handlers here --
-	
 	
 	// Start the server
 	log.Print("Running server on port " + PORT + ".")
