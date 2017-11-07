@@ -48,7 +48,7 @@ execute 'create-server-session' do
   command 'tmux new-session -d -s server'
 end
 execute 'start-server' do
-#  command "tmux send-keys -t server 'go run poker470.go' C-m"
+  command "tmux send-keys -t server 'go run poker.go' C-m"
 end
 
 # To access the program/prompt from inside the vm:
