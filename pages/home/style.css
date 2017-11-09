@@ -7,6 +7,10 @@ button {
 	padding: 5em;
 }
 
+.register-content {
+	position: relative;
+}
+
 .play {
 	font: 500px;
 }
@@ -18,15 +22,32 @@ button {
 	position: fixed;
 	text-decoration: none;
 	padding: 12px;
+	text-align: right;
 }
 
 .nav-links {
-	color: white;
+	color: #DDD;
     font-family: "Courier New", Courier, monospace;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
-a:hover {
+.nav-bar a:hover {
 	background-color: #444;
-	color: #BBB;
+	color: #FFF;
 	text-decoration: none;
+	padding: 12px;
+}
+
+#poker470-logo {
+	text-align: center;
+	color: #FFF;
+	height: 0px;
+}
+
+#poker470-logo a:visited {
+	color: #FFF;
+    font-family: "Courier New", Courier, monospace;
+    padding-left: 1em;
+    padding-right: 1em;
 }
