@@ -22,7 +22,7 @@ button {
 button:hover {
     background-color: red; /* Green */
     color: white;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.1), 0 5px 15px 0 rgba(0,0,0,0.10);
 }
 
 .register-content {
@@ -64,9 +64,13 @@ button:hover {
 	height: 0px;
 }
 
-#poker470-logo a:visited {
-	color: #FFF;
+a:visited {
+	color: #DDD;
     font-family: "Courier New", Courier, monospace;
     padding-left: 1em;
     padding-right: 1em;
+}
+
+a:active {
+	color: #DDD;
 }
