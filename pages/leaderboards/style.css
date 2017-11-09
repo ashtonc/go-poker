@@ -1,0 +1,93 @@
+body {background:url(https://zyzixun.net/data/out/133/3986974-poker-wallpapers.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+h1 {color: white; text-align: center;}
+
+form .labels {
+	color: #fff; 
+	font-family: "Courier New", Courier, monospace; 
+	font-weight: bold;
+	padding: 1em;
+}
+
+form img {
+	margin: 1%;
+}
+
+.profile-icon {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+input[type="text"] {
+	margin: 1.5em;
+}
+
+input[type="password"] {
+	margin: 1.5em;
+}
+
+input[type="email"] {
+	margin: 1.5em;
+}
+
+input[type="submit"] {
+	margin: auto;
+	position: relative;
+    width: 15%;
+    border: 3px solid green;
+    font-family: "Courier New", Courier, monospace;
+    transition-duration: 0.4s;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.register-button { text-align: center; }
+
+.register-content {
+    margin: auto;
+    width: 50%;
+    border: 3px solid white;
+    padding: 20px;
+}
+
+.nav-bar {
+	background-color: #333;
+	width: 100%;
+	height: 50px;
+	position: fixed;
+	text-decoration: none;
+	padding: 12px;
+	text-align: right;
+}
+
+.nav-links {
+	color: #DDD;
+    font-family: "Courier New", Courier, monospace;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.nav-bar a:hover {
+	background-color: #444;
+	color: #FFF;
+	text-decoration: none;
+	padding: 12px;
+}
+
+#poker470-logo {
+	text-align: center;
+	color: #FFF;
+	height: 0px;
+}
+
+#poker470-logo a:visited {
+	color: #FFF;
+    font-family: "Courier New", Courier, monospace;
+    padding-left: 1em;
+    padding-right: 1em;
+}
