@@ -17,10 +17,12 @@ button {
     transition-duration: 0.4s;
     border-radius: 8px;
     border: 2px solid red;
+    opacity: 0.7;
+    filter: alpha(opacity=70);
 }
 
 button:hover {
-    background-color: red; /* Green */
+    background-color: red;
     color: white;
     box-shadow: 0 6px 10px 0 rgba(0,0,0,0.1), 0 5px 15px 0 rgba(0,0,0,0.10);
 }
