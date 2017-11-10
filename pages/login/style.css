@@ -1,14 +1,14 @@
-body {background:url(https://zyzixun.net/data/out/133/3986974-poker-wallpapers.jpg) no-repeat center center fixed;
+body {background:url(https://images5.alphacoders.com/449/thumb-1920-449376.jpg) no-repeat center center fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
 }
 
-h1 {color: white; text-align: center;}
+h1 {color: black; text-align: center;}
 
 form .labels {
-	color: #fff; 
+	color: black; 
 	font-family: "Courier New", Courier, monospace; 
 	font-weight: bold;
 	padding: 1em;
@@ -49,6 +49,9 @@ input[type="submit"] {
     width: 50%;
     padding: 20px;
     text-align: center;
+    background-color: white;
+    opacity: 0.75;
+    border-radius: 12px;
 }
 
 .nav-bar {

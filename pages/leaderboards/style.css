@@ -1,4 +1,4 @@
-body {background:url(https://zyzixun.net/data/out/133/3986974-poker-wallpapers.jpg) no-repeat center center fixed;
+body {background:url(https://images5.alphacoders.com/321/321988.jpg) no-repeat center center fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
@@ -15,11 +15,14 @@ form .labels {
 }
 
 table {
-	color: white;
+	color: black;
 	margin: auto;
     width: 50%;
     border: 3px solid white;
     text-align: center;
+    background-color: white;
+    opacity: 0.8;
+    border-radius: 12px;
 }
 
 th, td {
@@ -31,6 +34,7 @@ th, td {
     margin: auto;
     width: 50%;
     padding: 20px;
+
 }
 
 .nav-bar {
