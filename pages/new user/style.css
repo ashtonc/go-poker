@@ -5,10 +5,10 @@ body {background:url(https://images2.alphacoders.com/209/thumb-1920-209202.jpg) 
         background-size: cover;
 }
 
-h1 {color: white; text-align: center;}
+h1 {color: black; text-align: center;}
 
 form .labels {
-	color: #fff; 
+	color: black; 
 	font-family: "Courier New", Courier, monospace; 
 	font-weight: bold;
 	padding: 1em;
@@ -53,6 +53,9 @@ input[type="submit"] {
     width: 50%;
     border: 3px solid white;
     padding: 20px;
+    background-color: white;
+    opacity: 0.9;
+    border-radius: 12px;
 }
 
 .nav-bar {
