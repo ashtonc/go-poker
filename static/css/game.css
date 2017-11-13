@@ -1,5 +1,5 @@
 body{
-	background-image: url("game-background.jpg");
+	background-image: url("/design/game-background.jpg");
 	background-repeat: no-repeat;
 }
 iframe{
