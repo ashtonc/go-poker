@@ -42,10 +42,10 @@ type Player struct {			/* A more complete player struct will likely be someplace
 }
 
 
-func (p *Player) remove_card(Card){
-	index = getIndex(p.hand, card)
-	p.hand = append(p.hand[:index], p.hand[index+1:]...)
- }
+//func (p *Player) remove_card(Card){
+//	index := getIndex(p.Hand, card)
+//	p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
+ //}
 
 
 

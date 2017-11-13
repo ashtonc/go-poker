@@ -10,6 +10,7 @@ import(
   	"os"
   	"strings"
   	"sort"
+  	"strconv"
 )
 
 
@@ -62,7 +63,7 @@ beginning with the player who opened the first round (the latter is common when 
  		d++
  	}
  	/*first round betting */
- 	betting_round(players, minBet, maxBet)
+ 	betting_round(players, minBet, maxBet, pot)
  	if len(players) == 1 {
  		winner := players[0]
  		return &winner
@@ -70,7 +71,7 @@ beginning with the player who opened the first round (the latter is common when 
  	/* first draw */ 
  	redraw(players, deck)
  	/* second round of betting */
- 	betting_round(players, minBet, maxBet)
+ 	betting_round(players, minBet, maxBet, pot)
  	if len(players) == 1 {
  		winner := players[0]
  		return &winner
@@ -78,7 +79,7 @@ beginning with the player who opened the first round (the latter is common when 
  	/* second draw */ 
  	redraw(players, deck)
  	/* Third and final round of betting */
- 	betting_round(players, minBet, maxBet)
+ 	betting_round(players, minBet, maxBet, pot)
  	/* sort hands by rank to prepare for hand comparisons */
  	for _, p := range players{
  		if p.Folded == false{
@@ -97,20 +98,34 @@ func sort_hand_by_rank(hand []Card){
 }
 
 
+
+func place_bet_test(p Player, current int, min_bet int, max_bet int) int{
+	reader := bufio.NewReader(os.Stdin)
+	show_hand(p.Hand)
+	fmt.Printf("Please place your bet")
+	fmt.Printf("You have %d dollats and current bet is %d", p.Money, current)
+	fmt.Printf("Input -1 to fold, 0 to call or the amount you wish to raise")
+	input, _ := reader.ReadString('\n')
+	bet, _ := strconv.Atoi(input)
+	return bet
+
+
+}
+
  func (p *Player) place_bet(current int, max_bet int, min_bet int) int {
- 	options := []string {"call", "fold", "raise"}
- 	if current == 0{
- 		options := append(options, "check")
- 	}
+ 	//options := []string {"call", "fold", "raise"}
+ 	//if current == 0{
+ 	//	options := append(options, "check")
+ 	//}
  	if p.Money < current{
  		p.Folded = true
  		return current
- 		fmt.Printf("You need to be %d to stay in the game and only have %d", currnet, p.money)
+ 		fmt.Printf("You need to have %d dollars to stay in the game and only have %d", current, p.Money)
  		fmt.Printf("You have no choice but to fold")
  	}
  	fmt.Printf("Place bet for player %s", p.Name)
- 	show_hand(p.hand)
- 	value := place_bet(p, )
+ 	show_hand(p.Hand)
+ 	value := place_bet_test(*p, current, min_bet, max_bet)
  	/* 
  	value = function(options, max_bet, min_bet)
  	function should show (or call something to show) the appropriate player a pop-up or something with 
@@ -120,22 +135,35 @@ func sort_hand_by_rank(hand []Card){
  		p.Folded = true
  		return current
  	}
-    amount = current + value 
+    amount := current + value 
     return amount
 }
+
  
 
  func (p *Player) pay_bet(amount int, pot int){
- 	player.Money -= amount 
+ 	p.Money -= amount 
  	pot += amount
  }
 
- func (p *Player) stay_in(difference) bool {
+ func (p *Player) stay_in(difference int) bool {
+ 	reader := bufio.NewReader(os.Stdin)
  	if difference > p.Money{
  		p.Folded = true
  		return false
- 	/* show_fun() letting player know that he or she is out of the game */
+ 		fmt.Print("%s unable to meet the raised bet and is out of the game", p.Name)
  	}
+	fmt.Printf("The bet has been rased by %d", difference)
+	fmt.Printf("Will you stay in the game? (Y/N")
+	input, _ := reader.ReadString('\n')
+	var stay bool
+	if input == "N"{
+		stay = false
+	}else{stay = true
+	}
+
+ 	/* show_fun() letting player know that he or she is out of the game */
+ 	
  	/* stay = show_func(difference) player p gets a pop up asking if he or she wishes to keep up with
  	the latest bet in order to remain in the game */
  	if stay == false{
@@ -148,21 +176,22 @@ func sort_hand_by_rank(hand []Card){
 	
 
 
-func betting_round(players []Player, minBet int, max_bet int){
+func betting_round(players []Player, minBet int, maxBet int, pot int){
 	for _, p := range players{
 		p.Bet = 0
 	}
-	bet = 0
- 	for i, p := range players{
+	bet := 0
+ 	for _, p := range players{
  		if len(players) == 1{
  			return
  		}
- 		amount := p.place_bet(bet)
+ 		amount := p.place_bet(bet, minBet, maxBet)
 
  		for _, q := range players{
  			if amount > q.Bet{
- 				q.stay_in(amount - q.Bet)
- 				q.pay_bet(amount - q.Bet)
+ 				difference := amount - q.Bet
+ 				q.stay_in(difference)
+ 				q.pay_bet(difference, pot)
  			}
  		}
  		bet = amount
@@ -191,7 +220,7 @@ func redraw(players []Player, deck []Card){
  		if p.Folded == false{
  			/* remove = p.show_func() ask player which cards to remove return array of cards to be removed 
  			the array may be empty */
- 			hand := p.hand
+ 			hand := p.Hand
  			show_hand(hand)
  			fmt.Printf("Which cards would you like to discard?")
  			input, _ := reader.ReadString('\n')
@@ -201,10 +230,10 @@ func redraw(players []Player, deck []Card){
  		}
  	/* Deal new cards to players */
  	for _, p := range players{
- 		if p.folded == false{
- 			hand_size = len(p.Hand)
+ 		if p.Folded == false{
+ 			hand_size := len(p.Hand)
  			for hand_size < 5{
- 				card = draw(deck)
+ 				card := draw(deck)
  				p.Hand = append(p.Hand, card)
  				hand_size ++
  			}
@@ -215,22 +244,23 @@ func redraw(players []Player, deck []Card){
 func discarded_hand(hand []Card, discard_index []int)[]Card{
 
 	discard := make([]Card, 5)
-	for i, d := range discard_index {
+	for _, d := range discard_index {
 		discard = append(discard, hand[d])
 	}
 
-	disacded_hand := make([]Card, 5)
+	discarded_hand := make([]Card, 5)
 	check := true
-	for i, c := range hand{
-		for j, d := range hand{
+	for _, c := range hand{
+		for _, d := range hand{
 			if c.Face == d.Face && c.Suit == d.Suit{
-				check == false
+				check = false
 			}
 		if check == true{
 			discarded_hand = append(discarded_hand, c)
 			}
 		}
 	}
+	return discarded_hand
 }
 
 	/* hand ranking :
@@ -259,24 +289,24 @@ func showdown(players []Player)*Player{
 		"nothing": 0,
 	}
 
-	for i, p := range player{
+	for _, p := range players{
 		if p.Folded == false{
-			hand = p.hand
-			if check_straight_flush(){
+			hand := p.Hand
+			if check_straight_flush(hand){
 				score_category_map["straight_flush"]++
-			}else if check_four_of_a_kind(){
+			}else if check_four_of_a_kind(hand){
 				score_category_map["four_of_a_kind"]++
-			}else if check_full_house(){
+			}else if check_full_house(hand){
 				score_category_map["full_house"]++
-			}else if check_flush(){
+			}else if check_flush(hand){
 				score_category_map["flush"]++
-			}else if check_stright(){
+			}else if check_stright(hand){
 				score_category_map["straight"]++
-			}else if check_three_of_a_kind(){
+			}else if check_three_of_a_kind(hand){
 				score_category_map["three_of_a_kind"]++
-			}else if check_two_pairs(){
+			}else if check_two_pairs(hand){
 				score_category_map["two_pairs"] ++
-			}else if check_pair(){
+			}else if check_pair(hand){
 				score_category_map["pair"]++
 			}else{
 				score_category_map["nothing"]++
@@ -285,15 +315,16 @@ func showdown(players []Player)*Player{
 			when the best two hands belong to the same category */
 			
 		}
-		p := players[0]
-		return p
+		
 	}
+	p := players[0]
+	return &p
 }
 
 func check_flush(hand []Card)bool{
-	suit := hand[0].suit
-	for c := range p.hand{
-		if c.Suite != suit{
+	suit := hand[0].Suit
+	for _, c := range hand{
+		if c.Suit != suit{
 			return false
 		}
 	}
@@ -302,7 +333,7 @@ func check_flush(hand []Card)bool{
 
 func check_stright(hand []Card)bool{
 	for i := 1; i < len(hand); i++{
-		if hand[i] != hand[i-1]+1{
+		if hand[i].Rank != hand[i-1].Rank+1{
 			return false
 		}
 	}
@@ -320,7 +351,7 @@ func check_straight_flush(hand []Card)bool{
 }
 
 func check_four_of_a_kind(hand []Card)bool{
-	if hand[0].Rank == hand[3].Rank[3] || hand[1].Rank == hand[4].Rank{
+	if hand[0].Rank == hand[3].Rank || hand[1].Rank == hand[4].Rank{
 		return true
 	}else{
   		return false
@@ -328,19 +359,19 @@ func check_four_of_a_kind(hand []Card)bool{
 }
 
 
-func check_full_house(hand []Card){
-	if hand[0].rank == hand[1].rank && hand[2].rank == hand[4].rank{
+func check_full_house(hand []Card)bool{
+	if hand[0].Rank == hand[1].Rank && hand[2].Rank == hand[4].Rank{
 		return true
 	}
-	if hand[0].rank == hand[2].rank && hand[3].rank == hand[4].rank{
+	if hand[0].Rank == hand[2].Rank && hand[3].Rank == hand[4].Rank{
 		return true
 	}else{
 		return false
 	}
 }
 
-func check_three_of_a_kind(hand []Card){
-	if hand[0].rank == hand[2].rank || hand[1].rank == hand[3].rank || hand[2].rank == hand[4].rank{
+func check_three_of_a_kind(hand []Card)bool{
+	if hand[0].Rank == hand[2].Rank || hand[1].Rank == hand[3].Rank || hand[2].Rank == hand[4].Rank{
 		return true
 	}else{
 		return false
@@ -354,14 +385,14 @@ func check_three_of_a_kind(hand []Card){
 */
 
 
-func check_two_pairs(hand []Card){
-	if hand[1].rank == hand[2].rank && hand[3].rank == hand[4].rank{
+func check_two_pairs(hand []Card)bool{
+	if hand[1].Rank == hand[2].Rank && hand[3].Rank == hand[4].Rank{
 		return true
 	}
-	if hand[0].rank == hand[1].rank && hand[3].rank == hand[4].rank{
+	if hand[0].Rank == hand[1].Rank && hand[3].Rank == hand[4].Rank{
 		return true
 	}
-	if hand[0].rank == hand[1].rank && hand[2].rank == hand[3].rank{
+	if hand[0].Rank == hand[1].Rank && hand[2].Rank == hand[3].Rank{
 		return true
 	}
 	return false
@@ -369,14 +400,15 @@ func check_two_pairs(hand []Card){
 
 /* this function must be used after the others, as it does not make sure that the hand has
 nothing greater than two of a kind */
-func check_pair(hand []Card){
+func check_pair(hand []Card)bool{
 	try := 0
 	for try < len(hand)-1{
 		for i := try+1; i < len(hand); i++{
-			if hand[try].rank == hand[i].rank{
+			if hand[try].Rank == hand[i].Rank{
 				return true
 			}
 		}
 		try ++
 	}
+	return false
 }
