@@ -7,7 +7,7 @@ import (
 )
 
 var cardTypes = [13]string{"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"}
-var suites    = [4]string{"hearts", "spades", "clubs", "diamonds"}
+var suites = [4]string{"hearts", "spades", "clubs", "diamonds"}
 
 func getIndex(array []string, item string) int {
 	for i := 0; i < len(array); i++ {
