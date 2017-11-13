@@ -2,14 +2,12 @@
 package logic
 
 import (
-	"math/random"
+	"math/rand"
 	"time"
 )
 
-const (
-	cardTypes = [13]string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"}
-	suites    = [4]string{"hearts", "spades", "clubs", "diamonds"}
-)
+var cardTypes = [13]string{"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"}
+var suites    = [4]string{"hearts", "spades", "clubs", "diamonds"}
 
 func getIndex(array []string, item string) int {
 	for i := 0; i < len(array); i++ {
@@ -26,16 +24,16 @@ func init() {
 
 /*classes:   */
 
-type Globals struct {
-	bets map[Player.name]int /*A map containing the bets of all players */
-}
-
 type Player struct { /* A more complete player struct will likely be someplace else in repo */
 	name   string
 	money  float32
 	hand   []Card
 	folded bool /*default value false */
 	bet    int
+}
+
+type Globals struct {
+	bets map[Player.name]int /*A map containing the bets of all players */
 }
 
 type Card struct {
