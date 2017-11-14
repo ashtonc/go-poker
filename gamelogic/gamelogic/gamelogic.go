@@ -9,12 +9,9 @@ import(
   	"fmt"
   	"os"
   	"strings"
-  	"sort"
+  	//"sort"
   	"strconv"
 )
-
-
-
 
 /* In casino play the first betting round begins with the player to the left of the big blind, 
 and subsequent rounds begin with the player to the dealer's left. Home games typically use an ante; 
@@ -40,169 +37,128 @@ beginning with the player who opened the first round (the latter is common when 
  	/* additional arguments might be added to function to denote display specifiations 
  	/* show() main game page
  	/* create and shuffle deck of cards */
+ 	//reader := bufio.NewReader(os.Stdin)
  	cardTypes, suites := Init_card_cat()
  	pot := 0
  	deck := createDeck(cardTypes, suites)
- 	shuffle(deck)
+ 	deck = shuffle(deck)
+ 	fmt.Printf("Deck test: \n")
+	for _, d := range deck{
+		fmt.Printf("%s of %s ", d.Face, d.Suit)
+	}
  	/*maybe show() some shuffle gif animation
  	/* each player pays the ante (may later swich to 'blind') */
- 	for _, p := range players{
- 		p.Money -= ante
- 	}
- 	/*display some text noting that each player is paying the ante and update the money in view
- 	}
+ 	for i := 0; i < len(players); i++{
+ 		players[i].Money -= ante
+ 		pot += ante
+ 		fmt.Printf("%s pays %d for ante \n", players[i].Name, ante)
+	}
+ 
  	/*first round dealing */
+ 	fmt.Printf("The dealer suffles the cards and begins dealing... \n")
+ 	bufio.NewReader(os.Stdin).ReadBytes('\n')
+
  	d := 0
  	for d < 5{
- 		for _, p := range players{
+ 		for i := 0; i < len(players); i++{
  			card := draw(deck)
- 			p.Hand = append(p.Hand, card)
- 				/*show card being added to player p - if p is "home" player show card face up at appriate 
- 				position. Else, have card added to one of the "other" players.  */
+ 			deck = deck[1:]
+ 			players[i].Hand = append(players[i].Hand, card)
+ 			fmt.Printf(" %s is delt a %s of %s \n ", players[i].Name, card.Face, card.Suit)
  		}
  		d++
  	}
  	/*first round betting */
- 	betting_round(players, minBet, maxBet, pot)
+ 	pot = betting_round(players, minBet, maxBet, pot)
  	if len(players) == 1 {
  		winner := players[0]
  		return &winner
  	}
  	/* first draw */ 
- 	redraw(players, deck)
+ 	deck = redraw(players, deck)
  	/* second round of betting */
- 	betting_round(players, minBet, maxBet, pot)
+ 	pot = betting_round(players, minBet, maxBet, pot)
  	if len(players) == 1 {
  		winner := players[0]
  		return &winner
  	}
  	/* second draw */ 
- 	redraw(players, deck)
+ 	deck= redraw(players, deck)
  	/* Third and final round of betting */
- 	betting_round(players, minBet, maxBet, pot)
+ 	pot = betting_round(players, minBet, maxBet, pot)
  	/* sort hands by rank to prepare for hand comparisons */
- 	for _, p := range players{
- 		if p.Folded == false{
- 			sort_hand_by_rank(p.Hand)
+ 	for i := 0; i < len(players); i++{
+ 		if players[i].Folded == false{
+ 			players[i].sort_hand_by_rank()
  		}
- 	} 	
+ 	}	
  	winner := showdown(players)
  	return winner
  		
  }
 
-func sort_hand_by_rank(hand []Card){
-	sort.Slice(hand[:], func(i, j int) bool {
-    return hand[i].Rank < hand[j].Rank
-	})
-}
-
 
 
 func place_bet_test(p Player, current int, min_bet int, max_bet int) int{
-	reader := bufio.NewReader(os.Stdin)
-	show_hand(p.Hand)
-	fmt.Printf("Please place your bet")
-	fmt.Printf("You have %d dollats and current bet is %d", p.Money, current)
-	fmt.Printf("Input -1 to fold, 0 to call or the amount you wish to raise")
-	input, _ := reader.ReadString('\n')
-	bet, _ := strconv.Atoi(input)
+	//reader := bufio.NewReader(os.Stdin)
+	p.show_hand()
+	fmt.Printf("%s, please place your bet \n", p.Name)
+	fmt.Printf("%s has %d dollars and current bet is %d \n", p.Name, p.Money, current)
+	fmt.Printf("Input -1 to fold, 0 to call or the amount you wish to raise \n")
+	var bet int
+    _, err := fmt.Scanf("%d", &bet)
+	//input, _ := reader.ReadString()
+	//fmt.Printf("Input = %s", input)
+	//bet, e := strconv.Atoi(input)
+	//fmt.Println(bet)
+	fmt.Println(err)
+	//fmt.Printf("Bet = %d", bet)
 	return bet
 
 
 }
 
- func (p *Player) place_bet(current int, max_bet int, min_bet int) int {
- 	//options := []string {"call", "fold", "raise"}
- 	//if current == 0{
- 	//	options := append(options, "check")
- 	//}
- 	if p.Money < current{
- 		p.Folded = true
- 		return current
- 		fmt.Printf("You need to have %d dollars to stay in the game and only have %d", current, p.Money)
- 		fmt.Printf("You have no choice but to fold")
- 	}
- 	fmt.Printf("Place bet for player %s", p.Name)
- 	show_hand(p.Hand)
- 	value := place_bet_test(*p, current, min_bet, max_bet)
- 	/* 
- 	value = function(options, max_bet, min_bet)
- 	function should show (or call something to show) the appropriate player a pop-up or something with 
- 	the options listed and ok button if call, return 0, if raise, return the amount added to bet,
- 	if fold, return -1. Do not let player bet more than his current money or the maximum bet*/
- 	if value == -1{
- 		p.Folded = true
- 		return current
- 	}
-    amount := current + value 
-    return amount
-}
 
- 
 
- func (p *Player) pay_bet(amount int, pot int){
- 	p.Money -= amount 
- 	pot += amount
- }
-
- func (p *Player) stay_in(difference int) bool {
- 	reader := bufio.NewReader(os.Stdin)
- 	if difference > p.Money{
- 		p.Folded = true
- 		return false
- 		fmt.Print("%s unable to meet the raised bet and is out of the game", p.Name)
- 	}
-	fmt.Printf("The bet has been rased by %d", difference)
-	fmt.Printf("Will you stay in the game? (Y/N")
-	input, _ := reader.ReadString('\n')
-	var stay bool
-	if input == "N"{
-		stay = false
-	}else{stay = true
-	}
-
- 	/* show_fun() letting player know that he or she is out of the game */
  	
- 	/* stay = show_func(difference) player p gets a pop up asking if he or she wishes to keep up with
- 	the latest bet in order to remain in the game */
- 	if stay == false{
- 		p.Folded = true
- 		return false
- 	}else{
- 		return true
- 	}
- }
-	
 
+func betting_round(players []Player, minBet int, maxBet int, pot int)int{
+	//reader := bufio.NewReader(os.Stdin)
 
-func betting_round(players []Player, minBet int, maxBet int, pot int){
-	for _, p := range players{
-		p.Bet = 0
+	for i := 0; i < len(players); i++{
+		players[i].Bet = 0
 	}
 	bet := 0
- 	for _, p := range players{
+	for i := 0; i < len(players); i++{
  		if len(players) == 1{
- 			return
+ 			return pot
  		}
- 		amount := p.place_bet(bet, minBet, maxBet)
-
- 		for _, q := range players{
- 			if amount > q.Bet{
- 				difference := amount - q.Bet
- 				q.stay_in(difference)
- 				q.pay_bet(difference, pot)
+ 		amount := players[i].place_bet(bet, minBet, maxBet)
+ 		pot = players[i].pay_bet(amount, pot)
+ 		players[i].Bet = amount + bet
+ 		bet = players[i].Bet
+ 		for j := 0; j < len(players); j++{
+ 			fmt.Printf("If raised, other players will need to match the bet of %d \n", bet)
+ 			if amount > players[j].Bet{
+ 				difference := amount - players[j].Bet
+ 				stay := players[j].stay_in(difference)
+ 				if stay == false{
+ 					fmt.Printf("%s is folding \n", players[j].Name)
+ 					players[j].Folded = true
+ 				}
+ 				if stay == true{
+ 					fmt.Printf("%s is staying ing the game \n", players[j].Name)
+ 					pot = players[j].pay_bet(difference, pot)
+ 				}
  			}
  		}
- 		bet = amount
+ 		//bet += amount
+ 		fmt.Printf("bet is currently %d \n", bet)
  	}
+ 	fmt.Printf("Returning from betting round \n")
+ 	return pot
 }
 
-func show_hand(hand []Card){
-	for i, crd := range hand{
-		fmt.Printf("%d %s of %s", i, crd.Face, crd.Suit)
-	}
-}
 
 func stringToIntSlice(initial string) []int{
  	strs := strings.Split(initial, " ")
@@ -213,50 +169,58 @@ func stringToIntSlice(initial string) []int{
     return ary
 }
 
-func redraw(players []Player, deck []Card){
-	reader := bufio.NewReader(os.Stdin)
+func redraw(players []Player, deck []Card)[]Card{
+	//reader := bufio.NewReader(os.Stdin)
 	/*Each player may discard cards */
- 	for _, p := range players{
- 		if p.Folded == false{
+	for i := 0; i < len(players); i++{
+ 		if players[i].Folded == false{
  			/* remove = p.show_func() ask player which cards to remove return array of cards to be removed 
  			the array may be empty */
- 			hand := p.Hand
- 			show_hand(hand)
- 			fmt.Printf("Which cards would you like to discard?")
- 			input, _ := reader.ReadString('\n')
+ 			players[i].show_hand()
+ 			fmt.Printf("Which cards would you like to discard? \n")
+ 			var input string
+ 			_, err := fmt.Scanf("%s\n", &input)
+ 			//n, err := fmt.Scanf("%d\n", &num)
+
+ 			//input, err := reader.ReadString('\n')
+ 			fmt.Println(err)
  			discard_index := stringToIntSlice(input)
- 			p.Hand = discarded_hand(p.Hand, discard_index)	
+ 			fmt.Printf("Discard index %v: \n", discard_index)
+ 			
+ 			players[i].Hand = discarded_hand(players[i].Hand, discard_index)	
  			}
  		}
  	/* Deal new cards to players */
- 	for _, p := range players{
- 		if p.Folded == false{
- 			hand_size := len(p.Hand)
+ 	for i := 0; i < len(players); i++{
+ 		if players[i].Folded == false{
+ 			hand_size := len(players[i].Hand)
  			for hand_size < 5{
  				card := draw(deck)
- 				p.Hand = append(p.Hand, card)
+ 				deck = deck[1:]
+ 				players[i].Hand = append(players[i].Hand, card)
  				hand_size ++
  			}
  		}
  	}
+ 	return deck
 }
 
 func discarded_hand(hand []Card, discard_index []int)[]Card{
 
 	discard := make([]Card, 5)
-	for _, d := range discard_index {
-		discard = append(discard, hand[d])
+	for i, d := range discard_index {
+		discard[i] = hand[d]
 	}
 
 	discarded_hand := make([]Card, 5)
 	check := true
-	for _, c := range hand{
+	for i, c := range hand{
 		for _, d := range hand{
 			if c.Face == d.Face && c.Suit == d.Suit{
 				check = false
 			}
 		if check == true{
-			discarded_hand = append(discarded_hand, c)
+			discarded_hand[i] = c
 			}
 		}
 	}
@@ -288,10 +252,9 @@ func showdown(players []Player)*Player{
 		"pair": 0,
 		"nothing": 0,
 	}
-
-	for _, p := range players{
-		if p.Folded == false{
-			hand := p.Hand
+	for i := 0; i < len(players); i++{
+		if players[i].Folded == false{
+			hand := players[i].Hand
 			if check_straight_flush(hand){
 				score_category_map["straight_flush"]++
 			}else if check_four_of_a_kind(hand){
