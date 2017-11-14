@@ -4,8 +4,8 @@ import(
 	"math/rand"
 	"time"
 	"fmt"
-	//"bufio"
-	//"os"
+	"bufio"
+	"os"
 	"sort"
 	"strings"
 )
@@ -54,7 +54,7 @@ type Player struct {			/* A more complete player struct will likely be someplace
  }
 
  func (p *Player) stay_in(difference int) bool {
- 	//reader := bufio.NewReader(os.Stdin)
+ 	reader := bufio.NewReader(os.Stdin)
  	if difference > p.Money{
  		p.Folded = true
  		return false
@@ -63,10 +63,9 @@ type Player struct {			/* A more complete player struct will likely be someplace
 	fmt.Printf("The bet has been rased by %d \n", difference)
 	fmt.Printf("Will %s stay in the game? (Y/N) \n", p.Name)
 	var input string
-    _, err := fmt.Scan("%s\n", &input)
-	//input, err := reader.ReadString('\n')
+	input, err := reader.ReadString('\n')
 	fmt.Println(err)
-	input = strings.Replace(input, "\n", "", -1)
+	input = strings.Replace(input, "\r\n", "", -1)
 	stay := false
 	if input == "N" || input == "n"{
 		stay = false
@@ -151,7 +150,6 @@ func (p *Player)sort_hand_by_rank(){
 	}
 } */
 
-
 //func (p *Player) remove_card(Card){
 //	index := getIndex(p.Hand, card)
 //	p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
@@ -200,12 +198,9 @@ func createDeck(cardTypes []string, suites []string)[]Card{
 
 func shuffle(d []Card)[]Card{
 	/*....   randomly re-order the array */
-	N := len(d)
-	for i := 0; i < N; i++ {
-		selection := rand.Intn(N - i)
-		temp := d[i]
-		d[i] = d[selection]
-		d[selection] = temp
+	for i := len(d) - 1; i > 0; i-- {
+		selection := rand.Intn(i + 1)
+		d[i], d[selection] = d[selection], d[i]
 	}
 	return d
 }

@@ -100,25 +100,22 @@ beginning with the player who opened the first round (the latter is common when 
 
 
 func place_bet_test(p Player, current int, min_bet int, max_bet int) int{
-	//reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(os.Stdin)
 	p.show_hand()
 	fmt.Printf("%s, please place your bet \n", p.Name)
 	fmt.Printf("%s has %d dollars and current bet is %d \n", p.Name, p.Money, current)
 	fmt.Printf("Input -1 to fold, 0 to call or the amount you wish to raise \n")
 	var bet int
-    _, err := fmt.Scanf("%d", &bet)
-	//input, _ := reader.ReadString()
-	//fmt.Printf("Input = %s", input)
-	//bet, e := strconv.Atoi(input)
-	//fmt.Println(bet)
+    //_, err := fmt.Scanf("%d", &bet)
+	input, _ := reader.ReadString('\n')
+	input = strings.Replace(input, "\r\n", "", -1)
+	fmt.Printf("Input = %s", input)
+	bet, err := strconv.Atoi(input)
+	fmt.Println(bet)
 	fmt.Println(err)
-	//fmt.Printf("Bet = %d", bet)
 	return bet
 
-
 }
-
-
 
  	
 
@@ -133,14 +130,13 @@ func betting_round(players []Player, minBet int, maxBet int, pot int)int{
  		if len(players) == 1{
  			return pot
  		}
- 		amount := players[i].place_bet(bet, minBet, maxBet)
- 		pot = players[i].pay_bet(amount, pot)
- 		players[i].Bet = amount + bet
- 		bet = players[i].Bet
+ 		bet = bet + players[i].place_bet(bet, minBet, maxBet)
+ 		pot = players[i].pay_bet(bet, pot)
+ 		players[i].Bet = bet
  		for j := 0; j < len(players); j++{
  			fmt.Printf("If raised, other players will need to match the bet of %d \n", bet)
- 			if amount > players[j].Bet{
- 				difference := amount - players[j].Bet
+ 			if bet > players[j].Bet{
+ 				difference := bet - players[j].Bet
  				stay := players[j].stay_in(difference)
  				if stay == false{
  					fmt.Printf("%s is folding \n", players[j].Name)
@@ -170,35 +166,46 @@ func stringToIntSlice(initial string) []int{
 }
 
 func redraw(players []Player, deck []Card)[]Card{
-	//reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(os.Stdin)
 	/*Each player may discard cards */
 	for i := 0; i < len(players); i++{
  		if players[i].Folded == false{
  			/* remove = p.show_func() ask player which cards to remove return array of cards to be removed 
  			the array may be empty */
  			players[i].show_hand()
+ 			fmt.Printf("Would you like to discard any cards (y/n)? \n")
+ 			//var choice string
+ 			choice, _ := reader.ReadString('\n')
+ 			choice = strings.Replace(choice, "\r\n", "", -1)
+ 			if choice == "n"{
+ 				continue
+ 			}
  			fmt.Printf("Which cards would you like to discard? \n")
  			var input string
- 			_, err := fmt.Scanf("%s\n", &input)
- 			//n, err := fmt.Scanf("%d\n", &num)
-
- 			//input, err := reader.ReadString('\n')
- 			fmt.Println(err)
+ 			//_, err := fmt.Scanf("%s\n", &input)
+ 			input, err := reader.ReadString('\n')
+ 			fmt.Printf("err: %s", err)
+ 			input = strings.Replace(input, "\r\n", "", -1)
+ 			fmt.Printf("input: %s", err)
  			discard_index := stringToIntSlice(input)
  			fmt.Printf("Discard index %v: \n", discard_index)
- 			
  			players[i].Hand = discarded_hand(players[i].Hand, discard_index)	
  			}
  		}
  	/* Deal new cards to players */
+ 	fmt.Printf("The dealer will now deal new cards to the players... (press 'enter')\n")
+ 	bufio.NewReader(os.Stdin).ReadBytes('\n')
+
  	for i := 0; i < len(players); i++{
  		if players[i].Folded == false{
- 			hand_size := len(players[i].Hand)
- 			for hand_size < 5{
+ 			//hand_size := 5 - len(discard_index)
+ 			fmt.Printf("%s's hand len after discard: %d", players[i].Name, len(players[i].Hand))
+ 			replace := 5 - len(players[i].Hand) 
+ 			for j := 0; j < replace; j++{
  				card := draw(deck)
  				deck = deck[1:]
+ 				fmt.Printf("%s draws a %s of %s \n", players[i].Name, card.Face, card.Suit)
  				players[i].Hand = append(players[i].Hand, card)
- 				hand_size ++
  			}
  		}
  	}
@@ -206,25 +213,41 @@ func redraw(players []Player, deck []Card)[]Card{
 }
 
 func discarded_hand(hand []Card, discard_index []int)[]Card{
-
-	discard := make([]Card, 5)
-	for i, d := range discard_index {
-		discard[i] = hand[d]
+	//temp_hand := make([]Card, 5)
+	var temp_hand []Card
+	for _, t := range discard_index {
+		//temp_hand[i] = hand[t]
+		temp_hand = append(temp_hand, hand[t])
 	}
-
-	discarded_hand := make([]Card, 5)
-	check := true
-	for i, c := range hand{
-		for _, d := range hand{
+	fmt.Printf("Print temp_hand\n")
+	for _, t := range temp_hand{
+		fmt.Println(t)
+	}
+	var discarded_hand []Card
+	//discarded_hand := make([]Card, 5)
+	index := 0
+	for _, c := range hand{
+		fmt.Printf("%s of %s \n", c.Face, c.Suit)
+		 		check := true
+		for _, d := range temp_hand{
+			fmt.Printf("%s of %s \n", d.Face, d.Suit)
 			if c.Face == d.Face && c.Suit == d.Suit{
+				fmt.Printf("Do not include %s of %s \n", c.Face, c.Suit )
 				check = false
 			}
+		}
 		if check == true{
-			discarded_hand[i] = c
+			fmt.Printf("Include %s of %s \n", c.Face, c.Suit)
+			discarded_hand = append(discarded_hand, c)
+			index ++
 			}
 		}
+	fmt.Printf("Discarded Hand:\n")
+	for _, c := range discarded_hand{
+		fmt.Println(c)
 	}
 	return discarded_hand
+
 }
 
 	/* hand ranking :
