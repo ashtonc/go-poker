@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network "forwarded_port", guest: 80, host: 8080
 
-  config.vm.synced_folder "./", "/vagrant/poker"
+  config.vm.synced_folder "./", "/vagrant/src/poker"
 
   cpus = "1"
   memory = "512" # MB

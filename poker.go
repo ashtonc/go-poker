@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	//"github.com/gorilla/websockets"
 
 	"poker/database"
 	"poker/handlers"
@@ -23,7 +24,7 @@ func main() {
 	// Populate our environment
 	database, err := database.CreateDatabase(db_user, db_password, db_name)
 	if err != nil {
-		//log.Fatal(err)
+		log.Fatal(err)
 	}
 
 	env := &models.Env{Database: database}
