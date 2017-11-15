@@ -10,7 +10,7 @@ import (
 	"poker/database"
 	"poker/handlers"
 	"poker/models"
-	//"poker-project/gamelogic"
+	//"poker/gamelogic"
 )
 
 func main() {
