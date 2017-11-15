@@ -36,7 +36,7 @@ execute 'postgres-set-password' do
   command 'echo "ALTER USER postgres WITH PASSWORD \'postgres\';" | sudo -u postgres psql'
 end
 execute 'database-setup' do
-  cwd '/vagrant'
+  cwd '/vagrant/poker/database'
   command 'sudo -u postgres psql pokerdb -f schema.sql'
 end
 
