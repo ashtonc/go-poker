@@ -19,6 +19,7 @@ func main() {
 	db_user := "postgres"
 	db_password := "postgres"
 	db_name := "pokerdb"
+
 	server_port := "8000"
 
 	// Populate our environment

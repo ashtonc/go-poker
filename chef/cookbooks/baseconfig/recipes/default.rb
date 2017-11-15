@@ -36,7 +36,7 @@ execute 'postgres-set-password' do
   command 'echo "ALTER USER postgres WITH PASSWORD \'postgres\';" | sudo -u postgres psql'
 end
 execute 'database-setup' do
-  cwd '/vagrant/poker/database'
+  cwd '/vagrant/src/poker/database'
   command 'sudo -u postgres psql pokerdb -f schema.sql'
 end
 
@@ -55,7 +55,7 @@ end
 # Install tmux and start the server in the background.
 package "tmux"
 execute 'create-server-session' do
-  cwd '/vagrant/poker'
+  cwd '/vagrant/src/poker'
   environment 'GOPATH' => '/vagrant'
   command 'tmux new-session -d -s server'
 end
