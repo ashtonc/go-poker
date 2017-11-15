@@ -7,7 +7,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.box_version = '>= 20160921.0.0'
 
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 80, host: 8000
 
   config.vm.synced_folder "./", "/vagrant/src/poker"
 
@@ -25,25 +25,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.vmx["memsize"] = memory
     v.vmx["numvcpus"] = cpus
   end
-  
-  config.vm.provider :cloudstack do |cloudstack, override|
-    override.vm.box = "Ubuntu-16.04-SSH-Keys"
-    cloudstack.scheme = "https"
-    cloudstack.host = "sfucloud.ca"
-    cloudstack.path = "/client/api"
-    cloudstack.api_key = ENV['CLOUDSTACK_KEY'] || "AAAAAAAAAAAAAAAA"
-    cloudstack.secret_key = ENV['CLOUDSTACK_SECRET'] || "AAAAAAAAAAAAAAAA"
-    cloudstack.service_offering_name = "sc.t2.micro"
-    cloudstack.zone_name = "NML-Zone"
-    cloudstack.name = "cmpt470-#{File.basename(Dir.getwd)}-#{Random.new.rand(100)}"
-    cloudstack.ssh_user = "ubuntu"
-    cloudstack.security_group_names = ['CMPT 470 firewall']
-  end
 
   config.vm.provision "chef_solo" do |chef|
+    chef.log_level = "debug"
     chef.cookbooks_path = "chef/cookbooks"
-    chef.add_recipe "baseconfig"
     chef.channel = "stable"
     chef.version = "12.10.24"
+    chef.add_recipe "baseconfig"
   end
 end
