@@ -19,11 +19,11 @@ end
 # Go installation and Go dependencies installation.
 package "golang"
 execute 'get-pq' do
-  environment 'GOPATH' => '/vagrant'
+  environment 'GOPATH' => '/go'
   command 'go get -u github.com/lib/pq'
 end
 execute 'get-mux' do
-  environment 'GOPATH' => '/vagrant'
+  environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/mux'
 end
 
@@ -36,7 +36,7 @@ execute 'postgres-set-password' do
   command 'echo "ALTER USER postgres WITH PASSWORD \'postgres\';" | sudo -u postgres psql'
 end
 execute 'database-setup' do
-  cwd '/vagrant/src/poker/database'
+  cwd '/go/src/poker/database'
   command 'sudo -u postgres psql pokerdb -f schema.sql'
 end
 
@@ -55,8 +55,8 @@ end
 # Install tmux and start the server in the background.
 package "tmux"
 execute 'create-server-session' do
-  cwd '/vagrant/src/poker'
-  environment 'GOPATH' => '/vagrant'
+  cwd '/go/src/poker'
+  environment 'GOPATH' => '/go'
   command 'tmux new-session -d -s server'
 end
 execute 'start-server' do

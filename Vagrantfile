@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network "forwarded_port", guest: 80, host: 8000
 
-  config.vm.synced_folder "./", "/vagrant/src/poker"
+  config.vm.synced_folder "./", "/go/src/poker"
 
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
