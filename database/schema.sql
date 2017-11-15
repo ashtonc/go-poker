@@ -40,17 +40,10 @@ CREATE TABLE round_seat (
 	id SERIAL PRIMARY KEY,
 	player_id INTEGER REFERENCES player (id),
 	position INTEGER,
-	card1
-	card2
-	card3
-	card4
-	card5
 );
 
 CREATE TABLE round_action (
 	id SERIAL PRIMARY KEY,
 	round_seat_id INTEGER REFERENCES round_seat (id),
 	pass BOOLEAN,
-	bet
-	trade
 );
