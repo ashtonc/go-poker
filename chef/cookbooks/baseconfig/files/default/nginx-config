@@ -3,7 +3,7 @@ server {
 
 	# Static files (files in the /static directory) are served immediately
 	location /static {
-		alias /vagrant/static;
+		alias /vagrant/poker/static;
 		autoindex on;
 		try_files $uri =404;
 	}

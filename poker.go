@@ -6,9 +6,9 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"poker-project/database"
-	"poker-project/handlers"
-	"poker-project/models"
+	"poker/database"
+	"poker/handlers"
+	"poker/models"
 	//"poker-project/gamelogic"
 )
 

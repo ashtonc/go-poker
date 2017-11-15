@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"poker-project/models"
+	"poker/models"
 
 	"github.com/gorilla/mux"
 )

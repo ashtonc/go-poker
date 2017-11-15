@@ -19,11 +19,11 @@ end
 # Go installation and Go dependencies installation.
 package "golang"
 execute 'get-pq' do
-  environment 'GOPATH' => '/go'
+  environment 'GOPATH' => '/vagrant'
   command 'go get -u github.com/lib/pq'
 end
 execute 'get-mux' do
-  environment 'GOPATH' => '/go'
+  environment 'GOPATH' => '/vagrant'
   command 'go get -u github.com/gorilla/mux'
 end
 
@@ -55,15 +55,10 @@ end
 # Install tmux and start the server in the background.
 package "tmux"
 execute 'create-server-session' do
-  cwd '/vagrant'
-  environment 'GOPATH' => '/go'
+  cwd '/vagrant/poker'
+  environment 'GOPATH' => '/vagrant'
   command 'tmux new-session -d -s server'
 end
 execute 'start-server' do
   command "tmux send-keys -t server 'go run poker.go' C-m"
 end
-
-# To access the program/prompt from inside the vm:
-# vagrant ssh
-# sudo su
-# tmux attach -t server
