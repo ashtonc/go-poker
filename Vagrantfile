@@ -11,6 +11,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.synced_folder "./", "/vagrant/src/poker"
 
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
   cpus = "1"
   memory = "512" # MB
   config.vm.provider :virtualbox do |vb|
