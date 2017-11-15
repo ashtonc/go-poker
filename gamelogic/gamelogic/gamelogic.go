@@ -70,22 +70,29 @@ beginning with the player who opened the first round (the latter is common when 
  	}
  	/*first round betting */
  	pot = betting_round(players, minBet, maxBet, pot)
- 	if len(players) == 1 {
- 		winner := players[0]
- 		return &winner
+ 	remaining := check_num_players_remaining(players)
+ 	if remaining < 2 {
+ 		winner := find_winner(players)
+ 		return winner
  	}
  	/* first draw */ 
  	deck = redraw(players, deck)
  	/* second round of betting */
  	pot = betting_round(players, minBet, maxBet, pot)
- 	if len(players) == 1 {
- 		winner := players[0]
- 		return &winner
+ 	remaining = check_num_players_remaining(players)
+ 	if remaining < 2 {
+ 		winner := find_winner(players)
+ 		return winner
  	}
  	/* second draw */ 
  	deck= redraw(players, deck)
  	/* Third and final round of betting */
  	pot = betting_round(players, minBet, maxBet, pot)
+ 	remaining = check_num_players_remaining(players)
+ 	if remaining < 2 {
+ 		winner := find_winner(players)
+ 		return winner
+ 	}
  	/* sort hands by rank to prepare for hand comparisons */
  	for i := 0; i < len(players); i++{
  		if players[i].Folded == false{
@@ -98,6 +105,27 @@ beginning with the player who opened the first round (the latter is common when 
  }
 
 
+ func check_num_players_remaining(players []Player)int{
+ 	remaining := 0
+ 	for _, p := range players{
+ 		if p.Folded == false{
+ 			remaining ++
+ 		}
+ 	}
+ 	fmt.Printf("%d players remaining in this game\n", remaining)
+ 	return remaining
+ }
+
+func find_winner(players []Player)*Player{
+	//function assumes only one players remains in the game
+	for _, p := range players{
+		if p.Folded == false{
+			return &p
+		}
+	}
+	p := players[0]		//just to make go happy
+	return &p
+}
 
 func place_bet_test(p Player, current int, min_bet int, max_bet int) int{
 	reader := bufio.NewReader(os.Stdin)
