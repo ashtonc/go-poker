@@ -43,6 +43,8 @@ type Player struct {			/* A more complete player struct will likely be someplace
 	Hand 	[]Card
 	Folded  bool    /*default value false */
 	Bet     int
+	Hand_Rank int
+	Card_Hist [13]int
 }
 
  func (p *Player) pay_bet(amount int, pot int)int{
@@ -129,6 +131,50 @@ func (p *Player)sort_hand_by_rank(){
     return value
 }
 
+func (p *Player)find_four_of_kind_rank()int{
+	for k, v := range p.Card_Hist{
+		if v == 4{
+			return k
+		}
+	} 
+}
+
+func (p *Player)find_three_of_kind_rank()int{
+	for k, v := range p.Card_Hist{
+		if v == 3{
+			return k
+		}
+	}
+}
+
+func (p *Player)best_pair()int{
+	for k := len(p.Card_Hist); k < 0; k--{
+		if p.Card_Hist[k] = 2{
+			return k
+		}
+	}
+}
+
+func (p *Player)second_best_pair()int{
+	for k, v := range p.Card_Hist
+		if p.Card_Hist[k] = 2{
+			return k 
+		}
+}
+
+
+func (p * Player)highest_card()int{
+	best = 0
+	for crd in p.Hand{
+		if crd.Rank > best{
+			best = crd.Rank
+		}
+	return best
+	}
+}
+
+
+
  /*func (p *Player)discarded_hand(discard_index []int){
 
 	discard := make([]Card, 5)
@@ -176,36 +222,4 @@ func newCard(face string, suit string, cardTypes []string)*Card{
 
 
 
-func createDeck(cardTypes []string, suites []string)[]Card{
-	/* create deck, adding each card looping through type and suite */
-	deck := make([]Card, 52)
-	count := 0
-	for _, t := range cardTypes{
-		for _, s := range suites{
-			crd := newCard(t, s, cardTypes)
-			deck[count] = *crd
-			count++
 
-		}
-	}
-	//fmt.Printf("Deck test: \n")
-	//for _, d := range deck{
-	//	fmt.Printf("%s of %s ", d.Face, d.Suit)
-	//}
-	return deck
-}
-
-
-func shuffle(d []Card)[]Card{
-	/*....   randomly re-order the array */
-	for i := len(d) - 1; i > 0; i-- {
-		selection := rand.Intn(i + 1)
-		d[i], d[selection] = d[selection], d[i]
-	}
-	return d
-}
-
-func draw(d []Card)Card{
-	crd := d[0]
-	return crd
-}
