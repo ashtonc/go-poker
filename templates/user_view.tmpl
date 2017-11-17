@@ -1,4 +1,11 @@
 {{ define "title" }}{{ end }}
 {{ define "content" -}}
-		??
+			{{ with .UserPage -}}
+			<h1>{{ .Username }}</h1>
+			<p>{{ .Name }}</p>
+			<p>{{ .Email }}</p>
+			<div id="profile-picture">
+				<img src="/poker/static/img/{{ .PictureUrl }}">
+			</div>
+			{{- end }}
 {{- end }}

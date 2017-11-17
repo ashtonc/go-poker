@@ -13,3 +13,38 @@ type Env struct {
 	// logger middleware
 	// authentication middleware
 }
+
+type UserPage struct {
+	Username string
+	Name string
+	Email string
+	PictureUrl string
+}
+
+type Session struct {
+	Username string
+	Name string
+	PageHome bool
+	PageGame bool
+	PageUser bool
+}
+
+type Game struct {
+	
+}
+
+type Lobby struct {
+	
+}
+
+type Leaderboard struct {
+	
+}
+
+type PageData struct {
+	Session Session
+	UserPage UserPage
+	Game Game
+	Lobby Lobby
+	Leaderboard Leaderboard
+}

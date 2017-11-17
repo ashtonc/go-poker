@@ -1,3 +1,11 @@
 {{ define "navigation" -}}
-		??
+			{{ with .Session -}}
+			<ul id="navigation-list">
+				<li{{ if not .PageHome }} class="current">{{ else }}>{{ end }}<a href="/poker/">Home</a></li>
+				<li{{ if not .PageGame }} class="current">{{ else }}>{{ end }}<a href="/poker/game/">Play</a></li>
+			</ul>
+			<div id="userthing">
+				Welcome, <a href="/poker/user/{{ .Username }}">{{ .Name }}</a>.
+			</div>
+			{{- end }}
 {{- end }}
