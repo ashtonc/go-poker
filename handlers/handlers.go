@@ -19,6 +19,8 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: true,
@@ -39,6 +41,8 @@ func Home(env *models.Env) http.Handler {
 
 func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: false,
@@ -57,6 +61,8 @@ func Login(env *models.Env) http.Handler {
 
 func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: false,
@@ -108,6 +114,7 @@ func UserEdit(env *models.Env) http.Handler {
 		vars := mux.Vars(r)
 		username := vars["username"]
 
+		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: true,
@@ -134,6 +141,8 @@ func UserEdit(env *models.Env) http.Handler {
 
 func Game(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: true,
