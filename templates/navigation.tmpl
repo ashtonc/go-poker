@@ -3,7 +3,7 @@
 			<ul id="navigation-list">
 				<li{{ if .PageHome }} class="current">{{ else }}>{{ end }}<a href="/poker/">Home</a></li>
 				<li{{ if .PageGame }} class="current">{{ else }}>{{ end }}<a href="/poker/game/">Play</a></li>
-				<li{{ if .PageLeaderboards }} class="current">{{ else }}>{{ end }}<a href="/poker/leaderboards/">Leaderboards</a></li>
+				<li{{ if .PageLeaderboard }} class="current">{{ else }}>{{ end }}<a href="/poker/leaderboard/">Leaderboards</a></li>
 			</ul>
 			{{ if .LoggedIn -}}
 			<div id="userthing">

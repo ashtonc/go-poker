@@ -35,8 +35,12 @@ func main() {
 
 	router.Handle("/", handlers.HomeRedirect(env))
 	router.Handle("/poker/", handlers.Home(env))
-	router.Handle("/poker/user/{username:[0-9]+}", handlers.User(env))
+	router.Handle("/poker/login/", handlers.Login(env))
+	router.Handle("/poker/register/", handlers.Register(env))
+	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}", handlers.User(env))
+	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.UserEdit(env))
 	router.Handle("/poker/game/", handlers.Game(env))
+	router.Handle("/poker/leaderboard/", handlers.Leaderboard(env))
 
 	// These functions are deferred until main finishes
 	defer env.Database.Close()

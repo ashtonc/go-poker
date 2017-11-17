@@ -26,9 +26,11 @@ type Session struct {
 	Username string
 	Name string
 	PageHome bool
-	PageGame bool
+	PageLogin bool
+	PageRegister bool
 	PageUser bool
-	PageLeaderboards bool
+	PageGame bool
+	PageLeaderboard bool
 }
 
 type Game struct {

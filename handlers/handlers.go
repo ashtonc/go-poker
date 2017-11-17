@@ -23,17 +23,29 @@ func Home(env *models.Env) http.Handler {
 	})
 }
 
+func Login(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Login")
+	})
+}
+
+func Register(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Register")
+	})
+}
+
 func User(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
 
-		// Populate the data needed for the page
+		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: true,
 				Username: "current-user",
-				Name: "Current User Name",
+				Name: "Current User",
 				PageUser: true,
 			},
 			UserPage: models.UserPage{
@@ -49,14 +61,23 @@ func User(env *models.Env) http.Handler {
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)
+	})
+}
 
-
-
+func UserEdit(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Edit a user")
 	})
 }
 
 func Game(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Game")
+	})
+}
+
+func Leaderboard(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Leaderboard")
 	})
 }
