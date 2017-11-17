@@ -2,10 +2,15 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="/static/css/style.css">
 		<title>Poker 470{{ template "title" . }}</title>
+		{{ template "head" . }}
 	</head>
 	<body>
-		{{ template "content" . }}
+		<div id="navigation">
+			{{ template "navigation" . }}
+		</div>
+		<div id="content">
+			{{ template "content" . }}
+		</div>
 	</body>
 </html>
