@@ -6,7 +6,7 @@ import (
 )
 
 // Env will serve as an environment that contains "global" variables. See
-// http://www.alexedwards.net/blog/organising-database-access for more details.
+// http://www.alexedwards.net/blog/organising-database-access for the idea
 type Env struct {
 	Database *sql.DB
 	// template cache
