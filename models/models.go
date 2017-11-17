@@ -15,6 +15,7 @@ type Env struct {
 }
 
 type UserPage struct {
+	MatchesSession bool
 	Username string
 	Name string
 	Email string

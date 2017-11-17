@@ -49,6 +49,7 @@ func User(env *models.Env) http.Handler {
 				PageUser: true,
 			},
 			UserPage: models.UserPage{
+				MatchesSession: true,
 				Username: username,
 				Name: "User Name",
 				Email: "user@email.ca",
