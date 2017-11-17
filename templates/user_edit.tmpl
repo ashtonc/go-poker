@@ -1,4 +1,4 @@
-{{ define "title" }}{{ end }}
+{{ define "title" }} | Edit | {{ with .UserPage -}}{{ .Username }}{{ end }}{{ end }}
 {{ define "content" -}}
 		??
 {{- end }}
