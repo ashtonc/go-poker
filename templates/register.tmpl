@@ -1,4 +1,26 @@
 {{ define "title" }} | Register{{ end }}
 {{ define "content" -}}
-		??
+		<form method="POST">
+			<div class="input">
+				<label for="username">Username:</label>
+				<input id="username" type="text" required>
+			</div>
+			<div class="input">
+				<label for="name">Name:</label>
+				<input id="name" type="text">
+			</div>
+			<div class="input">
+				<label for="email">Email:</label>
+				<input id="email" type="text" required>
+			</div>
+			<div class="input">
+				<label for="password">Password:</label>
+				<input id="password" type="password" required>
+			</div>
+			<div class="input">
+				<label for="password-repeat">Repeat Password:</label>
+				<input id="password-repeat" type="password" required>
+			</div>
+			<input type="submit" value="Register">
+		</form>
 {{- end }}
