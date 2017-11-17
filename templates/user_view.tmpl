@@ -1,0 +1,14 @@
+{{ define "title" }} | {{ with .UserPage }}{{ .Username }}{{ end }}{{ end }}
+{{ define "content" -}}
+			{{ with .UserPage -}}
+			<h1>{{ .Username }}</h1>
+			<p>{{ .Name }}</p>
+			<p>{{ .Email }}</p>
+			<div id="profile-picture">
+				<img src="/poker/static/img/{{ .PictureUrl }}">
+			</div>
+			{{- if .MatchesSession }}
+			<a href="/poker/user/{{ .Username }}/edit">Edit</a>
+			{{- end }}
+			{{- end }}
+{{- end }}

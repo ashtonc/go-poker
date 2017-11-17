@@ -36,22 +36,29 @@ execute 'postgres-set-password' do
   command 'echo "ALTER USER postgres WITH PASSWORD \'postgres\';" | sudo -u postgres psql'
 end
 execute 'database-setup' do
-  cwd '/vagrant'
+  cwd '/go/src/poker/database'
   command 'sudo -u postgres psql pokerdb -f schema.sql'
+end
+
+# nginx setup
+package "nginx"
+execute 'nginx_pid' do
+  command 'mkdir -p /run/nginx'
+end
+cookbook_file "nginx-config" do
+  path "/etc/nginx/sites-available/default"
+end
+execute 'nginx_reload' do
+  command 'nginx -s reload'
 end
 
 # Install tmux and start the server in the background.
 package "tmux"
 execute 'create-server-session' do
-  cwd '/vagrant'
+  cwd '/go/src/poker'
   environment 'GOPATH' => '/go'
   command 'tmux new-session -d -s server'
 end
 execute 'start-server' do
   command "tmux send-keys -t server 'go run poker.go' C-m"
 end
-
-# To access the program/prompt from inside the vm:
-# vagrant ssh
-# sudo su
-# tmux attach -t server

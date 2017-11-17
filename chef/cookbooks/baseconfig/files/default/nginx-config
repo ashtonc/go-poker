@@ -1,0 +1,16 @@
+server {
+	listen 80;
+
+	# Static files are served by nginx
+	location /poker/assets {
+		alias /vagrant/static;
+		autoindex on;
+		try_files $uri =404;
+	}
+
+	# All other requests are forwarded to the Go server
+	location / {
+		proxy_pass http://localhost:8000;
+	}
+}
+

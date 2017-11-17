@@ -1,0 +1,14 @@
+{{ define "title" }} | Login{{ end }}
+{{ define "content" -}}
+		<form method="POST">
+			<div class="input">
+				<label for="username">Username:</label>
+				<input id="username" type="text" required>
+			</div>
+			<div class="input">
+				<label for="password">Password:</label>
+				<input id="password" type="password" required>
+			</div>
+			<input type="submit" value="Login">
+		</form>
+{{- end }}

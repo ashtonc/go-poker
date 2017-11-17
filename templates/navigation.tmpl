@@ -1,0 +1,17 @@
+{{ define "navigation" -}}
+			{{ with .Session -}}
+			<img class="navigation-logo" src="/poker/assets/img/logo.png">
+			<ul id="navigation-list">
+				<li{{ if .PageHome }} class="current">{{ else }}>{{ end }}<a href="/poker/">Home</a></li>
+				<li{{ if .PageGame }} class="current">{{ else }}>{{ end }}<a href="/poker/game/">Play</a></li>
+				<li{{ if .PageLeaderboard }} class="current">{{ else }}>{{ end }}<a href="/poker/leaderboard/">Leaderboards</a></li>
+			</ul>
+			{{ if .LoggedIn -}}
+			<div id="userthing">
+				Welcome, <a href="/poker/user/{{ .Username }}">{{ .Name }}</a>.
+			</div>
+			{{- else -}}
+			<a href="/poker/register/">Register</a>
+			{{- end }}
+			{{- end }}
+{{- end }}
