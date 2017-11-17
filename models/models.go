@@ -22,11 +22,13 @@ type UserPage struct {
 }
 
 type Session struct {
+	LoggedIn bool
 	Username string
 	Name string
 	PageHome bool
 	PageGame bool
 	PageUser bool
+	PageLeaderboards bool
 }
 
 type Game struct {

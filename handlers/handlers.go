@@ -31,6 +31,7 @@ func User(env *models.Env) http.Handler {
 		// Populate the data needed for the page
 		pagedata := models.PageData{
 			Session: models.Session{
+				LoggedIn: true,
 				Username: "current-user",
 				Name: "Current User Name",
 				PageUser: true,
