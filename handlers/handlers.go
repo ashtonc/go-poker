@@ -67,7 +67,7 @@ func Register(env *models.Env) http.Handler {
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: false,
-				PageRegister: true,
+				PageUser: true,
 			},
 		}
 
@@ -90,7 +90,7 @@ func User(env *models.Env) http.Handler {
 		if err != nil {
 			log.Print("Player " + username + " not found.")
 
-			// For now, just redirect them to home
+			// For now, just redirect them to the home page
 			http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
 			return
 		}

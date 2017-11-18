@@ -194,6 +194,10 @@ input[type="submit"] {
 	background-color: #9D9C9C;
 }
 
+#navigation-list .nav-user {
+	float: right;
+}
+
 #navigation li:hover {
 	background-color: #444;
 	color: #FFF;
