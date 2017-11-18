@@ -1,4 +1,5 @@
-iframe {
+.tables {
+	background:white;
 	position: relative;
 	margin-top: 2%;
 	margin-bottom: 2%;
@@ -14,6 +15,8 @@ h1{
 	text-align: center;
 }
 .menu{
+	position: relative;
+	top: 95%;
 	text-align: center;
 }
 p{
