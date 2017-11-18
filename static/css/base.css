@@ -1,5 +1,12 @@
 /* background images */
 
+body {background:url(https://images4.alphacoders.com/418/thumb-1920-41814.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
 body.home {background:url(https://wallpaperscraft.com/image/poker_aces_combination_excitement_chips_26263_1920x1080.jpg) no-repeat center center fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
