@@ -2,7 +2,7 @@ body{
 	background-image: url("../../design/game-background.jpg");
 	background-repeat: no-repeat;
 }
-iframe{
+.log{
 	position: absolute;
 	top: 0;
 	left: 80%;
