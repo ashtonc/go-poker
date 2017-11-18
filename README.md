@@ -1,4 +1,8 @@
-This is the repository for our term project. It will be an implemetation of five card draw.
+# Group 15 - Five Card Draw
+
+This is the repository for the term project of group 15. It will be an implemetation of poker (specifically five card draw).
+
+To view our site, simply `vagrant up` and visit `localhost:8000/poker/`.
 
 ## Project Checkpoint
 
@@ -8,6 +12,7 @@ While our site doesn't completely work, here is a list of what is finished:
 * Basic routing
 * Basic URL structure
 * Basic templates
+* Basic page designs
 * Poker game logic (in the testing phase)
 
 What remains to be finished:
