@@ -164,7 +164,7 @@ input[type="submit"] {
 
 /* nav-bar */
 
-.nav-bar {
+#navigation {
 	background-color: #333;
 	width: 100%;
 	height: 50px;
@@ -174,14 +174,24 @@ input[type="submit"] {
 	text-align: right;
 }
 
-.nav-links {
-	color: #DDD;
-    font-family: "Courier New", Courier, monospace;
-    padding-left: 1em;
-    padding-right: 1em;
+#navigation ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
 
-.nav-bar a:hover {
+#navigation-list .current a {
+	background-color: #f1f1f1;
+}
+
+#navigation-list a {
+	color: #DDD;
+	font-family: "Courier New", Courier, monospace;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+#navigation a:hover {
 	background-color: #444;
 	color: #FFF;
 	text-decoration: none;
@@ -196,7 +206,7 @@ input[type="submit"] {
 
 #poker470-logo a:visited {
 	color: #FFF;
-    font-family: "Courier New", Courier, monospace;
-    padding-left: 1em;
-    padding-right: 1em;
+	font-family: "Courier New", Courier, monospace;
+	padding-left: 1em;
+	padding-right: 1em;
 }

@@ -12,12 +12,13 @@ While our site doesn't completely work, here is a list of what is finished:
 * Basic routing
 * Basic URL structure
 * Basic templates
-* Basic page designs
+* Basic page designs (see the pages and designs directories)
 * Poker game logic (in the testing phase)
 
 What remains to be finished:
 
-* Cohesive models for each game
+* Integrating the design CSS into the actual pages
+* Cohesive models for each game so that it can be managed in memory
 * Full database integration
 * Registration and authentication on the website
 * Connection between the game logic and client page
