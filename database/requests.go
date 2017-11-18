@@ -6,7 +6,7 @@ import (
 	"poker/models"
 )
 
-func getUserPage(env *models.Env, userName string) (*models.UserPage, error) {
+func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	var page models.UserPage
 	page.Username = userName
 
