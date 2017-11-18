@@ -8,6 +8,10 @@
 	height: 20em;
 	width: 90%;
 }
+td,th{
+	padding-left: 1em;
+	padding-right: 3em;
+}
 body{
 	background-color: #bbb;
 }

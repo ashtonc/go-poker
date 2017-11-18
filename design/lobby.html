@@ -10,33 +10,22 @@
 	<body>
 		<h1>POKER470</h1>
 		<div class = "tables">
-			<p>
-				Active tables will be shown here
-			</p>
 			<table>
 			<tr>
 				<th>Name</th>
 				<th>Stakes</th>
 				<th>Player count</th>
 			</tr>
-			<tr>
-				<td>Player 1's Game</td>
-				<td>500,000/1,000,000</td>
-				<td>1/2</td>
-				<td><button type="button">Join Table</button></td>
-			</tr>
-			<table>
+			</table>
 		</div>
 		<div class = "menu"> 
 			<p>Name:
 				<form>
-					<span id = "name">
-						<input type="text">
-					</span>
+					<input id = "name" type="text" value = "Generic name">
 				</form>
 			</p>
 			<p>Select number of players:
-				<select>
+				<select id = "players">
 					<option value="2">2</option>
 					<option value="3">3</option>
 					<option value="4">4</option>
@@ -45,7 +34,7 @@
 				</select>
 			</p>
 			<p>Select stakes:
-				<select>
+				<select id = "stakes">
 					<option value="100">50/100</option>
 					<option value="1,000">500/1,000</option>
 					<option value="10,000">5,000/10,000</option>
@@ -54,10 +43,10 @@
 				</select>
 			</p>
 			<button id = "createTable" type="button">Create Table</button>
-			<button id = "leaderboards" type="button">Leaderboards</button>
-			<button id = "logOff" type="button">Log Off</button>
+			<a href = "../pages/leaderboards/leaderboards.html"><button id = "leaderboards" type="button">Leaderboards</button></a>
+			<a href = "../pages/home/home.html"><button id = "logOff" type="button">Log Off</button></a>
 		</div>
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script src="../static/js/lobby.js"></script>
 	</body>
-</html>   
+</html>
