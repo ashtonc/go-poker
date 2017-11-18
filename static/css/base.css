@@ -1,3 +1,9 @@
+/* basic css */
+
+body {
+	color: white;
+}
+
 /* background images */
 
 body {background:url(https://images4.alphacoders.com/418/thumb-1920-41814.jpg) no-repeat center center fixed;

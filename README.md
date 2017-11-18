@@ -24,6 +24,16 @@ What remains to be finished:
 * Connection between the game logic and client page
 * Websockets integration sending json representations of the game state to the client to prevent clients from having to refresh the page
 
+The following pages can be viewed on our website:
+
+* `/poker/`
+* `/poker/game/`
+* `/poker/user/{any username with a-z, A-Z, 0-9, -, _, .}` note: this page will redirect you to the home page because it cannot find that user in the database
+* `/poker/user/{any username with a-z, A-Z, 0-9, -, _, .}/edit`
+* `/poker/leaderboard/`
+* `/poker/login/`
+* `/poker/register/`
+
 ## Technologies
 
 * Routing: https://github.com/gorilla/mux
