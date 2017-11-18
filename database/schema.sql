@@ -1,6 +1,9 @@
 CREATE TABLE player (
 	id SERIAL PRIMARY KEY,
 	username VARCHAR(32),
+	name VARCHAR(256),
+	email VARCHAR(128),
+	picture INT,
 	description TEXT,
 	password_hash VARCHAR(256),
 	password_salt VARCHAR(256)
