@@ -1,0 +1,221 @@
+/* basic css */
+
+body {
+	color: white;
+}
+
+/* background images */
+
+body {background:url(https://images4.alphacoders.com/418/thumb-1920-41814.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+body.home {background:url(https://wallpaperscraft.com/image/poker_aces_combination_excitement_chips_26263_1920x1080.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+body.leaderboards {background:url(https://images5.alphacoders.com/321/321988.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+body.login {background:url(https://images5.alphacoders.com/449/thumb-1920-449376.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+body.register {background:url(https://images2.alphacoders.com/209/thumb-1920-209202.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+/* h1 */
+
+h1.h1-register {color: black; text-align: center;}
+
+h1.h1-leaderboards {color: white; text-align: center;}
+
+h1.h1-login {color: black; text-align: center;}
+
+/* HOME */
+
+button {
+	width: 20em;
+	height: 5em;
+	position: fixed;
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 60%;
+	bottom: 0;
+	transition-duration: 0.4s;
+	border-radius: 8px;
+	border: 2px solid red;
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+}
+
+button:hover {
+	background-color: red;
+	color: white;
+	box-shadow: 0 6px 10px 0 rgba(0,0,0,0.1), 0 5px 15px 0 rgba(0,0,0,0.10);
+}
+
+.play {
+	font-size: 25px;
+	font-family: Palatino, serif; 
+}
+
+/* LEADERBOARDS */
+
+table {
+	color: black;
+	margin: auto;
+    width: 50%;
+    border: 3px solid white;
+    text-align: center;
+    background-color: white;
+    opacity: 0.8;
+    border-radius: 20px;
+}
+
+th, td {
+	text-align: center;
+	border: 2px solid white;
+}
+
+.leaderboard-content {
+    margin: auto;
+    width: 50%;
+    padding: 20px;
+
+}
+
+/* REGISTER & LOGIN */
+
+form .labels {
+	color: black; 
+	font-family: "Courier New", Courier, monospace; 
+	font-weight: bold;
+	padding: 1em;
+}
+
+form img {
+	margin: 1%;
+}
+
+.profile-icon {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+input[type="text"] {
+	margin: 1.5em;
+}
+
+input[type="password"] {
+	margin: 1.5em;
+}
+
+input[type="email"] {
+	margin: 1.5em;
+}
+
+input[type="submit"] {
+	margin: auto;
+	position: relative;
+    width: 15%;
+    border: 3px solid green;
+    font-family: "Courier New", Courier, monospace;
+    transition-duration: 0.4s;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.login-button { text-align: center; }
+
+.login-content {
+    margin: auto;
+    width: 50%;
+    padding: 20px;
+    text-align: center;
+    background-color: white;
+    opacity: 0.75;
+    border-radius: 12px;
+}
+
+.register-button { text-align: center; }
+
+.register-content {
+    margin: auto;
+    width: 50%;
+    border: 3px solid white;
+    padding: 20px;
+    background-color: white;
+    opacity: 0.9;
+    border-radius: 12px;
+}
+
+/* nav-bar */
+
+#navigation {
+	background-color: #333;
+	width: 100%;
+	height: 60px;
+	text-decoration: none;
+	padding: 12px;
+	color: white;
+}
+
+#navigation ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#navigation li {
+	float: left;
+	margin: 0 1em;
+	padding: 1em;
+}
+
+#navigation-list a {
+	color: #DDD;
+	font-family: "Courier New", Courier, monospace;
+}
+
+#navigation-list .current {
+	background-color: #9D9C9C;
+}
+
+#navigation-list .nav-user {
+	float: right;
+}
+
+#navigation li:hover {
+	background-color: #444;
+	color: #FFF;
+	text-decoration: none;
+}
+
+#poker470-logo {
+	text-align: center;
+	color: #FFF;
+	height: 0px;
+}
+
+#poker470-logo a:visited {
+	color: #FFF;
+}

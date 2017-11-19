@@ -1,4 +1,5 @@
-iframe {
+.tables {
+	background:white;
 	position: relative;
 	margin-top: 2%;
 	margin-bottom: 2%;
@@ -7,6 +8,10 @@ iframe {
 	height: 20em;
 	width: 90%;
 }
+td,th{
+	padding-left: 1em;
+	padding-right: 3em;
+}
 body{
 	background-color: #bbb;
 }
@@ -14,6 +19,8 @@ h1{
 	text-align: center;
 }
 .menu{
+	position: relative;
+	top: 95%;
 	text-align: center;
 }
 p{
