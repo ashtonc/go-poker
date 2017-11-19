@@ -96,6 +96,7 @@ type Player struct {			/* A more complete player struct will likely be someplace
 
 
 func (p *Player)sort_hand_by_rank(){
+	fmt.Printf("About to sort %s hand by rank", p.Name)
 	hand := p.Hand
 	sort.Slice(hand[:], func(i, j int) bool {
     return hand[i].Rank < hand[j].Rank
@@ -136,7 +137,8 @@ func (p *Player)find_four_of_kind_rank()int{
 		if v == 4{
 			return k
 		}
-	} 
+	}
+	return 0 
 }
 
 func (p *Player)find_three_of_kind_rank()int{
@@ -145,32 +147,37 @@ func (p *Player)find_three_of_kind_rank()int{
 			return k
 		}
 	}
+	return 0
 }
 
 func (p *Player)best_pair()int{
 	for k := len(p.Card_Hist); k < 0; k--{
-		if p.Card_Hist[k] = 2{
+		if p.Card_Hist[k] == 2{
 			return k
 		}
 	}
+	return 0
 }
 
 func (p *Player)second_best_pair()int{
-	for k, v := range p.Card_Hist
-		if p.Card_Hist[k] = 2{
+	for k, _ := range p.Card_Hist{
+		if p.Card_Hist[k] == 2{
 			return k 
 		}
-}
+	}
+	return 0
+}	
 
 
-func (p * Player)highest_card()int{
-	best = 0
-	for crd in p.Hand{
+func (p *Player)highest_card()int{
+	best := 0
+	for _, crd := range p.Hand{
 		if crd.Rank > best{
 			best = crd.Rank
 		}
-	return best
 	}
+	return best
+
 }
 
 

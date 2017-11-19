@@ -3,7 +3,7 @@
 package gamelogic
 
 import(
-	//"math/rand"
+	"math/rand"
 //	"time"
 	"bufio"
   	"fmt"
@@ -97,11 +97,18 @@ beginning with the player who opened the first round (the latter is common when 
  	for i := 0; i < len(players); i++{
  		if players[i].Folded == false{
  			players[i].sort_hand_by_rank()
+ 			fmt.Printf("Sorted hand: \n")
+ 			for _, crd := range players[i].Hand{
+ 				fmt.Printf("%s of %s \n", crd.Face, crd.Suit)
+ 			}
  		}
  	}
  	score_board :=rank_hands(players)	
  	winner := showdown(players, score_board)
+ 	fmt.Printf("%s win a pot worth %d \n", winner.Name, pot)
+ 	winner.Money += pot
  	return winner
+
  		
  }
 
@@ -220,7 +227,9 @@ func betting_round(players []Player, minBet int, maxBet int, pot int)int{
 
 
 func stringToIntSlice(initial string) []int{
- 	strs := strings.Split(initial, " ")
+ 	strs := strings.Split(initial," ")
+ 	fmt.Printf("Len of int-string: %d \n", len(strs))
+ 	fmt.Printf("%s \n", strs)
     ary := make([]int, len(strs))
     for i := range ary {
         ary[i], _ = strconv.Atoi(strs[i])
@@ -247,9 +256,9 @@ func redraw(players []Player, deck []Card)[]Card{
  			var input string
  			//_, err := fmt.Scanf("%s\n", &input)
  			input, err := reader.ReadString('\n')
- 			fmt.Printf("err: %s", err)
+ 			fmt.Printf("err: %s \n", err)
  			input = strings.Replace(input, "\r\n", "", -1)
- 			fmt.Printf("input: %s", err)
+ 			fmt.Printf("input: %s \n", input)
  			discard_index := stringToIntSlice(input)
  			fmt.Printf("Discard index %v: \n", discard_index)
  			players[i].Hand = discarded_hand(players[i].Hand, discard_index)	
@@ -313,7 +322,7 @@ func discarded_hand(hand []Card, discard_index []int)[]Card{
 }
 
 func (p *Player)card_histogram(){
-	card_hist := map[string]int{
+	/*p.Card_Hist = map[string]int{
 		"2":	0,
 		"3":	0,
 		"4":	0,
@@ -327,24 +336,25 @@ func (p *Player)card_histogram(){
 		"Queen":0,
 		"King":	0,
 		"Ace":	0, 
-	}
+	} */
 	for _, crd := range p.Hand{
 		p.Card_Hist[crd.Rank]++
 	}
+
 }
 
-max_dict(dict map[string]int){
-	max = 1
-	for k, v := range dict{
-		if v > max
+func max_dict(dict map[string]int){
+	max := 1
+	for _, v := range dict{
+		if v > max{
 		max = v
+		}
 	}
-
 }
 
-func (p *Player)rank_hand(){
-	first 	= 1
-	second  = 1
+/*func (p *Player)rank_hand(){
+	first 	:= 1
+	second  := 1
 	for k, v := range p.Card_Hist{
 		if v > 1{
 			if first !=1{
@@ -353,23 +363,20 @@ func (p *Player)rank_hand(){
 			}
 		}
 	}
-
 	first_tier := 1
 	second_tier := 1
 	larg_group := 0
 	small_group := 0
 	for r := 13; r > 0; r--{
-		if r > first_tier
+		//if r > first_tier
 		if first_tier != 1{
-			second_tier = first_tier
-			two_rank = three_rank  
+			second_tier := first_tier
+			two_rank := three_rank  
 		}
 		first_tier = x
 		large_group = x 
 	}
-}
-
-
+} */
 
 
 	/* hand ranking :
@@ -385,56 +392,58 @@ func (p *Player)rank_hand(){
 	if two or more players are tied for top rank, call a second function that compares the hands based on 
 	rank of the individual cards */
 
-func rank_hands(players []Player)map[string]int{
-	score_category_map := map[string]int{
-		"straight_flush": []Player,
-		"four_of_a_kind": []Player,
-		"full_house": []Player,
-		"flush": []Player,
-		"straight": []Player,
-		"three_of_a_kind": []Player,
-		"two_pairs": []Player,
-		"pair": []Player,
-		"nothing": []Player,
-	}
+func rank_hands(players []Player)map[string][]int{
+	fmt.Printf("About to begin ranking hands...\n")
+	score_category_map := make(map[string][]int)
+
+	//	"straight_flush": []Player,
+	//	"four_of_a_kind": []Player,
+	//	"full_house": []Player,
+	//	"flush": []Player,
+	///	"straight": []Player,
+	//"three_of_a_kind": []Player,
+	//	"two_pairs": []Player,
+	//	"pair": []Player,
+	//	"nothing": []Player,
+	//}
 	for i := 0; i < len(players); i++{
 		if players[i].Folded == false{
 			hand := players[i].Hand
 			if check_straight_flush(hand){
 				//score_category_map["straight_flush"]++
-				score_category_map["straight_flush"] = append(score_category_map["straight_flush"], players[i].Name)
+				score_category_map["straight_flush"] = append(score_category_map["straight_flush"], i )
 				//player.Hand_Rank = 1
 			}else if check_four_of_a_kind(hand){
 				//score_category_map["four_of_a_kind"]++
-				score_category_map["four_of_a_kind"] = append(score_category_map["four_of_a_kind"], players[i].Name)
+				score_category_map["four_of_a_kind"] = append(score_category_map["four_of_a_kind"], i)
 				//player.Hand_Rank = 2
 			}else if check_full_house(hand){
 				//score_category_map["full_house"]++
-				score_category_map["full_house"] = append(score_category_map["full_house"], players[i].Name)
+				score_category_map["full_house"] = append(score_category_map["full_house"], i)
 				//player.Hand_Rank = 3
 			}else if check_flush(hand){
 				//score_category_map["flush"]++
-				score_category_map["flush"] = append(score_category_map["flush"], players[i].Name)
+				score_category_map["flush"] = append(score_category_map["flush"], i)
 				//player.Hand_Rank = 4
 			}else if check_stright(hand){
 				//score_category_map["straight"]++
-				score_category_map["straight"] = append(score_category_map["straight"], players[i].Name)
+				score_category_map["straight"] = append(score_category_map["straight"], i)
 				//player.Hand_Rank = 5
 			}else if check_three_of_a_kind(hand){
 				//score_category_map["three_of_a_kind"]++
-				score_category_map["three_of_a_kind"] = append(score_category_map["three_of_a_kind"], players[i].Name)
+				score_category_map["three_of_a_kind"] = append(score_category_map["three_of_a_kind"], i)
 				//player.Hand_Rank = 6
 			}else if check_two_pairs(hand){
 				//score_category_map["two_pairs"] ++
-				score_category_map["two_pairs"] = append(score_category_map["two_pairs"], players[i].Name)
+				score_category_map["two_pairs"] = append(score_category_map["two_pairs"], i)
 				//player.Hand_Rank = 7
 			}else if check_pair(hand){
 				//score_category_map["pair"]++
-				score_category_map["pair"] = append(score_category_map["pair"], players[i].Name)
+				score_category_map["pair"] = append(score_category_map["pair"], i)
 				//player.Hand_Rank = 8
 			}else{
 				//score_category_map["nothing"]++
-				score_category_map["nothing"] = append(score_category_map["nothing"], players[i].Name)
+				score_category_map["nothing"] = append(score_category_map["nothing"], i)
 				//player.Hand_Rank = 9
 			}
 		/* not yet complete - will modify return values so that it is easier to determine the winner
@@ -455,10 +464,9 @@ func check_flush(hand []Card)bool{
 }
 
 func check_stright(hand []Card)bool{
-	if hand[4].Rank - hand[0].Rank == 4
-			return true
+	if (hand[4].Rank - hand[0].Rank) == 4{
+		return true
 		}
-	}
 	return false
 }
 
@@ -535,79 +543,85 @@ func check_pair(hand []Card)bool{
 	return false
 }
 
-func showdown(score_board map[string]int, players *Player)*Player{
-	hand_rank := 1
-	var winner string 
+/*func get_player_index_from_name(players []Player, name string)int{
+	for i, p := range players{
+		if p.Name == name{
+		return i
+		}	
+	}
+	return 0
+} */
+
+func showdown(players []Player, score_board map[string][]int)*Player{
+	fmt.Printf("About to begin showdown \n")
+	//hand_rank := 1
+	var winner Player 
 	for key, value := range score_board{
 		if len(value) == 1{
-			return value[0]
+			return &players[value[0]]
 		}
 		if len(value) > 1{
 			best := 0
 			if key == "straight_flush"{
 				for i := 0; i < len(value); i++{
 					if players[value[i]].Hand[0].Rank > best{
-						rank := players[value[i]].Hand[0].Rank
+						best = players[value[i]].Hand[0].Rank
 						winner = players[value[i]]
 					} 
 				}
 			}else if key == "four_of_a_kind"{
 				for i := 0; i < len(value); i++{
-					rank := player[value[i]].find_four_of_kind_rank()
+					rank := players[value[i]].find_four_of_kind_rank()
 					if rank > best{
-						winner = value[i]
+						winner = players[value[i]]
 					}
 				}
 			}else if key == "full_house"{
 				for i := 0; i < len(value); i++{
-					rank := player[value[i]].find_three_of_kind_rank()
+					rank := players[value[i]].find_three_of_kind_rank()
 					if rank > best{
-						winner = value[i]
+						winner = players[value[i]]
 					}
 				}
 			}else if key == "three_of_a_kind"{
 				for i := 0; i < len(value); i++{
-					rank := player[value[i]].find_three_of_kind_rank()
+					rank := players[value[i]].find_three_of_kind_rank()
 					if rank > best{
-						winner = value[i]
+						winner = players[value[i]]
 					}
 				}
 			}else if key == "two_pairs"{
 				best2 := 0
 				for i := 0; i < len(value); i++{
-					rank := player[value[i]].best_pair(){
-						if rank = best && best > 0{
-							for j := 0; j < len(value); j++{
-								rank2 := player[value[j]]second_best_pair()
-								if rank2 > best2{
-									winner = value[j]
+					rank := players[value[i]].best_pair()
+					if rank == best && best > 0{
+						for j := 0; j < len(value); j++{
+							rank2 := players[value[j]].second_best_pair()
+							if rank2 > best2{
+								winner = players[value[i]]
 								}		
 							}
 						}else if rank > best && rank > best2{
-							winner = value[i]
+							winner = players[value[i]]
 						}
 					}
-				}
 			}else if key == "pair"{
 				for i := 0; i < len(value); i++{
-					rank := player[value[i]].best_pair(){
-						if rank > best{
-							winner = value[i]{
-							}
+					rank := players[value[i]].best_pair()
+					if rank > best{
+						winner = players[value[i]]
 						}
 					}
-				}
 			}else if key == "nothing"{
 				for i := 0; i < len(value); i++{
-					rank := player[value[i]].highest_card(){
+					rank := players[value[i]].highest_card()
 						if rank > best{
-							winner = value[i]
+							winner = players[value[i]]
 						}
 					}
 				}
 			}
 		}
-	}
 	return &winner 
 }
 
