@@ -37,12 +37,17 @@ button, input, form{
 	margin: 0;
 	padding: 0;
 }
-.pot{
+.middleRow{
 	top: 50%;
 	width: 80%;
 	text-align: center;
-	margin: 0;
+	margin-top: -2em;
+	margin-bottom: -1em;
 	padding: 0;
+}
+.middleRow .deck{
+	top: 3em;
+	left: 30%;
 }
 .menu{
 	width: 80%;
@@ -76,7 +81,7 @@ button, input, form{
 	outline: 5px solid blue;
 }
 .folded{
-	opacity: 0.7;
+	opacity: 0.3;
 }
 .timer{
 	width: 195px;

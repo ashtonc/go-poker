@@ -1,11 +1,22 @@
 $(document).ready(function(){
 	// initialize first turn (random)
+	var numberOfPlayers = 6;
+	deal(numberOfPlayers);
 	$('.position1').find('img').addClass('yourTurn');
 	$('.position1').find('img').after('<div class=\"timer\"><div class=\"startTimer\"></div></div>');
 	$('.startTimer').on('animationend', nextTurn);
+	function deal(num){
+		for(i = 0; i < num * 5; i++){
+			currentPlayer = '.position' + ((i%num) + 1);
+			var rank = (i%num + 2);
+			var suit = 'spades';
+			$(currentPlayer).find('.table').append('<li><div class=\"card rank-' + rank + ' ' + suit + '\"><span class=\"rank\">' + rank + '</span><span class=\"suit\">&' + suit + ';</span></div></li>');
+		}
+	}
 	function nextTurn(){
 		// if it's your turn, draw blue outline and animate it
 		if($('.position1').find('img').hasClass('yourTurn')){
+			$('.yourTurn').parent().addClass('folded');
 			$('.position1').find('img').removeClass('yourTurn');
 			$('.timer').remove();
 			$('.startTimer').remove();
@@ -14,6 +25,7 @@ $(document).ready(function(){
 			$('.startTimer').on('animationend', nextTurn);
 		}
 		else if($('.position2').find('img').hasClass('yourTurn')){
+			$('.yourTurn').parent().addClass('folded');
 			$('.position2').find('img').removeClass('yourTurn');
 			$('.timer').remove();
 			$('.startTimer').remove();
@@ -22,6 +34,7 @@ $(document).ready(function(){
 			$('.startTimer').on('animationend', nextTurn);
 		}
 		else if($('.position3').find('img').hasClass('yourTurn')){
+			$('.yourTurn').parent().addClass('folded');
 			$('.position3').find('img').removeClass('yourTurn');
 			$('.timer').remove();
 			$('.startTimer').remove();
@@ -30,6 +43,7 @@ $(document).ready(function(){
 			$('.startTimer').on('animationend', nextTurn);
 		}
 		else if($('.position4').find('img').hasClass('yourTurn')){
+			$('.yourTurn').parent().addClass('folded');
 			$('.position4').find('img').removeClass('yourTurn');
 			$('.timer').remove();
 			$('.startTimer').remove();
@@ -38,6 +52,7 @@ $(document).ready(function(){
 			$('.startTimer').on('animationend', nextTurn);
 		}
 		else if($('.position5').find('img').hasClass('yourTurn')){
+			$('.yourTurn').parent().addClass('folded');
 			$('.position5').find('img').removeClass('yourTurn');
 			$('.timer').remove();
 			$('.startTimer').remove();
@@ -46,6 +61,7 @@ $(document).ready(function(){
 			$('.startTimer').on('animationend', nextTurn);
 		}
 		else{
+			$('.yourTurn').parent().addClass('folded');
 			$('.position6').find('img').removeClass('yourTurn');
 			$('.timer').remove();
 			$('.startTimer').remove();
@@ -64,7 +80,7 @@ $(document).ready(function(){
 	});
 	$('.menu').on('click', '#fold', function(){
 		$('.startTimer').stop(true, true);
-		$('.yourTurn').closest('img').addClass('folded');
+		$('.yourTurn').parent().addClass('folded');
 		nextTurn();
 	});
 	$('.menu').on('click', '#raiseButton', function(){
