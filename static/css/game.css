@@ -75,6 +75,9 @@ button, input, form{
 .yourTurn{
 	outline: 5px solid blue;
 }
+.folded{
+	opacity: 0.7;
+}
 .timer{
 	width: 195px;
 	margin: 0 auto;
