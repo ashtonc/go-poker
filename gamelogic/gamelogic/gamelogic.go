@@ -38,6 +38,7 @@ beginning with the player who opened the first round (the latter is common when 
  	/* show() main game page
  	/* create and shuffle deck of cards */
  	//reader := bufio.NewReader(os.Stdin)
+ 	cheat := true
  	cardTypes, suites := Init_card_cat()
  	pot := 0
  	deck := createDeck(cardTypes, suites)
@@ -53,21 +54,38 @@ beginning with the player who opened the first round (the latter is common when 
  		pot += ante
  		fmt.Printf("%s pays %d for ante \n", players[i].Name, ante)
 	}
+	if cheat == true{
+		reader := bufio.NewReader(os.Stdin)
+		for i := 0; i < len(players); i++{
+			fmt.Printf("Time for %s to chose cards...\n", players[i].Name)
+			for j := 0; j < 5; j++{
+				fmt.Printf("Please enter face of next card:\n")
+				face, _ := reader.ReadString('\n')
+				fmt.Printf("Please enter the suit of the next card:\n")
+				suit, _ := reader.ReadString('\n')
+				face = strings.Replace(face, "\r\n", "", -1)
+				suit = strings.Replace(suit, "\r\n", "", -1)
+				card := newCard(face, suit, cardTypes)
+				players[i].Hand = append(players[i].Hand, *card)
+			}
+		}
+	}else{
  
- 	/*first round dealing */
- 	fmt.Printf("The dealer suffles the cards and begins dealing... \n")
- 	bufio.NewReader(os.Stdin).ReadBytes('\n')
+ 		/*first round dealing */
+	 	fmt.Printf("The dealer suffles the cards and begins dealing... \n")
+	 	bufio.NewReader(os.Stdin).ReadBytes('\n')
 
- 	d := 0
- 	for d < 5{
- 		for i := 0; i < len(players); i++{
- 			card := draw(deck)
- 			deck = deck[1:]
- 			players[i].Hand = append(players[i].Hand, card)
- 			fmt.Printf(" %s is delt a %s of %s \n ", players[i].Name, card.Face, card.Suit)
- 		}
- 		d++
- 	}
+	 	d := 0
+	 	for d < 5{
+	 		for i := 0; i < len(players); i++{
+	 			card := draw(deck)
+	 			deck = deck[1:]
+	 			players[i].Hand = append(players[i].Hand, card)
+	 			fmt.Printf(" %s is delt a %s of %s \n ", players[i].Name, card.Face, card.Suit)
+	 		}
+	 		d++
+	 	}
+	}
  	/*first round betting */
  	pot = betting_round(players, minBet, maxBet, pot)
  	remaining := check_num_players_remaining(players)
@@ -98,11 +116,10 @@ beginning with the player who opened the first round (the latter is common when 
  		if players[i].Folded == false{
  			players[i].sort_hand_by_rank()
  			fmt.Printf("Sorted hand: \n")
- 			for _, crd := range players[i].Hand{
- 				fmt.Printf("%s of %s \n", crd.Face, crd.Suit)
+ 			players[i].show_hand()
+ 			players[i].card_histogram()
  			}
  		}
- 	}
  	score_board :=rank_hands(players)	
  	winner := showdown(players, score_board)
  	fmt.Printf("%s win a pot worth %d \n", winner.Name, pot)
@@ -323,6 +340,7 @@ func discarded_hand(hand []Card, discard_index []int)[]Card{
 
 func (p *Player)card_histogram(){
 	/*p.Card_Hist = map[string]int{
+		"1":	0,
 		"2":	0,
 		"3":	0,
 		"4":	0,
@@ -332,13 +350,16 @@ func (p *Player)card_histogram(){
 		"8":	0,
 		"9":	0,
 		"10":	0,
-		"Jack":	0,
-		"Queen":0,
-		"King":	0,
-		"Ace":	0, 
+		"11":   0,
+		"12":	0,
+		"13":	0, 
 	} */
 	for _, crd := range p.Hand{
 		p.Card_Hist[crd.Rank]++
+	}
+	fmt.Printf("Card Hist of %s: \n", p.Name)
+	for _, i := range p.Card_Hist{
+		fmt.Printf(" %d \n", i)
 	}
 
 }
@@ -395,7 +416,18 @@ func max_dict(dict map[string]int){
 func rank_hands(players []Player)map[string][]int{
 	fmt.Printf("About to begin ranking hands...\n")
 	score_category_map := make(map[string][]int)
-
+	var value []int
+	for rank := 0; rank < 9; rank ++{
+		score_category_map["straight_flush"] = value
+		score_category_map["four_of_a_kind"] = value
+		score_category_map["full_house"] = value
+		score_category_map["flush"] = value
+		score_category_map["straight"] = value
+		score_category_map["three_of_a_kind"] = value
+		score_category_map["two_pairs"] = value
+		score_category_map["pair"] = value
+		score_category_map["nothing"] = value
+	}
 	//	"straight_flush": []Player,
 	//	"four_of_a_kind": []Player,
 	//	"full_house": []Player,
@@ -412,39 +444,39 @@ func rank_hands(players []Player)map[string][]int{
 			if check_straight_flush(hand){
 				//score_category_map["straight_flush"]++
 				score_category_map["straight_flush"] = append(score_category_map["straight_flush"], i )
-				//player.Hand_Rank = 1
+				fmt.Printf("%s has a straight flush\n", players[i].Name)
 			}else if check_four_of_a_kind(hand){
 				//score_category_map["four_of_a_kind"]++
 				score_category_map["four_of_a_kind"] = append(score_category_map["four_of_a_kind"], i)
-				//player.Hand_Rank = 2
+				fmt.Printf("%s has a four of a kind\n", players[i].Name)
 			}else if check_full_house(hand){
 				//score_category_map["full_house"]++
 				score_category_map["full_house"] = append(score_category_map["full_house"], i)
-				//player.Hand_Rank = 3
+				fmt.Printf("%s has a full house\n", players[i].Name)
 			}else if check_flush(hand){
-				//score_category_map["flush"]++
+				fmt.Printf("%s has a flush\n", players[i].Name)
 				score_category_map["flush"] = append(score_category_map["flush"], i)
 				//player.Hand_Rank = 4
 			}else if check_stright(hand){
 				//score_category_map["straight"]++
 				score_category_map["straight"] = append(score_category_map["straight"], i)
-				//player.Hand_Rank = 5
+				fmt.Printf("%s has a straight\n ", players[i].Name)
 			}else if check_three_of_a_kind(hand){
 				//score_category_map["three_of_a_kind"]++
 				score_category_map["three_of_a_kind"] = append(score_category_map["three_of_a_kind"], i)
-				//player.Hand_Rank = 6
+				fmt.Printf("%s has a three of a kind \n", players[i].Name)
 			}else if check_two_pairs(hand){
 				//score_category_map["two_pairs"] ++
 				score_category_map["two_pairs"] = append(score_category_map["two_pairs"], i)
-				//player.Hand_Rank = 7
+				fmt.Printf("%s has a two pairs\n ", players[i].Name)
 			}else if check_pair(hand){
 				//score_category_map["pair"]++
 				score_category_map["pair"] = append(score_category_map["pair"], i)
-				//player.Hand_Rank = 8
+				fmt.Printf("%s has one pair \n", players[i].Name)
 			}else{
 				//score_category_map["nothing"]++
 				score_category_map["nothing"] = append(score_category_map["nothing"], i)
-				//player.Hand_Rank = 9
+				fmt.Printf("%s has nothing \n", players[i].Name)
 			}
 		/* not yet complete - will modify return values so that it is easier to determine the winner
 			when the best two hands belong to the same category */	
@@ -464,10 +496,12 @@ func check_flush(hand []Card)bool{
 }
 
 func check_stright(hand []Card)bool{
-	if (hand[4].Rank - hand[0].Rank) == 4{
-		return true
+	for i := 1; i < len(hand); i++{
+		if hand[i].Rank != hand[i-1].Rank + 1{
+			return false
 		}
-	return false
+	}
+	return true
 }
 
 func check_straight_flush(hand []Card)bool{
@@ -554,76 +588,244 @@ func check_pair(hand []Card)bool{
 
 func showdown(players []Player, score_board map[string][]int)*Player{
 	fmt.Printf("About to begin showdown \n")
-	//hand_rank := 1
-	var winner Player 
+	fmt.Printf("score_board:")
 	for key, value := range score_board{
-		if len(value) == 1{
-			return &players[value[0]]
-		}
-		if len(value) > 1{
-			best := 0
-			if key == "straight_flush"{
-				for i := 0; i < len(value); i++{
-					if players[value[i]].Hand[0].Rank > best{
-						best = players[value[i]].Hand[0].Rank
-						winner = players[value[i]]
-					} 
-				}
-			}else if key == "four_of_a_kind"{
-				for i := 0; i < len(value); i++{
-					rank := players[value[i]].find_four_of_kind_rank()
-					if rank > best{
-						winner = players[value[i]]
-					}
-				}
-			}else if key == "full_house"{
-				for i := 0; i < len(value); i++{
-					rank := players[value[i]].find_three_of_kind_rank()
-					if rank > best{
-						winner = players[value[i]]
-					}
-				}
-			}else if key == "three_of_a_kind"{
-				for i := 0; i < len(value); i++{
-					rank := players[value[i]].find_three_of_kind_rank()
-					if rank > best{
-						winner = players[value[i]]
-					}
-				}
-			}else if key == "two_pairs"{
-				best2 := 0
-				for i := 0; i < len(value); i++{
-					rank := players[value[i]].best_pair()
-					if rank == best && best > 0{
-						for j := 0; j < len(value); j++{
-							rank2 := players[value[j]].second_best_pair()
-							if rank2 > best2{
-								winner = players[value[i]]
-								}		
-							}
-						}else if rank > best && rank > best2{
-							winner = players[value[i]]
-						}
-					}
-			}else if key == "pair"{
-				for i := 0; i < len(value); i++{
-					rank := players[value[i]].best_pair()
-					if rank > best{
-						winner = players[value[i]]
-						}
-					}
-			}else if key == "nothing"{
-				for i := 0; i < len(value); i++{
-					rank := players[value[i]].highest_card()
-						if rank > best{
-							winner = players[value[i]]
-						}
-					}
-				}
+		fmt.Printf("%s: %v \n", key, value)
+	}
+	best := 0
+	//hand_rank := 1
+	var winner Player
+	if len(score_board["straight_flush"]) == 1{
+		win := score_board["straight_flush"][0]
+		winner = players[win]
+		//return winner
+	}else if len(score_board["straight_flush"]) > 1{
+		contenders := score_board["straight_flush"]
+		for c := 0; c < len(contenders); c++{
+			if players[c].Hand[4].Rank > best{
+				best = players[c].Hand[4].Rank
+				winner = players[contenders[c]]
 			}
 		}
-	return &winner 
+	}else if len(score_board["four_of_a_kind"]) == 1{
+		win := score_board["four_of_a_kind"][0]
+		winner = players[win]
+	}else if len(score_board["four_of_a_kind"]) > 1{
+		contenders := score_board["four_of_a_kind"]
+		for c := 0; c < len(contenders); c++{
+			if players[contenders[c]].find_four_of_kind_rank() > best{
+				best = players[contenders[c]].find_four_of_kind_rank()
+				winner = players[contenders[c]]
+				}
+			}
+	}else if len(score_board["full_house"]) == 1{
+		win := score_board["full_house"][0]
+		winner = players[win]
+	}else if len(score_board["full_house"]) > 1{
+		contenders := score_board["full_house"]
+		for c := 0; c < len(contenders); c++{
+			if players[contenders[c]].find_three_of_kind_rank() > best{
+				best = players[contenders[c]].find_three_of_kind_rank()
+				winner = players[contenders[c]]
+				}
+			}
+	}else if len(score_board["flush"]) == 1{
+		win := score_board["full_house"][0]
+		winner = players[win]
+	}else if len(score_board["flush"]) > 1{
+		contenders := score_board["flush"]
+		win := find_best_nothing(contenders, players)
+		winner = players[win]
+	
+	}else if len(score_board["straight"]) == 1{
+		win := score_board["straight"][0]
+		winner = players[win]
+	}else if len(score_board["straight"]) > 1{
+		contenders := score_board["straight"]
+		win := find_best_nothing(contenders, players)
+		winner = players[win]
+	}else if len(score_board["three_of_a_kind"]) == 1{
+		win := score_board["three_of_a_kind"][0]
+		winner = players[win]
+	}else if len(score_board["three_of_a_kind"]) > 1{
+		contenders := score_board["three_of_a_kind"]
+		for c := 0; c < len(contenders); c++{
+			if players[contenders[c]].find_three_of_kind_rank() > best{
+				best = players[contenders[c]].find_three_of_kind_rank()
+				winner = players[contenders[c]]
+			} 
+		}
+	}else if len(score_board["two_pairs"]) == 1{
+		win := score_board["two_pairs"][0]
+		winner = players[win]
+	}else if len(score_board["two_pairs"]) > 1{
+		contenders := score_board["two_pairs"]
+		best2 := 0
+		for i := 0; i < len(contenders); i++{
+			rank := players[contenders[i]].best_pair()
+			fmt.Printf("%s best pair rank is %d \n", players[contenders[i]].Name, rank)
+			if rank > best{
+				best = rank
+				winner = players[contenders[i]]
+			}else if rank == best && best > 0{
+				fmt.Printf("tie detected \n")
+				best = rank
+				for j := 0; j < len(contenders); j++{
+					if players[contenders[j]].best_pair() < best{
+						continue
+					}
+					rank2 := players[contenders[j]].second_best_pair()
+					fmt.Printf("%s second best pair rank is %d \n", players[contenders[j]].Name, rank2)
+					if rank2 > best2{
+						best2 = rank2
+						winner = players[contenders[j]]
+					}else if rank2 == best2 && best2 > 0{
+						fmt.Printf("Second tie!! \n")
+						win := find_best_nothing(contenders, players)
+						winner = players[win]							
+						fmt.Printf("current winner: %s \n", winner.Name)
+						return &winner
+						}		
+					}
+				} 
+			}
+		}else if len(score_board["pair"]) == 1{
+			win := score_board["pair"][0]
+			winner = players[win]
+		}else if len(score_board["pair"]) > 1{
+			contenders := score_board["two_pairs"]
+			fmt.Printf("Best is %d \n", best)
+			for i := 0; i < len(contenders); i++{
+				fmt.Printf("i is %d \n", i)
+				rank := players[contenders[i]].best_pair()
+				fmt.Printf("Rank is %d \n", rank)
+				if rank > best{
+					best = rank
+					winner = players[contenders[i]]
+				}else if rank == best && best > 0{
+					index := find_best_nothing(contenders, players)
+					winner = players[index]
+					return &winner
+					}
+				}
+		}else{
+			contenders := score_board["nothing"]
+			index := find_best_nothing(contenders, players)
+			winner = players[index]
+			}
+return &winner 
 }
 
 
+func find_best_nothing(indexes []int, players []Player)int{
 
+	for i := 4; i > 0; i--{
+		win_indx := 0
+		highest := 0
+		tie := false
+		for _, j := range indexes{
+			fmt.Printf("%s has a rank %d card \n", players[j].Name, players[j].Hand[i].Rank)
+			if players[j].Hand[j].Rank > highest{
+				if players[j].Hand[j].Rank == highest && highest > 0{
+					tie = true
+				}
+				win_indx = j
+			}
+		}
+		if tie == false{
+			return win_indx
+		}
+	}
+	return -1
+}
+
+
+func Unit_Test()*Player{
+
+	cardTypes, _ := Init_card_cat()
+
+	Red := new(Player)
+	Red.Name = "Red"
+	Red.Money = 100
+	Red.Folded = false
+	Red.Bet = 0
+
+
+	Green := new(Player)
+	Green.Name = "Green"
+	Green.Money = 100
+	Green.Folded = false
+	Green.Bet = 0
+
+	players := make([]Player, 2)
+	players[0] = *Red
+	players[1] = *Green
+	
+
+
+	//deck := make([]Card, 52)
+
+	
+	a := newCard("King", "diamonds", cardTypes)
+	b := newCard("Ace", "hearts", cardTypes)
+	c := newCard("Jack", "spades", cardTypes)
+	d := newCard("7", "clubs", cardTypes)
+	e := newCard("7", "diamonds", cardTypes)
+
+	arr := []Card{*a, *b, *c, *d, *e}
+	for i := 0; i < len(arr); i++ {
+		players[1].Hand = append(players[1].Hand, arr[i])
+	}
+
+
+
+	aa := newCard("10", "clubs", cardTypes)
+	bb := newCard("Queen", "spades", cardTypes)
+	cc := newCard("7", "spades", cardTypes)
+	dd := newCard("Queen", "clubs", cardTypes)
+	ee := newCard("Jack", "diamonds", cardTypes)
+
+	arrb := []Card{*aa, *bb, *cc, *dd, *ee}
+	for i := 0; i  < len(arrb); i++ {
+		players[0].Hand = append(players[0].Hand, arrb[i])
+	}
+
+
+	//Red.show_hand()
+	//Green.show_hand()
+
+	for i := 0; i < len(players); i++{
+		players[i].show_hand()
+	}
+	
+
+	value := make([]int, 0)
+	value = append(value, 0)
+	value = append(value, 1)
+
+	for i := 0; i < len(players); i++{
+ 	if players[i].Folded == false{
+ 		players[i].sort_hand_by_rank()
+ 		players[i].show_hand()
+ 		players[i].card_histogram()
+ 			}
+ 		}
+ 	
+
+	best := 0
+	winner := players[0]
+
+	for i := 0; i < len(value); i++{
+		fmt.Printf("i is %d", i)
+		rank := players[value[i]].best_pair()
+		fmt.Printf("Rank is %d", rank)
+		if rank > best{
+			if rank == best && best > 0{
+				best = rank
+				index := find_best_nothing(value, players)
+				winner = players[index]
+			}
+		}
+	}
+	return &winner
+}

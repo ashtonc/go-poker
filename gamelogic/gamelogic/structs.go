@@ -44,7 +44,7 @@ type Player struct {			/* A more complete player struct will likely be someplace
 	Folded  bool    /*default value false */
 	Bet     int
 	Hand_Rank int
-	Card_Hist [13]int
+	Card_Hist [14]int
 }
 
  func (p *Player) pay_bet(amount int, pot int)int{
@@ -96,7 +96,7 @@ type Player struct {			/* A more complete player struct will likely be someplace
 
 
 func (p *Player)sort_hand_by_rank(){
-	fmt.Printf("About to sort %s hand by rank", p.Name)
+	fmt.Printf("About to sort %s hand by rank \n", p.Name)
 	hand := p.Hand
 	sort.Slice(hand[:], func(i, j int) bool {
     return hand[i].Rank < hand[j].Rank
@@ -135,6 +135,7 @@ func (p *Player)sort_hand_by_rank(){
 func (p *Player)find_four_of_kind_rank()int{
 	for k, v := range p.Card_Hist{
 		if v == 4{
+			fmt.Printf("For of kind rank: %d \n", k)
 			return k
 		}
 	}
@@ -151,7 +152,7 @@ func (p *Player)find_three_of_kind_rank()int{
 }
 
 func (p *Player)best_pair()int{
-	for k := len(p.Card_Hist); k < 0; k--{
+	for k := len(p.Card_Hist) - 1; k >= 0; k--{
 		if p.Card_Hist[k] == 2{
 			return k
 		}
@@ -169,16 +170,7 @@ func (p *Player)second_best_pair()int{
 }	
 
 
-func (p *Player)highest_card()int{
-	best := 0
-	for _, crd := range p.Hand{
-		if crd.Rank > best{
-			best = crd.Rank
-		}
-	}
-	return best
 
-}
 
 
 
@@ -221,7 +213,7 @@ func newCard(face string, suit string, cardTypes []string)*Card{
 	crd := new(Card)
 	crd.Face = face
 	crd.Suit = suit
-	rank := getIndex(cardTypes, face) + 1
+	rank := getIndex(cardTypes, face)
 	crd.Rank = rank
 	return crd
 	}
