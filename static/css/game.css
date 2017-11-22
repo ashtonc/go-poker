@@ -17,12 +17,12 @@ button, input, form{
 .game{
 	background-size: 80% 100%;
 }
-.game .topRow .profile{
+.topRow{
 	margin-top: 0.5%;
 	width: 80%;
 	text-align: center;
 }
-.game .bottomRow .profile{
+.bottomRow{
 	margin-top: 4%;
 	width: 80%;
 	text-align: center;
@@ -37,13 +37,81 @@ button, input, form{
 	margin: 0;
 	padding: 0;
 }
-.game .pot{
+.pot{
+	top: 50%;
 	width: 80%;
 	text-align: center;
 	margin: 0;
 	padding: 0;
 }
-.game .menu{
+.menu{
 	width: 80%;
 	text-align: right;
 }
+.position1{
+	display: inline-block;
+	margin-right: 2em;
+}
+.position2{
+	display: inline-block;
+	margin-right: 2em;
+}
+.position3{
+	display: inline-block;
+	margin-right: 2em;
+}
+.position4{
+	display: inline-block;
+	margin-right: 2em;
+}
+.position5{
+	display: inline-block;
+	margin-right: 2em;
+}
+.position6{
+	display: inline-block;
+	margin-right: 2em;
+}
+.yourTurn{
+	outline: 5px solid blue;
+}
+.timer{
+	width: 195px;
+	margin: 0 auto;
+	position: relative;
+}
+.startTimer{
+    width: 195px;
+    height: 10px;
+	margin: 0 auto;	
+    position: absolute;
+    bottom: 0;
+    -webkit-animation-name: fillBar;
+        animation-name: fillBar;
+    -webkit-animation-duration: 5s;
+            animation-duration: 5s;
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    -webkit-animation-iteration-count: 1;
+            animation-iteration-count: 1;
+    -webkit-animation-direction: alternate;
+            animation-direction: alternate;
+    background-color: red; 
+}
+
+@-webkit-keyframes fillBar {
+      0% {
+        width: 100%;
+      }
+      100% {
+        width: 0%;
+      }
+  }
+  @keyframes fillBar {
+      0% {
+        width: 100%;
+      }
+      100% {
+        width: 0%;
+      }
+  }

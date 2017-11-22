@@ -14,40 +14,88 @@
 		<div class="playingCards simpleCards">
 			<div class="game">
 				<div class="topRow">
-					<div class="profile">
-						<img src="profile.jpg">
-						<p>$1,000,000</p>
-						<p>Your Hand:
-							<ul class="hand">
-								<li><div class="card rank-a spades">
-										<span class="rank">A</span>
-										<span class="suit">&spades;</span>
-								</div></li>
-								<li><div class="card rank-k spades">
-										<span class="rank">K</span>
-										<span class="suit">&spades;</span>
-								</div></li>
-								<li><div class="card rank-q spades">
-										<span class="rank">Q</span>
-										<span class="suit">&spades;</span>
-								</div></li>
-								<li><div class="card rank-j spades">
-										<span class="rank">J</span>
-										<span class="suit">&spades;</span>
-								</div></li>
-								<li><div class="card rank-10 spades">
-										<span class="rank">10</span>
-										<span class="suit">&spades;</span>
-								</div></li>
-							</ul>
-						</p>
+					<div class="position1">
+						<img src="profile.jpg" title ="picture">
+						<div class="name">Player 1</div>
+						<div class="stack">1000000</div>
+						<ul class="hand">
+							<li><div class="card rank-a spades">
+									<span class="rank">A</span>
+									<span class="suit">&spades;</span>
+							</div></li>
+							<li><div class="card rank-k spades">
+									<span class="rank">K</span>
+									<span class="suit">&spades;</span>
+							</div></li>
+							<li><div class="card rank-q spades">
+									<span class="rank">Q</span>
+									<span class="suit">&spades;</span>
+							</div></li>
+							<li><div class="card rank-j spades">
+									<span class="rank">J</span>
+									<span class="suit">&spades;</span>
+							</div></li>
+							<li><div class="card rank-10 spades">
+									<span class="rank">10</span>
+									<span class="suit">&spades;</span>
+							</div></li>
+						</ul>
+					</div>
+					<div class="position2">
+						<img src="profile.jpg" title ="picture">
+						<div class="name">Player 3</div>
+						<div class="stack">1000000</div>
+						<ul class="hand">
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+						</ul>
+					</div>
+					<div class="position3">
+						<img src="profile.jpg" title ="picture">
+						<div class="name">Player 5</div>
+						<div class="stack">1000000</div>
+						<ul class="hand">
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+						</ul>
 					</div>
 				</div>
 				<div class = "pot"><p>Pot: 1,000,000</p></div>
 				<div class = "bottomRow">
-					<div class="profile">
-						<img src="profile.jpg">
-						<p>$1,000,000</p>
+					<div class="position6">
+						<img src="profile.jpg" title ="picture">
+						<div class="name">Player 2</div>
+						<div class="stack">1000000</div>
+						<ul class="hand">
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+						</ul>
+					</div>
+					<div class="position5">
+						<img src="profile.jpg" title ="picture">
+						<div class="name">Player 4</div>
+						<div class="stack">1000000</div>
+						<ul class="hand">
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+							<li><div class="card back">*</div></li>
+						</ul>
+					</div>
+					<div class="position4">
+						<img src="profile.jpg" title ="picture"> 
+						<div class="name">Player 6</div>
+						<div class="stack">1000000</div>
 						<ul class="hand">
 							<li><div class="card back">*</div></li>
 							<li><div class="card back">*</div></li>
@@ -58,20 +106,20 @@
 					</div>
 				</div>
 				<div class = "menu">
-						<button type="button">Check</button>
-						<button type="button">Call</button>
-						<button type="button">Fold</button>
+						<button type="button" id = "check">Check</button>
+						<button type="button" id = "call">Call</button>
+						<button type="button" id = "fold">Fold</button>
 						<form>
 							<input type="text">
-							<input type = "submit" value = "Raise">
+							<input id = "raise" type = "submit" value = "Raise">
 						</form>
-						<button type="button">Leave game</button><br>
+						<button type="button" id = "nextTurn">Next Turn</button>
+						<a href = "lobby.html"><button type="button" id = "leaveGame">Leave game</button></a><br>
 				</div>
-				
 			</div>
-			<div class = "log">
-				<p>Welcome to Poker470!</p>
-			</div>
+			<div class = "log"><p>Welcome to Poker470!</p></div>
 		</div>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="../static/js/game.js"></script>
 	</body>
 </html>
