@@ -53,27 +53,7 @@ button, input, form{
 	width: 80%;
 	text-align: right;
 }
-.position1{
-	display: inline-block;
-	margin-right: 2em;
-}
-.position2{
-	display: inline-block;
-	margin-right: 2em;
-}
-.position3{
-	display: inline-block;
-	margin-right: 2em;
-}
-.position4{
-	display: inline-block;
-	margin-right: 2em;
-}
-.position5{
-	display: inline-block;
-	margin-right: 2em;
-}
-.position6{
+.position1, .position2, .position3, .position4, .position5, .position6{
 	display: inline-block;
 	margin-right: 2em;
 }
@@ -96,8 +76,8 @@ button, input, form{
     bottom: 0;
     -webkit-animation-name: fillBar;
         animation-name: fillBar;
-    -webkit-animation-duration: 5s;
-            animation-duration: 5s;
+    -webkit-animation-duration: 2s;
+            animation-duration: 2s;
     -webkit-animation-timing-function: ease-in;
             animation-timing-function: ease-in;
     -webkit-animation-iteration-count: 1;
