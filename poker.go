@@ -40,6 +40,9 @@ func main() {
 	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}", handlers.User(env))
 	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.UserEdit(env))
 	router.Handle("/poker/game/", handlers.Lobby(env))
+	router.Handle("/poker/game/lobby", handlers.Lobby(env))
+	router.Handle("/poker/game/play", handlers.PlayGame(env))
+	router.Handle("/poker/game/watch", handlers.ViewGame(env))
 	router.Handle("/poker/leaderboard/", handlers.Leaderboard(env))
 
 	// These functions are deferred until main finishes
