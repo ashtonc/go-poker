@@ -5,6 +5,10 @@ body {
 	background-color: black;
 }
 
+h1 {
+	text-align: center;
+}
+
 /* Navigation */
 
 #navigation ul {
@@ -20,9 +24,8 @@ body {
 	border-bottom: 1px solid #888;
 }
 
-#navigation li.nav-current {
-	background-color: rgb(146, 0, 0);
-	color: #444;
+#navigation li.nav-current a {
+	background-color: #000000;
 	cursor: default;
 }
 
@@ -37,15 +40,21 @@ body {
 	background-color: #570000;
 }
 
-@media screen and (min-width: 600px) {
+@media (min-width: 640px) {
 	#navigation li {
-		width: 20%;
+		width: 22.5%;
+		font-size: 1.3em;
 		border-bottom: none;
-		font-size: 1.2em;
 	}
 
 	#navigation li {
 		display: inline-block;
 		margin-right: -5px;
+	}
+}
+
+@media (min-width: 1200px) {
+	#navigation li {
+		width: 270px;
 	}
 }
