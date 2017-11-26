@@ -2,27 +2,29 @@
 {{ define "content" -}}
 		{{ with .UserPage -}}
 		<form method="POST">
-			<div class="input">
+			<div>
 				<label for="username">Username:</label>
 				<input id="username" type="text" value="{{ .Username }}">
 			</div>
-			<div class="input">
+			<div>
 				<label for="name">Name:</label>
 				<input id="name" type="text" value="{{ .Name }}">
 			</div>
-			<div class="input">
+			<div>
 				<label for="email">Email:</label>
 				<input id="email" type="text" value="{{ .Email }}">
 			</div>
-			<div class="input">
+			<div>
 				<label for="password">New Password:</label>
 				<input id="new-password" type="password">
 			</div>
-			<div class="input">
+			<div>
 				<label for="password-repeat">Repeat Password:</label>
 				<input id="new-password-repeat" type="password">
 			</div>
-			<input type="submit" value="Edit">
+			<div>
+				<input type="submit" value="Edit">
+			</div>
 		</form>
 		{{ end }}
 {{- end }}

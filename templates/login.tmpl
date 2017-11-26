@@ -1,17 +1,17 @@
 {{ define "title" }} | Login{{ end }}
 {{ define "content" -}}
-		<div class="login-content">
-			<h1 class="h1-login">Login</h1>
-			<form action="POST">
-				<block class="labels">Username:<br></block>
-				<input type="text" name="username" min="2" max="20"><br>
-				<block class="labels">Password:<br></block>
-				<input type="password" name="password" min="6" max="25"><br>
-				<div class="login-button">
-				<br>
+		<h1>Login</h1>
+		<form method="POST">
+			<div>
+				<label for="username">Username:</label>
+				<input id="username" type="text">
+			</div>
+			<div>
+				<label for="password">Password:</label>
+				<input id="password" type="password">
+			</div>
+			<div>
 				<input type="submit" value="Login">
-				<br>
-				</div>
-			</form> 
-		</div>
+			</div>
+		</form>
 {{- end }}

@@ -1,25 +1,33 @@
 {{ define "title" }} | Register{{ end }}
 {{ define "content" -}}
-		<div class="register-content">
-			<h1 class="h1-register">New User</h1>
-			<form method="POST">
-				<block class="labels">Username:<br></block>
-				<input type="text" name="username" min="2" max="20"><br>
-				<block class="labels">Password:<br></block>
-				<input type="password" name="password" min="6" max="25"><br>
-				<block class="labels"> Email:<br></block>
-				<input type="email" name="email"><br>
-				<block class="labels">Choose an image as your profile icon:<br></block>
-				<div class="profile-icon">
-					<img src="1.jpg" alt="5 IMAGES HERE">
-					<img src="2.jpg" alt="5 IMAGES HERE">
-					<img src="1.jpg" alt="5 IMAGES HERE">
-					<img src="2.jpg" alt="5 IMAGES HERE">
-					<img src="1.jpg" alt="5 IMAGES HERE">
-				</div>
-				<div class="register-button">
-					<input type="submit" value="Register">
-				</div>
-			</form> 
-		</div>
+		<h1>Register</h1>
+		<form method="POST">
+			<div>
+				<label for="username">Username:</label>
+				<input id="username" type="text">
+			</div>
+			<div>
+				<label for="name">Name:</label>
+				<input id="name" type="text">
+			</div>
+			<div>
+				<label for="email">Email:</label>
+				<input id="email" type="text">
+			</div>
+			<div>
+				<label for="profile-image">Profile Image:</label>
+				<!-- Profile Image Inputs -->
+			</div>
+			<div>
+				<label for="password">Password:</label>
+				<input id="password" type="password">
+			</div>
+			<div>
+				<label for="password-repeat">Repeat Password:</label>
+				<input id="password-repeat" type="password">
+			</div>
+			<div>
+				<input type="submit" value="Register">
+			</div>
+		</form>
 {{- end }}
