@@ -100,3 +100,21 @@ input[type=submit] {
 
 /* Tables */
 
+table {
+	width: 95%;
+	box-sizing: border-box;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+td {
+	padding: 0.25em;
+}
+
+tbody tr:nth-child(odd) {
+	background-color: #303030;
+}
+
+tbody tr:nth-child(even) {
+	background-color: #555555;
+}

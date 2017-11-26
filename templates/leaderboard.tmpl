@@ -3,14 +3,35 @@
 		{{ with .Leaderboard -}}
 		<h1>Leaderboard</h1>
 		<table>
-			<tr>
-				<th>Player Name</th>
-				<th>Hands Played</th>
-				<th>Wins</th>
-				<th>Losses</th>
-				<th>Draws</th>
-				<th>$ Earned</th>
-			</tr>
+			<thead>
+				<tr>
+					<th scope="col">User</th>
+					<th scope="col">Hands Played</th>
+					<th scope="col">Total Cash</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Example</td>
+					<td>1,000</td>
+					<td>$10,000</td>
+				</tr>
+				<tr>
+					<td>Example</td>
+					<td>1,000</td>
+					<td>$10,000</td>
+				</tr>
+				<tr>
+					<td>Example</td>
+					<td>1,000</td>
+					<td>$10,000</td>
+				</tr>
+				<tr>
+					<td>Example</td>
+					<td>1,000</td>
+					<td>$10,000</td>
+				</tr>
+			</tbody>
 		</table>
 		{{- end }}
 {{- end }}
