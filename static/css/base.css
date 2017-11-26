@@ -82,7 +82,7 @@ input[type=submit] {
 @media (min-width: 640px) {
 	#navigation li {
 		width: 22.5%;
-		font-size: 1.3em;
+		font-size: 1.2em;
 		border-bottom: none;
 	}
 	#navigation li {
@@ -96,3 +96,7 @@ input[type=submit] {
 		width: 270px;
 	}
 }
+
+
+/* Tables */
+

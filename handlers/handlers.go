@@ -189,7 +189,7 @@ func PlayGame(env *models.Env) http.Handler {
 
 		// Build our template using the required files (need base, head, navigation, and content)
 		// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
-		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/game_play.tmpl", "./templates/game.tmpl")
+		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_game.tmpl", "./templates/navigation.tmpl", "./templates/game_play.tmpl", "./templates/game.tmpl")
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)
@@ -211,7 +211,7 @@ func ViewGame(env *models.Env) http.Handler {
 
 		// Build our template using the required files (need base, head, navigation, and content)
 		// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
-		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/game_watch.tmpl", "./templates/game.tmpl")
+		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_game.tmpl", "./templates/navigation.tmpl", "./templates/game_spectate.tmpl", "./templates/game.tmpl")
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)

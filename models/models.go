@@ -66,6 +66,7 @@ type GamePhase struct {
 }
 
 type Game struct {
+	Name string
 	Stakes GameStakes
 	Phase GamePhase
 	Deck GameDeck
@@ -77,12 +78,23 @@ type Game struct {
 	Player6 GameSeat
 }
 
+type GameListing struct {
+	Name string
+	Stakes GameStakes
+	Players int
+}
+
 type Lobby struct {
-	
+	Games []GameListing
+}
+
+type LeaderboardEntry struct {
+	Username string
+	Cash int64
 }
 
 type Leaderboard struct {
-	
+	Entries []LeaderboardEntry
 }
 
 type PageData struct {

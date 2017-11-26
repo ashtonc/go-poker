@@ -4,6 +4,7 @@
 	padding: 10px;
 	margin: 0 auto;
 	text-align: center;
+	box-sizing: border-box;
 }
 
 #deck {
@@ -79,4 +80,5 @@
 #game-menu {
 	width: 95%;
 	max-width: none;
+	box-sizing: border-box;
 }
