@@ -1,96 +1,86 @@
 {{ define "game" -}}
 		{{ with .Game -}}
-			<div id="game">
-				<div id="game-menu">
-					<button type="button" id="check">Check</button>
-					<button type="button" id="call">Call</button>
-					<form method="POST">
-						<label for="raise">Raise:</label>
-						<input id="raise" type="number">
-						<input type="submit" value="Raise">
-					</form>
-					<button type="button" id="fold">Fold</button>
+		<div id="game">
+			<div id="deck"></div>
+			<div id="pot"></div>
+			<div class="seat player-1 empty">
+				<div class="image"></div>
+				<div class="name"></div>
+				<div class="stack"></div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
 				</div>
-				<div id="deck"></div>
-				<div id="pot"></div>
-				<div class="seat player-1 empty">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack"></div>
-					<div class="hand">
-						<div class="card card-1 none"></div>
-						<div class="card card-2 none"></div>
-						<div class="card card-3 none"></div>
-						<div class="card card-4 none"></div>
-						<div class="card card-5 none"></div>
-					</div>
-					<div class="timer"></div>
-				</div>
-				<div class="seat player-2 empty">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack"></div>
-					<div class="hand">
-						<div class="card card-1 none"></div>
-						<div class="card card-2 none"></div>
-						<div class="card card-3 none"></div>
-						<div class="card card-4 none"></div>
-						<div class="card card-5 none"></div>
-					</div>
-					<div class="timer"></div>
-				</div>
-				<div class="seat player-3 empty">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack"></div>
-					<div class="hand">
-						<div class="card card-1 none"></div>
-						<div class="card card-2 none"></div>
-						<div class="card card-3 none"></div>
-						<div class="card card-4 none"></div>
-						<div class="card card-5 none"></div>
-					</div>
-					<div class="timer"></div>
-				</div>
-				<div class="seat player-4 empty">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack"></div>
-					<div class="hand">
-						<div class="card card-1 none"></div>
-						<div class="card card-2 none"></div>
-						<div class="card card-3 none"></div>
-						<div class="card card-4 none"></div>
-						<div class="card card-5 none"></div>
-					</div>
-					<div class="timer"></div>
-				</div>
-				<div class="seat player-5 empty">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack"></div>
-					<div class="hand">
-						<div class="card card-1 none"></div>
-						<div class="card card-2 none"></div>
-						<div class="card card-3 none"></div>
-						<div class="card card-4 none"></div>
-						<div class="card card-5 none"></div>
-					</div>
-					<div class="timer"></div>
-				</div>
-				<div class="seat player-6 empty">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack"></div>
-					<div class="hand">
-						<div class="card card-1 none"></div>
-						<div class="card card-2 none"></div>
-						<div class="card card-3 none"></div>
-						<div class="card card-4 none"></div>
-						<div class="card card-5 none"></div>
-					</div>
-					<div class="timer"></div>
-				</div>
+				<div class="timer"></div>
 			</div>
+			<div class="seat player-2 empty">
+				<div class="image"></div>
+				<div class="name"></div>
+				<div class="stack"></div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-3 empty">
+				<div class="image"></div>
+				<div class="name"></div>
+				<div class="stack"></div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-4 empty">
+				<div class="image"></div>
+				<div class="name"></div>
+				<div class="stack"></div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-5 empty">
+				<div class="image"></div>
+				<div class="name"></div>
+				<div class="stack"></div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-6 empty">
+				<div class="image"></div>
+				<div class="name"></div>
+				<div class="stack"></div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+		</div>
 		{{- end }}
 {{- end }}

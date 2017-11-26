@@ -39,7 +39,7 @@ type Card struct {
 }
 
 type GameDeck struct {
-	Cards []Card
+	Cards [52]Card
 }
 
 type GameHand struct {
