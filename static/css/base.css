@@ -9,14 +9,54 @@ h1 {
 	text-align: center;
 }
 
+
+/* Forms */
+
+label {
+	display: block;
+	margin-bottom: 0.5em;
+}
+
+form {
+	width: 95%;
+	max-width: 800px;
+	margin: auto;
+}
+
+form div {
+	margin: 1em 0;
+}
+
+button,
+input,
+select,
+textarea {
+	padding: 0.5em;
+	font-family: inherit;
+	font-size: 1em;
+	width: 100%;
+	box-sizing: border-box;
+	outline: none;
+}
+
+input[type=submit] {
+	border: none;
+	background-color: #570000;
+	color: white;
+	cursor: pointer;
+	font-size: 1.5em;
+	height: 2.5em;
+}
+
+
 /* Navigation */
 
 #navigation ul {
 	list-style-type: none;
 	background-color: #242424;
 	text-align: center;
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 #navigation li {
@@ -33,7 +73,6 @@ h1 {
 	text-decoration: none;
 	color: #fff;
 	display: block;
-	transition: .3s background-color;
 }
 
 #navigation a:hover {
@@ -46,7 +85,6 @@ h1 {
 		font-size: 1.3em;
 		border-bottom: none;
 	}
-
 	#navigation li {
 		display: inline-block;
 		margin-right: -5px;
