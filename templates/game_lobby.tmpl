@@ -1,4 +1,37 @@
 {{ define "title" }} | Lobby{{ end }}
 {{ define "content" -}}
-		
+		{{ with .Lobby -}}
+		<h1>Lobby</h1>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Title</th>
+					<th scope="col">Stakes</th>
+					<th scope="col">Players</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Example</td>
+					<td>$1/2 NL</td>
+					<td>6/6</td>
+				</tr>
+				<tr>
+					<td>Example</td>
+					<td>$50/100 NL</td>
+					<td>0/6</td>
+				</tr>
+				<tr>
+					<td>Example</td>
+					<td>$1/2 NL</td>
+					<td>2/6</td>
+				</tr>
+				<tr>
+					<td>Example</td>
+					<td>$1/2 NL</td>
+					<td>0/6</td>
+				</tr>
+			</tbody>
+		</table>
+		{{- end }}
 {{- end }}
