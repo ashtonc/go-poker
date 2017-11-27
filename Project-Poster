@@ -1,0 +1,17 @@
+** Overview **
+
+Poker is a commonly-played card game in which players try to assemble the "best" possible hand with the cards that they are given. Poker is most frequently played with a 52-card deck and up to 10 players. There are also multiple branches of Poker, and of these branches the focus of our project is on Five Card Draw.
+
+Our goal in this project is to develop our own implementation of Five Card Draw (with a working multiplayer), which is a branch of Poker where at the start of a match, players are initially dealt five cards. From here, five completed "rounds" (a round referring to a full rotation of actions) need to take place before the match is finished. There are two types of rounds: discard rounds and wager rounds. After being dealt the first five cards, players take turns wagering, then discarding, then wagering again, then discarding again, and then wagering for the last time.
+
+In the discard round, players are permitted to select up to 5 cards and replace them for a new set of cards from the deck. The victory condition of the game is to obtain a hand that is considered stronger than the hands of the other players by the end of the match. Hands are ranked in order of strength from least to greatest by the following measure: high card, one pair of the same number, two pairs of two different numbers, three-of-a-kind, straight (five cards in ascending order), flush (five cards of the same suit), a full house (a three-of-a-kind with a pair), four-of-a-kind, straight flush (a straight combined with a flush), and royal flush (a flush where the cards are numbered 10 to Ace).
+
+In wager rounds, each player takes turns deciding whether they want to wager as much as is already on the board (Call), wager more than what is currently on the board (Raise), or forfeit their hand and any chance of winning the match (Fold). A Call is done to match an existing bet so that the player can stay in for another set of turns, while a Raise is done to try and increase the amount of money at stake on the board. Folding is done if a player does not want to  put any more money into the round.
+
+When all of the rounds have finished, players reveal their hands, and the player with the best hand takes all of the money that has been wagered.
+
+** Technologies / Implementation **
+
+** Features **
+
+** Conclusion **
