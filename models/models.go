@@ -35,7 +35,7 @@ type UserPage struct {
 }
 
 type Card struct {
-	
+	// each type of card or a string or whatever
 }
 
 type GameDeck struct {
@@ -53,6 +53,7 @@ type GameHand struct {
 type GameSeat struct {
 	Cash int64
 	Hand GameHand
+	// User that they're connected to
 }
 
 type GameStakes struct {

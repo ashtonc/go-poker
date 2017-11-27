@@ -87,6 +87,7 @@ func User(env *models.Env) http.Handler {
 
 		// Get the user page matching that username from the database
 		user, err := database.GetUserPage(env, username)
+		
 		if err != nil {
 			log.Print("Player " + username + " not found.")
 

@@ -11,26 +11,13 @@
 				</tr>
 			</thead>
 			<tbody>
+				{{ range . -}}
 				<tr>
-					<td>Example</td>
-					<td>$1/2 NL</td>
-					<td>6/6</td>
+					<td>{{ .Title }}</td>
+					<td>{{ .Stakes }}</td>
+					<td>{{ .PlayerCount }}/{{ .MaxPlayers }}</td>
 				</tr>
-				<tr>
-					<td>Example</td>
-					<td>$50/100 NL</td>
-					<td>0/6</td>
-				</tr>
-				<tr>
-					<td>Example</td>
-					<td>$1/2 NL</td>
-					<td>2/6</td>
-				</tr>
-				<tr>
-					<td>Example</td>
-					<td>$1/2 NL</td>
-					<td>0/6</td>
-				</tr>
+				{{- end}}
 			</tbody>
 		</table>
 		{{- end }}
