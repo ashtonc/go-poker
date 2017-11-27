@@ -1,5 +1,6 @@
 {{ define "title" }} | {{ with .UserPage }}{{ .Username }}{{ end }}{{ end }}
 {{ define "content" -}}
+			{{ if .UserPage }}
 			{{ with .UserPage -}}
 			<h1>{{ .Username }}</h1>
 			<p>{{ .Name }}</p>
@@ -11,4 +12,7 @@
 			<a href="/poker/user/{{ .Username }}/edit">Edit</a>
 			{{- end }}
 			{{- end }}
+			{{ else }}
+			<p>User not found.</p>
+			{{ end }}
 {{- end }}

@@ -1,7 +1,8 @@
 {{ define "title" }} | Lobby{{ end }}
 {{ define "content" -}}
-		{{ with .Lobby -}}
 		<h1>Lobby</h1>
+		{{ if .Lobby -}}
+		{{ with .Lobby -}}
 		<table>
 			<thead>
 				<tr>
@@ -20,5 +21,8 @@
 				{{- end}}
 			</tbody>
 		</table>
+		{{- end }}
+		{{- else -}}
+		<p>No games found.</p>
 		{{- end }}
 {{- end }}
