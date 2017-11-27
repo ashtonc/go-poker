@@ -14,4 +14,16 @@ When all of the rounds have finished, players reveal their hands, and the player
 
 ** Features **
 
+In our application, we intend to include a number of features which simulate what an implementation of Five Card Draw might look like.
+
+*User Profiles*: An authentication system will be in place so that users can properly log in to play Five Card Draw and log out when they are done with their session. Users should be able to register an account, and those who create an account will have their own user profile in which they can display and edit basic information such as their name and profile picture. Each user account will also start off by default with a set amount of money which they can use to participate in matches. In addition, each player is associated with lifetime statistics such as wins and losses which will be displayed in the leaderboard as described below.
+
+*Lobby System*: Our application displays a list of existing lobbies and permits the user to create a lobby of their own, as shown in Figure 1. The list of lobbies is not a static page and constantly updates itself to show users what rooms are available.
+
+*Gameplay*: The gameplay itself can be split up into several aspects, including the game logic, the timer, and the AI. In the Overview, we discussed the manner in which Five Card Draw is played, and in our application we have written code in Go that directly handles the sequence of turns, actions that can be taken (i.e. discard rounds and wager rounds), and determining who the victor of a match is. A timer will also prevent players from taking an indefinite period of time to make a move, and the AI will be able to follow the rules of Five Card Draw at a bare minimum. Figure 2 shows what a match of Five Card Draw would look like in our application.
+
+*Multiplayer*: Five Card Draw is a game meant to be played with multiple other people, so being able to connect with others would be an expected part of our application. At the moment, we are trying to implement a version of Five Card Draw that supports up to 6 simultaneous players at once per lobby.
+
+*Leaderboard*: A leaderboard exists that keeps track of user statistics. In this case, user statistics refer to information collected about a player's performance during their account's lifetime, such as the number of wins, losses, draws, folds, and amount of money held by that user. These statistics are obtained after the conclusion of each Poker match, and then the leaderboard is updated to reflect the changes in the player's performance.
+
 ** Conclusion **
