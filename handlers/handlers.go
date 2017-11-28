@@ -4,11 +4,13 @@ import (
 	"log"
 	"net/http"
 	"html/template"
+	"fmt"
 
 	"poker/models"
 	"poker/database"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
 )
 
 // This simply redirects users to /poker
@@ -40,25 +42,109 @@ func Home(env *models.Env) http.Handler {
 	})
 }
 
-func Login(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// func Login(env *models.Env) http.Handler {
 
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: false,
-				PageLogin: true,
-			},
-		}
+// 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+// 		fmt.Printf("before")
+// 		if request.Method == "GET" {
+			
+// 		} else {
+			
+//   	}
 
-		// Build our template using the required files (need base, head, navigation, and content)
-		// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
-		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/login.tmpl")
 
-		// Execute the template with our page data
-		t.Execute(w, pagedata)
-	})
+// 	})
+// }
+
+func getUserName(request *http.Request) (userName string) {
+    if cookie, err := request.Cookie("session"); err == nil {
+        cookieValue := make(map[string]string)
+        if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
+            userName = cookieValue["username"]
+        }
+    }
+    return userName
 }
+
+func getName(request *http.Request) (name string) {
+    if cookie, err := request.Cookie("session"); err == nil {
+        cookieValue := make(map[string]string)
+        if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
+            name = cookieValue["name"]
+        }
+    }
+    return name
+}
+
+
+func clearSession(response http.ResponseWriter) {
+    cookie := &http.Cookie{
+        Name:   "session",
+        Value:  "",
+        Path:   "/",
+        MaxAge: -1,
+    }
+    http.SetCookie(response, cookie)
+}
+
+
+var cookieHandler = securecookie.New(
+    securecookie.GenerateRandomKey(64),
+    securecookie.GenerateRandomKey(32))
+
+func setSession(userName string, name string, response http.ResponseWriter) {
+    value := map[string]string{
+        "username": userName,
+        "name": name,
+    }
+    if encoded, err := cookieHandler.Encode("session", value); err == nil {
+        cookie := &http.Cookie{
+            Name:  "session",
+            Value: encoded,
+            Path:  "/",
+        }
+        http.SetCookie(response, cookie)
+    }
+}
+
+func LoginGET(response http.ResponseWriter, request *http.Request) {
+	// Populate the data needed for the page (these should nearly all be external functions)
+			fmt.Printf("after if")
+			pagedata := models.PageData{
+				Session: models.Session{
+					LoggedIn: false,
+					PageLogin: true,
+				},
+			}
+
+			// Build our template using the required files (need base, head, navigation, and content)
+			// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
+			t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/login.tmpl")
+
+			// Execute the template with our page data
+			t.Execute(response, pagedata)
+}
+
+func LoginPOST(response http.ResponseWriter, request *http.Request) {
+	fmt.Printf("qqqqqqqqqqqq")
+			 userName := request.FormValue("username")
+			 name := request.FormValue("username")
+	     pass := request.FormValue("password")
+	     redirectTarget := "/leaderboard/"
+	     if name != "" && pass != "" {
+	        // .. check credentials ..
+	        setSession(userName, name, response)
+	        redirectTarget = "/poker/game/"
+	    }
+	    http.Redirect(response, request, redirectTarget, 302)
+
+}
+
+func logoutHandler(response http.ResponseWriter, request *http.Request) {
+    clearSession(response)
+    http.Redirect(response, request, "/", 302)
+}
+
 
 func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -159,8 +245,8 @@ func Game(env *models.Env) http.Handler {
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: true,
-				Username: "current-user",
-				Name: "Current User",
+				Username: getUserName(r),
+				Name: getName(r),
 				PageGame: true,
 			},
 		}
