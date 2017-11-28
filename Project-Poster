@@ -30,6 +30,20 @@ In our application, we intend to include a number of features which simulate wha
 
 *Gameplay*: The gameplay itself can be split up into several aspects, including the game logic, the timer, and the AI. In the Overview, we discussed the manner in which Five Card Draw is played, and in our application we have written code in Go that directly handles the sequence of turns, actions that can be taken (i.e. discard rounds and wager rounds), and determining who the victor of a match is. A timer will also prevent players from taking an indefinite period of time to make a move, and the AI will be able to follow the rules of Five Card Draw at a bare minimum. Figure 2 shows what a match of Five Card Draw would look like in our application.
 
+Each player joins a table with six seats to join a poker game. 
+Each game has a specific ante (blinds might be added), a minimum bet value, and maximum bet value. 
+At the beginning of a round of Five Card Draw, each player pays the ante value, which is added to the “pot”. Next, each player is dealt 5 cards face down. Each computer displays, on its screen, the cards belonging the player playing from it.
+After all players have examined their hands, betting begins starting from the “dealers” left. 
+Each player may choose to “call” the current bet by matching the bet of the previous player, “raise” the current bet by the max-bet or less, or “fold”, whereby the player cuts her losses and withdrawals from that round. 
+Betting continues to go around the table until each player has either passed or folded. All bets are added to the pot.
+
+If more than one player remains after the first round of betting, each player may choose to discard a subset of the cards in her hand. 
+The dealer then deals new cards to replace those which were discarded. Upon examining the updated hands, players begin a new round of betting as before. 
+If more than one player remans after the second round of betting, a second discard and replace phase occurs, followed by a third and final betting phase. 
+After the final bets are made, the pot is awarded to the player with the strongest hand. 
+
+
+
 *Multiplayer*: Five Card Draw is a game meant to be played with multiple other people, so being able to connect with others would be an expected part of our application. At the moment, we are trying to implement a version of Five Card Draw that supports up to 6 simultaneous players at once per lobby.
 
 *Leaderboard*: A leaderboard exists that keeps track of user statistics. In this case, user statistics refer to information collected about a player's performance during their account's lifetime, such as the number of wins, losses, draws, folds, and amount of money held by that user. These statistics are obtained after the conclusion of each Poker match, and then the leaderboard is updated to reflect the changes in the player's performance.
