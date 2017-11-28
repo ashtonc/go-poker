@@ -12,6 +12,14 @@ When all of the rounds have finished, players reveal their hands, and the player
 
 ** Technologies / Implementation **
 
+For this project, we utilized several different technologies to implement the features described in the next section.
+
+HTML and CSS were used to design the webpages and put static content such as text, buttons, and images on the page. These designs were later converted into Go templates to be displayed as dynamic pages to the user. With Javascript, we were also able to add functionality to our application's lobby system so that users could leave and join rooms.
+
+The Go programming language was used extensively for the backend implementation. The handlers and function calls were written up in Go, as was the Five Card Draw game logic. Some of the Go handlers also make SQL queries to the database to update or fetch necessary information. For example, when a user successfully registers an account, the database will have a new entry that contains the username, password, and profile picture of that player. 
+
+Although our final implementation will use PostgreSQL as a database, we have been using SQLite during the development process. SQL user tables exist for handling login sessions made by users (authentication), registering new accounts, existing user accounts and user details such as their name and password, and keeping track of user statistics (leaderboards). 
+
 ** Features **
 
 In our application, we intend to include a number of features which simulate what an implementation of Five Card Draw might look like.
