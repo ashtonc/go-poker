@@ -186,7 +186,6 @@ func UserEdit(env *models.Env) http.Handler {
 
 func Lobby(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
@@ -194,6 +193,9 @@ func Lobby(env *models.Env) http.Handler {
 				Username: getUserName(r),
 				Name:     getName(r),
 				PageGame: true,
+			},
+			Lobby: models.Lobby{
+				Empty: true,
 			},
 		}
 
@@ -259,6 +261,9 @@ func Leaderboard(env *models.Env) http.Handler {
 				Username:        "current-user",
 				Name:            "Current User",
 				PageLeaderboard: true,
+			},
+			Leaderboard: models.Leaderboard{
+				Empty: true,
 			},
 		}
 

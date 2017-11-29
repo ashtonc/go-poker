@@ -1,28 +1,30 @@
 {{ define "title" }} | Lobby{{ end }}
 {{ define "content" -}}
 		<h1>Lobby</h1>
-		{{ if .Lobby -}}
-		{{ with .Lobby -}}
-		<table>
-			<thead>
-				<tr>
-					<th scope="col">Title</th>
-					<th scope="col">Stakes</th>
-					<th scope="col">Players</th>
-				</tr>
-			</thead>
-			<tbody>
-				{{ range . -}}
-				<tr>
-					<td>{{ .Title }}</td>
-					<td>{{ .Stakes }}</td>
-					<td>{{ .PlayerCount }}/{{ .MaxPlayers }}</td>
-				</tr>
-				{{- end}}
-			</tbody>
-		</table>
-		{{- end }}
-		{{- else -}}
-		<p>No games found.</p>
-		{{- end }}
+		<div id="content">
+			{{ with .Lobby -}}
+			{{ if .Empty -}}
+			<p>No games found.</p>
+			{{- else -}}
+			<table>
+				<thead>
+					<tr>
+						<th scope="col">Title</th>
+						<th scope="col">Stakes</th>
+						<th scope="col">Players</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{ range . -}}
+					<tr>
+						<td>{{ .Title }}</td>
+						<td>{{ .Stakes }}</td>
+						<td>{{ .PlayerCount }}/{{ .MaxPlayers }}</td>
+					</tr>
+					{{- end}}
+				</tbody>
+			</table>
+			{{- end }}
+			{{- end }}
+		</div>
 {{- end }}

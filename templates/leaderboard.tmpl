@@ -1,28 +1,30 @@
 {{ define "title" }} | Leaderboard{{ end }}
 {{ define "content" -}}
-		{{ if .Leaderboard -}}
-		{{ with .Leaderboard -}}
 		<h1>Leaderboard</h1>
-		<table>
-			<thead>
-				<tr>
-					<th scope="col">User</th>
-					<th scope="col">Hands Played</th>
-					<th scope="col">Total Cash</th>
-				</tr>
-			</thead>
-			<tbody>
-				{{ range . -}}
-				<tr>
-					<td>{{ .Username }}</td>
-					<td>{{ .Played }}</td>
-					<td>{{ .Cash }}</td>
-				</tr>
-				{{- end}}
-			</tbody>
-		</table>
-		{{- end }}
-		{{- else -}}
-		<p>No entries found.</p>
-		{{- end }}
+		<div id="content">
+			{{ with .Leaderboard -}}
+			{{ if .Empty -}}
+			<p>No entries found.</p>
+			{{- else -}}
+			<table>
+				<thead>
+					<tr>
+						<th scope="col">User</th>
+						<th scope="col">Hands Played</th>
+						<th scope="col">Total Cash</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{ range . -}}
+					<tr>
+						<td>{{ .Username }}</td>
+						<td>{{ .Played }}</td>
+						<td>{{ .Cash }}</td>
+					</tr>
+					{{- end}}
+				</tbody>
+			</table>
+			{{- end }}
+			{{- end }}
+		</div>
 {{- end }}

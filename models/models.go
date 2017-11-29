@@ -85,6 +85,7 @@ type GameListing struct {
 }
 
 type Lobby struct {
+	Empty bool
 	Games []GameListing
 }
 
@@ -94,6 +95,7 @@ type LeaderboardEntry struct {
 }
 
 type Leaderboard struct {
+	Empty   bool
 	Entries []LeaderboardEntry
 }
 
