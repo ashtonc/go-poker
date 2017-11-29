@@ -1,40 +1,28 @@
 {{ define "title" }} | Leaderboard{{ end }}
 {{ define "content" -}}
-		<div class="leaderboard-content">
-			<h1 class="h1-leaderboards">Leaderboards</h1>
-			<table>
+		{{ if .Leaderboard -}}
+		{{ with .Leaderboard -}}
+		<h1>Leaderboard</h1>
+		<table>
+			<thead>
 				<tr>
-					<th>Player Name</th>
-					<th>Hands Played</th>
-					<th>Wins</th>
-					<th>Losses</th>
-					<th>Draws</th>
-					<th>$ Earned</th>
+					<th scope="col">User</th>
+					<th scope="col">Hands Played</th>
+					<th scope="col">Total Cash</th>
 				</tr>
+			</thead>
+			<tbody>
+				{{ range . -}}
 				<tr>
-					<td>Player 1</td>
-					<td>10</td>
-					<td>4</td>
-					<td>5</td>
-					<td>1</td>
-					<td>$400</td>
+					<td>{{ .Username }}</td>
+					<td>{{ .Played }}</td>
+					<td>{{ .Cash }}</td>
 				</tr>
-				<tr>
-					<td>Player 2</td>
-					<td>11</td>
-					<td>5</td>
-					<td>5</td>
-					<td>1</td>
-					<td>$300</td>
-				</tr>
-				<tr>
-					<td>Player 3</td>
-					<td>100</td>
-					<td>50</td>
-					<td>50</td>
-					<td>0</td>
-					<td>$10000</td>
-				</tr>
-			</table>
-		</div>
+				{{- end}}
+			</tbody>
+		</table>
+		{{- end }}
+		{{- else -}}
+		<p>No entries found.</p>
+		{{- end }}
 {{- end }}

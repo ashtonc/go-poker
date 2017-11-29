@@ -1,5 +1,29 @@
-{{ define "title" }} | Register{{ end }}
-{{ define "content" -}}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Poker | Register</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<link rel="stylesheet" href="../../static/css/normalize.css">
+		<link rel="stylesheet" href="../../static/css/base.css">
+	</head>
+	<body>
+		<div id="navigation">
+			<ul>
+				<li>
+					<a href="/poker/">Home</a>
+				</li>
+				<li>
+					<a href="/poker/game/">Play</a>
+				</li>
+				<li>
+					<a href="/poker/leaderboard/">Leaderboard</a>
+				</li>
+				<li class="nav-current">
+					<a href="/poker/register/">Register</a>
+				</li>
+			</ul>
+		</div>
 		<h1>Register</h1>
 		<form method="POST">
 			<div>
@@ -16,7 +40,7 @@
 			</div>
 			<div>
 				<label for="profile-image">Profile Image:</label>
-				<!-- Profile Image Inputs -->
+				
 			</div>
 			<div>
 				<label for="password">Password:</label>
@@ -30,4 +54,5 @@
 				<input type="submit" value="Register">
 			</div>
 		</form>
-{{- end }}
+	</body>
+</html>

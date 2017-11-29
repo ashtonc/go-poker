@@ -1,105 +1,84 @@
-body{
-	background-image: url("../../design/game-background.jpg");
-	background-repeat: no-repeat;
-}
-.log{
-	position: absolute;
-	top: 0;
-	left: 80%;
-	width: 20%;
-	height: 100%;
-}
-button, input, form{
-	display: inline;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
-}
-.game{
-	background-size: 80% 100%;
-}
-.topRow{
-	margin-top: 0.5%;
-	width: 80%;
-	text-align: center;
-}
-.bottomRow{
-	margin-top: 4%;
-	width: 80%;
-	text-align: center;
-}
-.topRow ul{
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-}
-.bottomRow ul{
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-}
-.middleRow{
-	top: 50%;
-	width: 80%;
-	text-align: center;
-	margin-top: -2em;
-	margin-bottom: -1em;
-	padding: 0;
-}
-.middleRow .deck{
-	top: 3em;
-	left: 30%;
-}
-.menu{
-	width: 80%;
-	text-align: right;
-}
-.position1, .position2, .position3, .position4, .position5, .position6{
-	display: inline-block;
-	margin-right: 2em;
-}
-.yourTurn{
-	outline: 5px solid blue;
-}
-.folded{
-	opacity: 0.3;
-}
-.timer{
-	width: 195px;
+#game {
+	background: green;
+	width: 95%;
+	padding: 10px;
 	margin: 0 auto;
-	position: relative;
-}
-.startTimer{
-    width: 195px;
-    height: 10px;
-	margin: 0 auto;	
-    position: absolute;
-    bottom: 0;
-    -webkit-animation-name: fillBar;
-        animation-name: fillBar;
-    -webkit-animation-duration: 2s;
-            animation-duration: 2s;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in;
-    -webkit-animation-iteration-count: 1;
-            animation-iteration-count: 1;
-    -webkit-animation-direction: alternate;
-            animation-direction: alternate;
-    background-color: red; 
+	text-align: center;
+	box-sizing: border-box;
 }
 
-@-webkit-keyframes fillBar {
-      0% {
-        width: 100%;
-      }
-      100% {
-        width: 0%;
-      }
-  }
-  @keyframes fillBar {
-      0% {
-        width: 100%;
-      }
-      100% {
-        width: 0%;
-      }
-  }
+#deck {
+	display: inline-block;
+	background: #272727;
+	height: 105px;
+	width: 75px;
+	border-radius: 5px;
+	margin: 1px;
+}
+
+#pot {}
+
+#game-info {
+	padding: 1em;
+}
+
+
+/* Player */
+
+.seat {
+	display: inline-block;
+	padding: 1em;
+}
+
+.empty {}
+
+.occupied {}
+
+.player-info {
+	display: inline-block;
+	position: relative;
+}
+
+.player-info .image {
+	width: 150px;
+	height: 150px;
+	background: #8f7a00;
+}
+
+.player-info .name {
+	position: absolute;
+	top: 5px;
+	width: 100%;
+}
+
+.stack {
+	position: absolute;
+	bottom: 5px;
+	width: 100%;
+}
+
+.hand {}
+
+.card {
+	display: inline-block;
+	background: #272727;
+	height: 105px;
+	width: 75px;
+	border-radius: 5px;
+	margin: 1px;
+}
+
+.timer {
+	background: #8f0000;
+	height: 10px;
+	width: 100%;
+}
+
+
+/* Menu */
+
+#game-menu {
+	width: 95%;
+	max-width: none;
+	box-sizing: border-box;
+}

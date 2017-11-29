@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Poker 470{{ template "title" . }}</title>
+		<title>Poker{{ template "title" . }}</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		{{ template "head" . }}
 	</head>
-	<body class="login">
-		<div id="navigation">
-			{{ template "navigation" . }}
-		</div>
-		<div id="content">
-			{{ template "content" . }}
-		</div>
+	<body>
+		{{ template "navigation" . }}
+		{{ template "content" . }}
 	</body>
 </html>

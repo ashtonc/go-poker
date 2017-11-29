@@ -1,4 +1,23 @@
 {{ define "title" }} | Play{{ end }}
 {{ define "content" -}}
-		
+        <h1>Play</h1>
+		{{ template "game" . }}
+        <form id="game-menu" method="POST">
+            <div>
+                <input type="button" value="Check">
+            </div>
+            <div>
+                <input type="button" value="Call">
+            </div>
+            <div>
+                <input type="button" value="Fold">
+            </div>
+            <div>
+                <label for="raise">Raise:</label>
+                <input id="raise" type="number">
+            </div>
+            <div>
+                <input type="submit" value="Play">
+            </div>
+        </form>
 {{- end }}

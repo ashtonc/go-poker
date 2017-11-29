@@ -1,0 +1,100 @@
+{{ define "game" -}}
+		{{ with .Game -}}
+		<div id="game">
+			<div id="game-info">
+				<div id="deck"></div>
+				<div id="pot">Pot: $10,000</div>
+			</div>
+			<div class="seat player-1 empty">
+				<div class="player-info">
+					<div class="image"></div>
+					<div class="name">Something</div>
+					<div class="stack">$0</div>
+				</div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-2 occupied">
+				<div class="player-info">
+					<div class="image"></div>
+					<div class="name">Player One</div>
+					<div class="stack">$50000</div>
+				</div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-3 empty">
+				<div class="player-info">
+					<div class="image"></div>
+					<div class="name"></div>
+					<div class="stack">$0</div>
+				</div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-4 empty">
+				<div class="player-info">
+					<div class="image"></div>
+					<div class="name"></div>
+					<div class="stack">$0</div>
+				</div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-5 occupied">
+				<div class="player-info">
+					<div class="image"></div>
+					<div class="name"></div>
+					<div class="stack">$0</div>
+				</div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+			<div class="seat player-6 empty">
+				<div class="player-info">
+					<div class="image"></div>
+					<div class="name"></div>
+					<div class="stack">$0</div>
+				</div>
+				<div class="hand">
+					<div class="card card-1 none"></div>
+					<div class="card card-2 none"></div>
+					<div class="card card-3 none"></div>
+					<div class="card card-4 none"></div>
+					<div class="card card-5 none"></div>
+				</div>
+				<div class="timer"></div>
+			</div>
+		</div>
+		{{- end }}
+{{- end }}
