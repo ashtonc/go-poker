@@ -49,3 +49,7 @@ After the final bets are made, the pot is awarded to the player with the stronge
 *Leaderboard*: A leaderboard exists that keeps track of user statistics. In this case, user statistics refer to information collected about a player's performance during their account's lifetime, such as the number of wins, losses, draws, folds, and amount of money held by that user. These statistics are obtained after the conclusion of each Poker match, and then the leaderboard is updated to reflect the changes in the player's performance.
 
 ** Conclusion **
+
+This project is an attempt to simulate a version of Poker for up to 6 players using the Go language. Our original plan was to use the Django framework with Node.js, but we felt that Go was better equipped to handle the real-time updates that were necessary as part of the game logic and the lobby updates. The main obstruction of our application was getting each page to work with one another (setting up the handlers).
+
+There are many other ways in which the implementation could have been carried out, such as trying to imitate a style of Poker other than Five Card Draw (i.e. Texas Hold'Em) or using a programming language other than Go. If we were to try and update our application to include more features, a good starting point might be a more-sophistcated AI that could play Five Card Draw in place of a human player.
