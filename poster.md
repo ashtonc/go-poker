@@ -71,3 +71,10 @@ After the final bets are made, the pot is awarded to the player with the stronge
 *Multiplayer*: Five-card draw is a game meant to be played with multiple other people, so being able to connect with others would be an expected part of our application. At the moment, we support up to 6 simultaneous players per game.
 
 *Leaderboard*: A leaderboard exists that keeps track of user statistics. In this case, user statistics refer to information collected about a player's performance during their account's lifetime, such as the number of wins, losses, draws, folds, and amount of money held by that user. These statistics are obtained after the conclusion of each round, and the leaderboard is updated to reflect the changes in the player's performance.
+
+
+## Conclusion
+
+This project is an attempt to simulate a version of poker for up to 6 players using the Go language. Our original plan was to use the Django framework, but we felt that Go was better equipped to handle the real-time updates that were necessary as part of the game logic and the lobby updates. The main obstruction of our application was getting each page to work with one another (setting up the handlers).
+
+There are many other ways in which the implementation could have been carried out, such as trying to imitate a style of poker other than five-card draw(i.e. Texas Hold'Em) or using a programming language other than Go. If we were to try and update our application to include more features, a good starting point might be a more-sophisticated AI that could play five-card draw in place of a human player.
