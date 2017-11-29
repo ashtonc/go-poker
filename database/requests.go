@@ -55,3 +55,20 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 
 	return lobby, err
 }
+
+/* MATTHEW'S STUFF
+
+func UserLogin(env *models.Env, userName string, password string) (*models.user, error) {
+	var users models.users
+	page.Username = userName
+	page.Password = password
+
+	sqlStatement := `INSERT INTO users ();`
+
+	row := env.Database.QueryRow(sqlStatement, page.Username)
+	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureUrl)
+
+	return &page, err
+}
+
+*/
