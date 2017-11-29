@@ -1,4 +1,4 @@
-CREATE TABLE player (
+CREATE TABLE user (
 	id SERIAL PRIMARY KEY,
 	username VARCHAR(32),
 	name VARCHAR(256),
@@ -9,7 +9,7 @@ CREATE TABLE player (
 	password_salt VARCHAR(256)
 );
 
-CREATE TABLE player_session (
+CREATE TABLE session (
 	id SERIAL PRIMARY KEY,
 	player_id INTEGER REFERENCES player (id),
 	token VARCHAR(256),
@@ -28,20 +28,13 @@ CREATE TABLE game_round (
 	id SERIAL PRIMARY KEY,
 	game_id INTEGER REFERENCES game (id),
 	stakes BIGINT,
-	big_blind BIGINT,
-	small_blind BIGINT,
 	pot BIGINT
 );
 
-CREATE TABLE round_seat (
+CREATE TABLE game_player (
 	id SERIAL PRIMARY KEY,
 	player_id INTEGER REFERENCES player (id),
-	position INTEGER
-);
-
-CREATE TABLE round_win (
-	id SERIAL PRIMARY KEY,
-	round_seat_id INTEGER REFERENCES round_seat (id),
+	position INTEGER,
 	total_won BIGINT
 );
 

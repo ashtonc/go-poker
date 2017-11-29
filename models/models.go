@@ -5,7 +5,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// Env will serve as an environment that contains "global" variables. See
+/*
+ *    Session management
+ */
+
+// Env serves as an environment that contains "global" variables. See
 // http://www.alexedwards.net/blog/organising-database-access for the idea
 type Env struct {
 	Database *sql.DB
@@ -34,12 +38,47 @@ type UserPage struct {
 	PictureUrl     string
 }
 
-type Card struct {
-	// each type of card or a string or whatever
+/*
+ *    Game models
+ */
+
+type Game struct {
+	Name    string
+	Stakes  GameStakes
+	Phase   GamePhase
+	Deck    GameDeck
+	Player1 GamePlayer
+	Player2 GamePlayer
+	Player3 GamePlayer
+	Player4 GamePlayer
+	Player5 GamePlayer
+	Player6 GamePlayer
+}
+
+type GamePhase struct {
+	Phase int
 }
 
 type GameDeck struct {
 	Cards [52]Card
+}
+
+type Card struct {
+	Face string
+	Suit string
+	Rank int
+}
+
+type GameStakes struct {
+	Ante   int64
+	MaxBet int64
+	MinBet int64
+}
+
+type GamePlayer struct {
+	Cash     int64
+	Hand     GameHand
+	Username string
 }
 
 type GameHand struct {
@@ -50,43 +89,28 @@ type GameHand struct {
 	Card5 Card
 }
 
-type GameSeat struct {
-	Cash int64
-	Hand GameHand
-	// User that they're connected to
-}
+/*
+ *    Template models
+ */
 
-type GameStakes struct {
-	Ante   int64
-	MaxBet int64
-	MinBet int64
-}
-
-type GamePhase struct {
-}
-
-type Game struct {
-	Name    string
-	Stakes  GameStakes
-	Phase   GamePhase
-	Deck    GameDeck
-	Player1 GameSeat
-	Player2 GameSeat
-	Player3 GameSeat
-	Player4 GameSeat
-	Player5 GameSeat
-	Player6 GameSeat
-}
-
-type GameListing struct {
-	Name    string
-	Stakes  GameStakes
-	Players int
+type PageData struct {
+	Session     Session
+	UserPage    UserPage
+	Game        Game
+	Lobby       Lobby
+	Leaderboard Leaderboard
 }
 
 type Lobby struct {
 	Empty bool
-	Games []GameListing
+	Games []LobbyListing
+}
+
+type LobbyListing struct {
+	Name    string
+	Stakes  GameStakes
+	Players int
+	Private bool
 }
 
 type LeaderboardEntry struct {
@@ -97,12 +121,4 @@ type LeaderboardEntry struct {
 type Leaderboard struct {
 	Empty   bool
 	Entries []LeaderboardEntry
-}
-
-type PageData struct {
-	Session     Session
-	UserPage    UserPage
-	Game        Game
-	Lobby       Lobby
-	Leaderboard Leaderboard
 }
