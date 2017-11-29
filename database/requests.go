@@ -18,7 +18,8 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	return &page, err
 }
 
-/*func GetGame(env *models.Env, gameId int) (*models.Game, error) {
+/*
+func GetGame(env *models.Env, gameId int) (*models.Game, error) {
 
 }
 

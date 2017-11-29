@@ -59,5 +59,5 @@ Repository information:
 
 * `vagrant ssh`
 * `sudo su`
-* `tmux attach -t server`
+* `tmux attach -t server` (or just `tmux a`)
 * TODO: set it up so the server log writes to /log or something
