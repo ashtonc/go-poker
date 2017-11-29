@@ -15,23 +15,23 @@ type Env struct {
 }
 
 type Session struct {
-	LoggedIn bool
-	Username string
-	Name string
-	PageHome bool
-	PageLogin bool
-	PageRegister bool
-	PageUser bool
-	PageGame bool
+	LoggedIn        bool
+	Username        string
+	Name            string
+	PageHome        bool
+	PageLogin       bool
+	PageRegister    bool
+	PageUser        bool
+	PageGame        bool
 	PageLeaderboard bool
 }
 
 type UserPage struct {
 	MatchesSession bool
-	Username string
-	Name string
-	Email string
-	PictureUrl string
+	Username       string
+	Name           string
+	Email          string
+	PictureUrl     string
 }
 
 type Card struct {
@@ -57,20 +57,19 @@ type GameSeat struct {
 }
 
 type GameStakes struct {
-	Ante int64
+	Ante   int64
 	MaxBet int64
 	MinBet int64
 }
 
 type GamePhase struct {
-	
 }
 
 type Game struct {
-	Name string
-	Stakes GameStakes
-	Phase GamePhase
-	Deck GameDeck
+	Name    string
+	Stakes  GameStakes
+	Phase   GamePhase
+	Deck    GameDeck
 	Player1 GameSeat
 	Player2 GameSeat
 	Player3 GameSeat
@@ -80,8 +79,8 @@ type Game struct {
 }
 
 type GameListing struct {
-	Name string
-	Stakes GameStakes
+	Name    string
+	Stakes  GameStakes
 	Players int
 }
 
@@ -91,7 +90,7 @@ type Lobby struct {
 
 type LeaderboardEntry struct {
 	Username string
-	Cash int64
+	Cash     int64
 }
 
 type Leaderboard struct {
@@ -99,9 +98,9 @@ type Leaderboard struct {
 }
 
 type PageData struct {
-	Session Session
-	UserPage UserPage
-	Game Game
-	Lobby Lobby
+	Session     Session
+	UserPage    UserPage
+	Game        Game
+	Lobby       Lobby
 	Leaderboard Leaderboard
 }

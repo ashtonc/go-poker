@@ -1,17 +1,15 @@
-
 package main
 
-import(
-//	"math/rand"
-//	"time"
-	"fmt"
+import (
+	//	"math/rand"
+	//	"time"
 	"./gamelogic"
 	"bufio"
-  	"os"
-
+	"fmt"
+	"os"
 )
 
-func main(){
+func main() {
 	//reader := bufio.NewReader(os.Stdin)
 	fmt.Printf("Welcome to Five Card Draw! (press 'enter' between messages to continue)")
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
@@ -21,7 +19,6 @@ func main(){
 	Red.Money = 100
 	Red.Folded = false
 	Red.Bet = 0
-
 
 	Green := new(gamelogic.Player)
 	Green.Name = "Green"
@@ -43,7 +40,4 @@ func main(){
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
 	gamelogic.Game(players, ante, minBet, maxBet, dealerToken)
 
-
 }
-
-

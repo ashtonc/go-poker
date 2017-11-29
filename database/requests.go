@@ -19,13 +19,13 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 }
 
 func GetGame(env *models.Env, gameId int) (*models.Game, error) {
-	
+
 }
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
-	
+
 }
 
 func GetLobby(env *models.Env) (*models.Lobby, error) {
-	
+
 }
