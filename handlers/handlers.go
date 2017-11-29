@@ -10,7 +10,6 @@ import (
 	"poker/models"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/securecookie"
 )
 
 // This simply redirects users to /poker
@@ -42,67 +41,6 @@ func Home(env *models.Env) http.Handler {
 	})
 }
 
-// func Login(env *models.Env) http.Handler {
-// 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-// 		fmt.Printf("before")
-// 		if request.Method == "GET" {
-
-// 		} else {
-
-//   	}
-
-// 	})
-// }
-
-func getUserName(request *http.Request) (userName string) {
-	if cookie, err := request.Cookie("session"); err == nil {
-		cookieValue := make(map[string]string)
-		if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
-			userName = cookieValue["username"]
-		}
-	}
-	return userName
-}
-
-func getName(request *http.Request) (name string) {
-	if cookie, err := request.Cookie("session"); err == nil {
-		cookieValue := make(map[string]string)
-		if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
-			name = cookieValue["name"]
-		}
-	}
-	return name
-}
-
-func clearSession(response http.ResponseWriter) {
-	cookie := &http.Cookie{
-		Name:   "session",
-		Value:  "",
-		Path:   "/",
-		MaxAge: -1,
-	}
-	http.SetCookie(response, cookie)
-}
-
-var cookieHandler = securecookie.New(
-	securecookie.GenerateRandomKey(64),
-	securecookie.GenerateRandomKey(32))
-
-func setSession(userName string, name string, response http.ResponseWriter) {
-	value := map[string]string{
-		"username": userName,
-		"name":     name,
-	}
-	if encoded, err := cookieHandler.Encode("session", value); err == nil {
-		cookie := &http.Cookie{
-			Name:  "session",
-			Value: encoded,
-			Path:  "/",
-		}
-		http.SetCookie(response, cookie)
-	}
-}
-
 func LoginGET(response http.ResponseWriter, request *http.Request) {
 	// Populate the data needed for the page (these should nearly all be external functions)
 	fmt.Printf("after if")
@@ -122,7 +60,6 @@ func LoginGET(response http.ResponseWriter, request *http.Request) {
 }
 
 func LoginPOST(response http.ResponseWriter, request *http.Request) {
-	fmt.Printf("qqqqqqqqqqqq")
 	userName := request.FormValue("username")
 	name := request.FormValue("username")
 	pass := request.FormValue("password")
@@ -138,6 +75,20 @@ func LoginPOST(response http.ResponseWriter, request *http.Request) {
 func logoutHandler(response http.ResponseWriter, request *http.Request) {
 	clearSession(response)
 	http.Redirect(response, request, "/", 302)
+}
+
+// Handler for logging in
+func Login(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	})
+}
+
+// Handler for logging out
+func Logout(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	})
 }
 
 func Register(env *models.Env) http.Handler {
