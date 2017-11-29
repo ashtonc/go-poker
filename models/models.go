@@ -9,9 +9,9 @@ import (
 // http://www.alexedwards.net/blog/organising-database-access for the idea
 type Env struct {
 	Database *sql.DB
+	// authentication middleware ****************************************************
 	// template cache middleware
 	// logger middleware
-	// authentication middleware
 }
 
 type Session struct {

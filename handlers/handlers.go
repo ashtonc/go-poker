@@ -43,7 +43,6 @@ func Home(env *models.Env) http.Handler {
 }
 
 // func Login(env *models.Env) http.Handler {
-
 // 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 // 		fmt.Printf("before")
 // 		if request.Method == "GET" {
@@ -127,14 +126,13 @@ func LoginPOST(response http.ResponseWriter, request *http.Request) {
 	userName := request.FormValue("username")
 	name := request.FormValue("username")
 	pass := request.FormValue("password")
-	redirectTarget := "/leaderboard/"
+	redirectTarget := "/poker/leaderboard/"
 	if name != "" && pass != "" {
 		// .. check credentials ..
 		setSession(userName, name, response)
 		redirectTarget = "/poker/game/"
 	}
 	http.Redirect(response, request, redirectTarget, 302)
-
 }
 
 func logoutHandler(response http.ResponseWriter, request *http.Request) {

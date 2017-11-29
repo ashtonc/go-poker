@@ -26,6 +26,10 @@ execute 'get-mux' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/mux'
 end
+execute 'get-securecookie' do
+  environment 'GOPATH' => '/go'
+  command 'go get -u github.com/gorilla/securecookie'
+end
 
 # Postgres setup.
 package "postgresql"
