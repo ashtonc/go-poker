@@ -9,3 +9,5 @@ log/*
 .bundle
 
 *.exe
+
+*.swp

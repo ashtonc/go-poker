@@ -46,14 +46,14 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		lobby.Games = append(models.LobbyListing{Name: name, Players: players})
+		lobby.Games = append(lobby.Games, models.LobbyListing{Name: name, Players: players})
 	}
 
 	if true {
-		lobby.Empty = False
+		lobby.Empty = false
 	}
 
-	return lobby, err
+	return &lobby, err
 }
 
 /* MATTHEW'S STUFF
