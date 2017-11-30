@@ -215,7 +215,7 @@ func Leaderboard(env *models.Env) http.Handler {
 		username := vars["username"]
 
 		// Get the user page matching that username from the database
-		user, err := database.UserLogin(env, username)
+		user, err := database.UserRegister(env, username)
 		if err != nil {
 			// TODO
 		}
