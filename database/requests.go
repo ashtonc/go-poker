@@ -2,7 +2,7 @@ package database
 
 import (
 	_ "github.com/lib/pq"
-	"log"
+	// "log"
 
 	"poker/models"
 )
@@ -26,6 +26,7 @@ func GetGame(env *models.Env, gameId int) (*models.Game, error) {
 */
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
+<<<<<<< HEAD
 	var leaderboard models.Leaderboard
 
 	sqlStatement := `SELECT username, total_cash FROM player_stats, account WHERE player_stats.user_id = account.id;`
@@ -56,19 +57,12 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
+
 func GetLobby(env *models.Env) (*models.Lobby, error) {
-	var lobby models.Lobby
+// 	var lobby models.Lobby
 
 	sqlStatement := `SELECT name, players FROM game;`
 	// , game_status WHERE game_status.description = 'open'
-
-
-	rows, err := env.Database.Query(sqlStatement)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer rows.Close()
 
 	for rows.Next() {
 		var name string
@@ -89,19 +83,32 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 	return &lobby, err
 }
 
-/* MATTHEW'S STUFF
 
-func UserLogin(env *models.Env, userName string, password string) (*models.user, error) {
-	var users models.users
-	page.Username = userName
-	page.Password = password
+// func UserLogin(env *models.Env, userName string) (*models.UserPage, error) {
+// 	var users models.UserPage
+// 	users.Username = userName
+// 	// page.Password = password
 
-	sqlStatement := `INSERT INTO users ();`
+// 	sqlStatement := `SELECT * FROM user;`
 
-	row := env.Database.QueryRow(sqlStatement, page.Username)
-	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureUrl)
+// 	row := env.Database.QueryRow(sqlStatement, "ghth")
+// 	err := row.Scan(&users.Username, &users.Name, &users.Email, &users.PictureUrl)
 
-	return &page, err
+// 	return &users, err
+// }
+
+
+func UserRegister(env *models.Env, userName string) (*models.UserPage, error) {
+	var users models.UserPage
+	users.Username = userName
+
+	sqlStatement := `  
+	INSERT INTO account (username, name, email) 
+	VALUES ($1, $2, $3)`  
+	_, err := env.Database.Exec(sqlStatement, "username!", "Jonathan", "fff@f.com")  
+	if err != nil {  
+	  panic(err)
+	}
+
+	return &users, err
 }
-
-*/
