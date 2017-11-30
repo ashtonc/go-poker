@@ -219,6 +219,11 @@ func Lobby(env *models.Env) http.Handler {
 
 func Leaderboard(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		leaderboard, err := database.GetLeaderboard(env)
+		if err != nil {
+			// Big error
+		}
+
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
@@ -227,6 +232,7 @@ func Leaderboard(env *models.Env) http.Handler {
 				Name: "Current User",
 				PageLeaderboard: true,
 			},
+			Leaderboard: *leaderboard,
 		}
 
 		// Build our template using the required files (need base, head, navigation, and content)
