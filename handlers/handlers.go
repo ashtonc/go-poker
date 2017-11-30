@@ -273,6 +273,18 @@ func Leaderboard(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page (these should nearly all be external functions)
+		vars := mux.Vars(r)
+		username := vars["username"]
+
+		// Get the user page matching that username from the database
+		user, err := database.UserRegister(env, username)
+		if err != nil {
+			// TODO
+		}
+		fmt.Printf("LOL!")
+		fmt.Printf(user.Username)
+		
+
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn:        true,
@@ -289,5 +301,6 @@ func Leaderboard(env *models.Env) http.Handler {
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)
+		fmt.Printf("DONE.")
 	})
 }
