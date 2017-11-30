@@ -53,6 +53,8 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 
 	if (len(lobby.Games) > 0) {
 		lobby.Empty = false
+	} else {
+		lobby.Empty = true
 	}
 
 	return &lobby, err
