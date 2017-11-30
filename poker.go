@@ -49,7 +49,7 @@ func main() {
     router.Handle("/poker/register/", handlers.Register(env))
     router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}", handlers.User(env))
     router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.UserEdit(env))
-    router.Handle("/poker/game/", handlers.Game(env))
+    router.Handle("/poker/game/", handlers.Lobby(env))
     router.Handle("/poker/leaderboard/", handlers.Leaderboard(env))
     //router.HandleFunc("/home", indexPageHandler)
     //router.HandleFunc("/internal", internalPageHandler)

@@ -31,6 +31,8 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 	var lobby models.Lobby
 
 	sqlStatement := `SELECT name, players FROM game;`
+	// , game_status WHERE game_status.description = 'open'
+
 
 	rows, err := env.Database.Query(sqlStatement)
 	if err != nil {
@@ -49,7 +51,7 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 		lobby.Games = append(lobby.Games, models.LobbyListing{Name: name, Players: players})
 	}
 
-	if true {
+	if (len(lobby.Games) > 0) {
 		lobby.Empty = false
 	}
 
