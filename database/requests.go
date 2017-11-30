@@ -2,7 +2,7 @@ package database
 
 import (
 	_ "github.com/lib/pq"
-	// "log"
+	"log"
 
 	"poker/models"
 )
@@ -26,7 +26,6 @@ func GetGame(env *models.Env, gameId int) (*models.Game, error) {
 */
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
-<<<<<<< HEAD
 	var leaderboard models.Leaderboard
 
 	sqlStatement := `SELECT username, total_cash FROM player_stats, account WHERE player_stats.user_id = account.id;`
@@ -48,7 +47,7 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 		leaderboard.Entries = append(leaderboard.Entries, models.LeaderboardEntry{Username: username, Cash: cash})
 	}
 
-	if (len(leaderboard.Entries) > 0) {
+	if len(leaderboard.Entries) > 0 {
 		leaderboard.Empty = false
 	} else {
 		leaderboard.Empty = true
@@ -57,12 +56,18 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
-
 func GetLobby(env *models.Env) (*models.Lobby, error) {
-// 	var lobby models.Lobby
+	var lobby models.Lobby
 
 	sqlStatement := `SELECT name, players FROM game;`
 	// , game_status WHERE game_status.description = 'open'
+
+	rows, err := env.Database.Query(sqlStatement)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer rows.Close()
 
 	for rows.Next() {
 		var name string
@@ -74,7 +79,7 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 		lobby.Games = append(lobby.Games, models.LobbyListing{Name: name, Players: players})
 	}
 
-	if (len(lobby.Games) > 0) {
+	if len(lobby.Games) > 0 {
 		lobby.Empty = false
 	} else {
 		lobby.Empty = true
@@ -82,7 +87,6 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 
 	return &lobby, err
 }
-
 
 // func UserLogin(env *models.Env, userName string) (*models.UserPage, error) {
 // 	var users models.UserPage
@@ -97,17 +101,16 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 // 	return &users, err
 // }
 
-
 func UserRegister(env *models.Env, userName string) (*models.UserPage, error) {
 	var users models.UserPage
 	users.Username = userName
 
 	sqlStatement := `  
 	INSERT INTO account (username, name, email) 
-	VALUES ($1, $2, $3)`  
-	_, err := env.Database.Exec(sqlStatement, "username!", "Jonathan", "fff@f.com")  
-	if err != nil {  
-	  panic(err)
+	VALUES ($1, $2, $3)`
+	_, err := env.Database.Exec(sqlStatement, "username!", "Jonathan", "fff@f.com")
+	if err != nil {
+		panic(err)
 	}
 
 	return &users, err
