@@ -186,8 +186,16 @@ func UserEdit(env *models.Env) http.Handler {
 	})
 }
 
-func Game(env *models.Env) http.Handler {
+func Lobby(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		lobby, err := database.GetLobby(env)
+		if err != nil {
+			// No lobby exists or worse error
+			// return
+		}
+
+		
 
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
@@ -197,6 +205,7 @@ func Game(env *models.Env) http.Handler {
 				Name: getName(r),
 				PageGame: true,
 			},
+			Lobby: *lobby,
 		}
 
 		// Build our template using the required files (need base, head, navigation, and content)
@@ -210,6 +219,11 @@ func Game(env *models.Env) http.Handler {
 
 func Leaderboard(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		leaderboard, err := database.GetLeaderboard(env)
+		if err != nil {
+			// Big error
+		}
+
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
@@ -218,6 +232,7 @@ func Leaderboard(env *models.Env) http.Handler {
 				Name: "Current User",
 				PageLeaderboard: true,
 			},
+			Leaderboard: *leaderboard,
 		}
 
 		// Build our template using the required files (need base, head, navigation, and content)
