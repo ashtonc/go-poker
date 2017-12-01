@@ -21,6 +21,20 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		err := database.CreateLobbyEntries(env)
+		if err != nil {
+			panic("No database found")
+		}
+
+		/*		// Populate the data needed for the page (these should nearly all be external functions)
+				vars := mux.Vars(r)
+				username := vars["username"]*/
+
+		/*		// Get the user page matching that username from the database
+				user, err := database.UserRegister(env, username)
+				if err != nil {
+					// TODO
+				}*/
 
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
