@@ -115,3 +115,19 @@ func UserRegister(env *models.Env, userName string) (*models.UserPage, error) {
 
 	return &users, err
 }
+
+
+// Temporary function that adds entries to the leaderboard database
+func CreateLobbyEntries(env *models.Env) (error) {
+	// var leaderboard models.Leaderboard
+
+	sqlStatement := `  
+	INSERT INTO game (name) 
+	VALUES ($1)`
+	_, err := env.Database.Exec(sqlStatement, "my name")
+	if err != nil {
+		panic(err)
+	}
+
+	return err
+}
