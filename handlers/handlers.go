@@ -183,6 +183,37 @@ func UserEdit(env *models.Env) http.Handler {
 	})
 }
 
+func RouteGame(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// If someone is stitting at a table, send them to that table
+		http.Redirect(w, r, "/poker/play", http.StatusTemporaryRedirect)
+		// Else, send them to the lobby
+		http.Redirect(w, r, "/poker/lobby", http.StatusTemporaryRedirect)
+	})
+}
+
+func PlayGame(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Populate the data needed for the page (these should nearly all be external functions)
+		pagedata := models.PageData{
+			Session: models.Session{
+				LoggedIn: true,
+				Username: "current-user",
+				Name:     "Current User",
+				PageGame: true,
+			},
+		}
+
+		// Build our template using the required files (need base, head, navigation, and content)
+		// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
+		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/game_play.tmpl", "./templates/game.tmpl")
+
+		// Execute the template with our page data
+		t.Execute(w, pagedata)
+	})
+}
+
 func ViewLobby(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -209,37 +240,6 @@ func ViewLobby(env *models.Env) http.Handler {
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)
-	})
-}
-
-func PlayGame(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: true,
-				Username: "current-user",
-				Name:     "Current User",
-				PageGame: true,
-			},
-		}
-
-		// Build our template using the required files (need base, head, navigation, and content)
-		// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
-		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/game_play.tmpl", "./templates/game.tmpl")
-
-		// Execute the template with our page data
-		t.Execute(w, pagedata)
-	})
-}
-
-func RouteGame(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// If someone is stitting at a table, send them to that table
-		http.Redirect(w, r, "/poker/play", http.StatusTemporaryRedirect)
-		// Else, send them to the lobby
-		http.Redirect(w, r, "/poker/lobby", http.StatusTemporaryRedirect)
 	})
 }
 
@@ -272,18 +272,15 @@ func Leaderboard(env *models.Env) http.Handler {
 			// Big error
 		}
 
-		// Populate the data needed for the page (these should nearly all be external functions)
-		vars := mux.Vars(r)
-		username := vars["username"]
+		/*		// Populate the data needed for the page (these should nearly all be external functions)
+				vars := mux.Vars(r)
+				username := vars["username"]*/
 
-		// Get the user page matching that username from the database
-		user, err := database.UserRegister(env, username)
-		if err != nil {
-			// TODO
-		}
-		fmt.Printf("LOL!")
-		fmt.Printf(user.Username)
-		
+		/*		// Get the user page matching that username from the database
+				user, err := database.UserRegister(env, username)
+				if err != nil {
+					// TODO
+				}*/
 
 		pagedata := models.PageData{
 			Session: models.Session{
@@ -301,6 +298,5 @@ func Leaderboard(env *models.Env) http.Handler {
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)
-		fmt.Printf("DONE.")
 	})
 }
