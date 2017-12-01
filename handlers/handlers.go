@@ -21,7 +21,7 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		err := database.CreateLobbyEntries(env)
+		err := database.CreateLeaderboardEntries(env)
 		if err != nil {
 			panic("No database found")
 		}
