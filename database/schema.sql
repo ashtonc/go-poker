@@ -3,10 +3,11 @@ CREATE TABLE account (
 	username VARCHAR(32),
 	name VARCHAR(256),
 	email VARCHAR(128),
-	picture_slug VARCHAR(128),
-	description TEXT,
-	password_salt VARCHAR(256),
-	password_hash VARCHAR(256)
+	password VARCHAR(256)
+	-- picture_slug VARCHAR(128),
+	-- description TEXT,
+	-- password_salt VARCHAR(256),
+	-- password_hash VARCHAR(256)
 );
 
 CREATE TABLE session (
