@@ -116,9 +116,8 @@ func UserRegister(env *models.Env, userName string) (*models.UserPage, error) {
 	return &users, err
 }
 
-
 // Temporary function that adds entries to the game database
-func CreateLobbyEntries(env *models.Env) (error) {
+func CreateLobbyEntries(env *models.Env) error {
 	// var leaderboard models.Leaderboard
 
 	sqlStatement := `  
@@ -133,7 +132,7 @@ func CreateLobbyEntries(env *models.Env) (error) {
 }
 
 // Temporary function that adds entries to the game database
-func CreateLeaderboardEntries(env *models.Env) (error) {
+func CreateLeaderboardEntries(env *models.Env) error {
 	// var leaderboard models.Leaderboard
 
 	sqlStatement := `  
@@ -146,12 +145,3 @@ func CreateLeaderboardEntries(env *models.Env) (error) {
 
 	return err
 }
-
-
-
-CREATE TABLE player_stats (
-	user_id INTEGER REFERENCES account (id),
-	best_hand INTEGER REFERENCES round_hand (id),
-	total_hands INTEGER,
-	total_cash BIGINT
-);

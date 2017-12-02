@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	_ "github.com/lib/pq"
+	"html/template"
 )
 
 /*
@@ -12,9 +13,10 @@ import (
 // Env serves as an environment that contains "global" variables. See
 // http://www.alexedwards.net/blog/organising-database-access for the idea
 type Env struct {
-	Database *sql.DB
-	// authentication middleware ****************************************************
-	// template cache middleware
+	Database  *sql.DB
+	Port      string
+	Templates map[string]*template.Template
+	// authentication middleware
 	// logger middleware
 }
 
