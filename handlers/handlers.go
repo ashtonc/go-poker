@@ -92,12 +92,13 @@ func Login(env *models.Env) http.Handler {
 		}
 
 	})
-
 }
 
-func logoutHandler(response http.ResponseWriter, request *http.Request) {
-	clearSession(response)
-	http.Redirect(response, request, "/", 302)
+func Logout(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		//clearSession(response)
+		http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
+	})
 }
 
 func Register(env *models.Env) http.Handler {
@@ -125,7 +126,7 @@ func Register(env *models.Env) http.Handler {
 	})
 }
 
-func User(env *models.Env) http.Handler {
+func ViewUser(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
@@ -167,7 +168,7 @@ func User(env *models.Env) http.Handler {
 	})
 }
 
-func UserEdit(env *models.Env) http.Handler {
+func EditUser(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
@@ -235,14 +236,15 @@ func ViewLobby(env *models.Env) http.Handler {
 		if err != nil {
 			// No lobby exists or worse error
 			// return
+			log.Fatal(err)
 		}
 
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: true,
-				Username: getUserName(r),
-				Name:     getName(r),
+				Username: "testName"//getUserName(r),
+				Name:     "Test"//getName(r),
 				PageGame: true,
 			},
 			Lobby: *lobby,
@@ -285,16 +287,6 @@ func Leaderboard(env *models.Env) http.Handler {
 		if err != nil {
 			// Big error
 		}
-
-		/*		// Populate the data needed for the page (these should nearly all be external functions)
-				vars := mux.Vars(r)
-				username := vars["username"]*/
-
-		/*		// Get the user page matching that username from the database
-				user, err := database.UserRegister(env, username)
-				if err != nil {
-					// TODO
-				}*/
 
 		pagedata := models.PageData{
 			Session: models.Session{

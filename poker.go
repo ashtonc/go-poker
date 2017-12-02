@@ -6,7 +6,6 @@ import (
 
 	"github.com/gorilla/mux"
 	//"github.com/gorilla/securecookie"
-
 	//"github.com/gorilla/websockets"
 
 	"poker/database"
@@ -38,10 +37,10 @@ func main() {
 	router.Handle("/", handlers.HomeRedirect(env))
 	router.Handle("/poker/", handlers.Home(env))
 	router.Handle("/poker/login/", handlers.Login(env))
-	//router.Handle("/poker/logout/", handlers.Logout(env))
+	router.Handle("/poker/logout/", handlers.Logout(env))
 	router.Handle("/poker/register/", handlers.Register(env))
-	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}", handlers.User(env))
-	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.UserEdit(env))
+	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}", handlers.ViewUser(env))
+	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))
 	router.Handle("/poker/game/", handlers.RouteGame(env))
 	router.Handle("/poker/game/play", handlers.PlayGame(env))
 	router.Handle("/poker/game/lobby", handlers.ViewLobby(env))
