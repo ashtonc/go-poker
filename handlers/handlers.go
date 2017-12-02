@@ -105,15 +105,14 @@ func Register(env *models.Env) http.Handler {
 		} else if r.Method == "POST" {
 
 			fmt.Printf("User attempted to register.\n")
-			fmt.Println("method:", r.Method)
 			r.ParseForm()
-			fmt.Println(r)
-			fmt.Println(r.Form) // print information on server side.
-			fmt.Println("path", r.URL.Path)
-			fmt.Println("scheme", r.URL.Scheme)
+			username := r.PostFormValue("username")
+			password := r.PostFormValue("password")
+			name := r.PostFormValue("name")
+			email := r.PostFormValue("email")
+			password_repeat := r.PostFormValue("password-repeat")
 
-		    fmt.Println("username: ", r.FormValue("username"))
-		    fmt.Println("password: ", r.PostFormValue("password"))
+			
 		}
 	})
 }
