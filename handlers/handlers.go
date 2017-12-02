@@ -95,7 +95,7 @@ func Login(env *models.Env) http.Handler {
 }
 
 func Logout(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//clearSession(response)
 		http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
 	})
@@ -201,9 +201,9 @@ func EditUser(env *models.Env) http.Handler {
 func RouteGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
-		http.Redirect(w, r, "/poker/play", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/poker/game/play", http.StatusTemporaryRedirect)
 		// Else, send them to the lobby
-		http.Redirect(w, r, "/poker/lobby", http.StatusTemporaryRedirect)
+		//http.Redirect(w, r, "/poker/game/lobby", http.StatusTemporaryRedirect)
 	})
 }
 
@@ -222,7 +222,7 @@ func PlayGame(env *models.Env) http.Handler {
 
 		// Build our template using the required files (need base, head, navigation, and content)
 		// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
-		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/game_play.tmpl", "./templates/game.tmpl")
+		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_game.tmpl", "./templates/navigation.tmpl", "./templates/game_play.tmpl", "./templates/game.tmpl")
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)
@@ -243,8 +243,8 @@ func ViewLobby(env *models.Env) http.Handler {
 		pagedata := models.PageData{
 			Session: models.Session{
 				LoggedIn: true,
-				Username: "testName"//getUserName(r),
-				Name:     "Test"//getName(r),
+				Username: "testName",
+				Name:     "Test",
 				PageGame: true,
 			},
 			Lobby: *lobby,
@@ -274,7 +274,7 @@ func ViewGame(env *models.Env) http.Handler {
 
 		// Build our template using the required files (need base, head, navigation, and content)
 		// This should be moved to a caching function: https://elithrar.github.io/article/approximating-html-template-inheritance/
-		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_base.tmpl", "./templates/navigation.tmpl", "./templates/game_watch.tmpl", "./templates/game.tmpl")
+		t, _ := template.ParseFiles("./templates/base.tmpl", "./templates/head_game.tmpl", "./templates/navigation.tmpl", "./templates/game_watch.tmpl", "./templates/game.tmpl")
 
 		// Execute the template with our page data
 		t.Execute(w, pagedata)
