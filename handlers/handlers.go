@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 
 	"poker/database"
 	"poker/models"
+	"poker/sessions"
 
 	"github.com/gorilla/mux"
 )
@@ -21,29 +21,12 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		err := database.CreateLeaderboardEntries(env)
-		if err != nil {
-			panic("No database found")
-		}
-
-		/*		// Populate the data needed for the page (these should nearly all be external functions)
-				vars := mux.Vars(r)
-				username := vars["username"]*/
-
-		/*		// Get the user page matching that username from the database
-				user, err := database.UserRegister(env, username)
-				if err != nil {
-					// TODO
-				}*/
-
 		// Populate the data needed for the page (these should nearly all be external functions)
+		var session = sessions.GetSession()
+		session.PageHome = true
+
 		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: true,
-				Username: "current-user",
-				Name:     "Current User",
-				PageHome: true,
-			},
+			Session: session,
 		}
 
 		// Build our template using the required files (need base, head, navigation, and content)
@@ -60,14 +43,12 @@ func Login(env *models.Env) http.Handler {
 		// func Login(response http.ResponseWriter, request *http.Request) {
 
 		if request.Method == "POST" {
-			fmt.Printf("TTTTT")
 			userName := request.FormValue("username")
 			name := request.FormValue("username")
 			pass := request.FormValue("password")
 			redirectTarget := "/poker/login/"
 			if name != "" && pass != "" {
 
-				fmt.Printf("NAME")
 				// .. check credentials ..
 				setSession(userName, name, response)
 				redirectTarget = "/poker/game/"
@@ -76,7 +57,6 @@ func Login(env *models.Env) http.Handler {
 			http.Redirect(response, request, redirectTarget, 302)
 		} else {
 			// Populate the data needed for the page (these should nearly all be external functions)
-			fmt.Printf("after if")
 			pagedata := models.PageData{
 				Session: models.Session{
 					LoggedIn:  false,
@@ -120,7 +100,6 @@ func Register(env *models.Env) http.Handler {
 			// Execute the template with our page data
 			t.Execute(w, pagedata)
 		} else if r.Method == "POST" {
-			fmt.Printf("test")
 
 		}
 	})
@@ -141,14 +120,12 @@ func ViewUser(env *models.Env) http.Handler {
 			return
 		}
 
+		var session = sessions.GetSession()
+		session.PageUser = true
+
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: true,
-				Username: "current-user",
-				Name:     "Current User",
-				PageUser: true,
-			},
+			Session: session,
 			UserPage: models.UserPage{
 				MatchesSession: true,
 				Username:       user.Username,
@@ -173,14 +150,12 @@ func EditUser(env *models.Env) http.Handler {
 		vars := mux.Vars(r)
 		username := vars["username"]
 
+		var session = sessions.GetSession()
+		session.PageUser = true
+
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: true,
-				Username: "current-user",
-				Name:     "Current User",
-				PageUser: true,
-			},
+			Session: session,
 			UserPage: models.UserPage{
 				MatchesSession: true,
 				Username:       username,
@@ -210,14 +185,12 @@ func RouteGame(env *models.Env) http.Handler {
 func PlayGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
+		var session = sessions.GetSession()
+		session.PageGame = true
+
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: true,
-				Username: "current-user",
-				Name:     "Current User",
-				PageGame: true,
-			},
+			Session: session,
 		}
 
 		// Build our template using the required files (need base, head, navigation, and content)
@@ -239,15 +212,13 @@ func ViewLobby(env *models.Env) http.Handler {
 			log.Fatal(err)
 		}
 
+		var session = sessions.GetSession()
+		session.PageGame = true
+
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: true,
-				Username: "testName",
-				Name:     "Test",
-				PageGame: true,
-			},
-			Lobby: *lobby,
+			Session: session,
+			Lobby:   *lobby,
 		}
 
 		// Build our template using the required files (need base, head, navigation, and content)
@@ -262,14 +233,12 @@ func ViewLobby(env *models.Env) http.Handler {
 func ViewGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
+		var session = sessions.GetSession()
+		session.PageGame = true
+
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn: true,
-				Username: "current-user",
-				Name:     "Current User",
-				PageGame: true,
-			},
+			Session: session,
 		}
 
 		// Build our template using the required files (need base, head, navigation, and content)
@@ -288,13 +257,11 @@ func Leaderboard(env *models.Env) http.Handler {
 			// Big error
 		}
 
+		var session = sessions.GetSession()
+		session.PageLeaderboard = true
+
 		pagedata := models.PageData{
-			Session: models.Session{
-				LoggedIn:        true,
-				Username:        "current-user",
-				Name:            "Current User",
-				PageLeaderboard: true,
-			},
+			Session:     session,
 			Leaderboard: *leaderboard,
 		}
 

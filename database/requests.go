@@ -116,9 +116,8 @@ func UserRegister(env *models.Env, userName string) (*models.UserPage, error) {
 	return &users, err
 }
 
-
 // Temporary function that adds entries to the game database
-func CreateLobbyEntries(env *models.Env) (error) {
+func CreateLobbyEntries(env *models.Env) error {
 	// var leaderboard models.Leaderboard
 
 	sqlStatement := `  
@@ -133,7 +132,7 @@ func CreateLobbyEntries(env *models.Env) (error) {
 }
 
 // Temporary function that adds entries to the game database
-func CreateLeaderboardEntries(env *models.Env) (error) {
+func CreateLeaderboardEntries(env *models.Env) error {
 	// var leaderboard models.Leaderboard
 
 	sqlStatement := `  
