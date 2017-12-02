@@ -147,11 +147,3 @@ func CreateLeaderboardEntries(env *models.Env) (error) {
 	return err
 }
 
-
-
-CREATE TABLE player_stats (
-	user_id INTEGER REFERENCES account (id),
-	best_hand INTEGER REFERENCES round_hand (id),
-	total_hands INTEGER,
-	total_cash BIGINT
-);

@@ -21,7 +21,8 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		err := database.CreateLeaderboardEntries(env)
+		fmt.Printf("TTTTT")
+		err := database.CreateLobbyEntries(env)
 		if err != nil {
 			panic("No database found")
 		}
@@ -119,7 +120,12 @@ func Register(env *models.Env) http.Handler {
 			// Execute the template with our page data
 			t.Execute(w, pagedata)
 		} else if r.Method == "POST" {
-			fmt.Printf("test")
+			// fmt.Printf("test")
+			r.ParseForm()
+		    fmt.Println(r)
+		    fmt.Println("username:", r.Form["username"])
+		    fmt.Println("password:", r.Form["password"])
+			
 
 		}
 	})
