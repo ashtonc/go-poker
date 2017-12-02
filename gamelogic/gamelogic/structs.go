@@ -16,6 +16,7 @@ func Init_card_cat() ([]string, []string) {
 	return cardTypes, suites
 }
 
+
 func getIndex(array []string, item string) int {
 	for i := 0; i < len(array); i++ {
 		if array[i] == item {
@@ -31,8 +32,49 @@ func Rand_init() {
 
 /*classes:   */
 
-type Globals struct {
-	Bets map[string]int /*A map containing the bets of all players */
+type Game struct {
+	Name    string
+	Stakes  GameStakes
+	Phase   int
+	Pot 	int
+	Deck 	[]Card
+	Seats 	[6]Seat 
+	Players []Player
+	Sitters []Player
+	Current_Player string
+	Current_Bet int
+	Ant 	int
+	Max_bet 	int
+	Min_bet 	int
+	timer 	float
+}
+
+func init(ante int, min_bet int, max_bet int)error {
+	game = new(Game)
+	if game == nil{
+		return error.New("Game failed to initiate.")
+	}else{
+		game.Ante = ante
+		game.Min_bet = min_bet
+		game.Max_bet = max_bet
+		for i, s := range(game.Seats){
+			s.Number = i + 1
+			s.occupied = false
+		}
+		return
+	}
+}
+
+type GameStakes struct {
+	Ante   int64
+	MaxBet int64
+	MinBet int64
+}
+
+type Seat struct {
+	number 		int
+	occupied 	bool
+	occupier 	string 
 }
 
 type Player struct { /* A more complete player struct will likely be someplace else in repo */
@@ -43,6 +85,7 @@ type Player struct { /* A more complete player struct will likely be someplace e
 	Bet       int
 	Hand_Rank int
 	Card_Hist [14]int
+	Seat 		int
 }
 
 func (p *Player) pay_bet(amount int, pot int) int {
