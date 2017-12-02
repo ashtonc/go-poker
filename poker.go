@@ -32,9 +32,12 @@ func main() {
 	// Populate our environment
 	env := &models.Env{
 		Database:  database,
-		Port:      "8000",
+		Port:      ":8000",
 		Templates: templates,
 	}
+
+	// Deferred until main finishes, idiomatic
+	defer env.Database.Close()
 
 	// Create a new router and initialize the handlers
 	router := mux.NewRouter()
@@ -52,10 +55,7 @@ func main() {
 	router.Handle("/poker/game/watch", handlers.WatchGame(env))
 	router.Handle("/poker/leaderboard/", handlers.Leaderboard(env))
 
-	// These functions are deferred until main finishes
-	defer env.Database.Close()
-
 	// Start the server
-	log.Print("Running server on port " + env.Port + ".")
-	log.Fatal(http.ListenAndServe(":"+env.Port, router))
+	log.Print("Running server on port " + env.Port)
+	log.Fatal(http.ListenAndServe(env.Port, router))
 }

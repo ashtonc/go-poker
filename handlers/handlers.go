@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// This simply redirects users to /poker
+// This simply redirects users to /poker/
 func HomeRedirect(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
@@ -104,7 +104,7 @@ func ViewUser(env *models.Env) http.Handler {
 		// Get the user page matching that username from the database
 		user, err := database.GetUserPage(env, username)
 		if err != nil {
-			log.Print("Player " + username + " not found.")
+			log.Print("Player " + username + " not found")
 
 			// For now, just redirect them to the home page
 			http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
@@ -130,7 +130,7 @@ func ViewUser(env *models.Env) http.Handler {
 		template := env.Templates["ViewUser"]
 		template.Execute(w, pagedata)
 
-		log.Print("Displaying player " + username + ".")
+		log.Print("Displaying player " + username)
 	})
 }
 

@@ -21,6 +21,7 @@ func BuildTemplateCache() map[string]*template.Template {
 	return templateCache
 }
 
+// Similar to the functionality of template.Must, but writes the error to the server log
 func BuildWithError(filenames ...string) *template.Template {
 	template, err := template.ParseFiles(filenames...)
 	if err != nil {
