@@ -48,7 +48,7 @@ func Login(env *models.Env) http.Handler {
 		} else {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
-				Session: &models.Session{
+				Session: models.Session{
 					LoggedIn:  false,
 					PageLogin: true,
 				},
@@ -75,7 +75,7 @@ func Register(env *models.Env) http.Handler {
 		if r.Method == "GET" {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
-				Session: &models.Session{
+				Session: models.Session{
 					LoggedIn: false,
 					PageUser: true,
 				},
@@ -98,7 +98,7 @@ func ViewUser(env *models.Env) http.Handler {
 		// Get the user page matching that username from the database
 		user, err := database.GetUserPage(env, username)
 		if err != nil {
-			log.Print("Player " + username + " not found")
+			log.Print("Player " + username + " not found.")
 
 			// For now, just redirect them to the home page
 			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
@@ -119,7 +119,7 @@ func ViewUser(env *models.Env) http.Handler {
 		template := env.Templates["ViewUser"]
 		template.Execute(w, pagedata)
 
-		log.Print("Displaying player " + username)
+		log.Print("Displaying player " + username + ".")
 	})
 }
 

@@ -98,7 +98,7 @@ type GameHand struct {
 
 type PageData struct {
 	SiteRoot    string
-	Session     *Session
+	Session     Session
 	UserPage    UserPage
 	Game        Game
 	Lobby       Lobby

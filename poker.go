@@ -57,6 +57,6 @@ func main() {
 	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 
 	// Start the server
-	log.Print("Running server on port " + env.Port)
+	log.Print("Running server on port " + env.Port + ".")
 	log.Fatal(http.ListenAndServe(env.Port, router))
 }

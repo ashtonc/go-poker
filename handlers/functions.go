@@ -8,9 +8,14 @@ import (
 	"poker/sessions"
 )
 
-func getPageData(sessionid string, page string) *models.PageData {
-	var pagedata *models.PageData
-	var session = sessions.GetSession(sessionid)
+// Move the global variables in the env struct ************
+var cookieHandler = securecookie.New(
+	securecookie.GenerateRandomKey(64),
+	securecookie.GenerateRandomKey(32))
+
+func getPageData(sessionid string, page string) models.PageData {
+	var pagedata models.PageData
+	session := sessions.GetSession(sessionid)
 
 	switch page {
 	case "Home":
@@ -76,8 +81,3 @@ func clearSession(response http.ResponseWriter) {
 	}
 	http.SetCookie(response, cookie)
 }
-
-// Move the global variables in the env struct
-var cookieHandler = securecookie.New(
-	securecookie.GenerateRandomKey(64),
-	securecookie.GenerateRandomKey(32))
