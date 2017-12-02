@@ -4,7 +4,38 @@ import (
 	"net/http"
 
 	"github.com/gorilla/securecookie"
+	"poker/models"
+	"poker/sessions"
 )
+
+// Move the global variables in the env struct ************
+var cookieHandler = securecookie.New(
+	securecookie.GenerateRandomKey(64),
+	securecookie.GenerateRandomKey(32))
+
+func getPageData(sessionid string, page string) models.PageData {
+	var pagedata models.PageData
+	session := sessions.GetSession(sessionid)
+
+	switch page {
+	case "Home":
+		session.PageHome = true
+	case "ViewUser", "EditUser":
+		session.PageUser = true
+	case "Login":
+		session.PageLogin = true
+	case "Register":
+		session.PageRegister = true
+	case "PlayGame", "WatchGame", "ViewLobby":
+		session.PageGame = true
+	case "Leaderboard":
+		session.PageLeaderboard = true
+	}
+
+	pagedata.Session = session
+
+	return pagedata
+}
 
 func getUserName(request *http.Request) (userName string) {
 	if cookie, err := request.Cookie("session"); err == nil {
@@ -50,8 +81,3 @@ func clearSession(response http.ResponseWriter) {
 	}
 	http.SetCookie(response, cookie)
 }
-
-// Move the global variables in the env struct
-var cookieHandler = securecookie.New(
-	securecookie.GenerateRandomKey(64),
-	securecookie.GenerateRandomKey(32))

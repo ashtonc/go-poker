@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	_ "github.com/lib/pq"
+	"html/template"
 )
 
 /*
@@ -12,9 +13,11 @@ import (
 // Env serves as an environment that contains "global" variables. See
 // http://www.alexedwards.net/blog/organising-database-access for the idea
 type Env struct {
-	Database *sql.DB
-	// authentication middleware ****************************************************
-	// template cache middleware
+	Database  *sql.DB
+	Port      string
+	Templates map[string]*template.Template
+	SiteRoot  string
+	// authentication middleware
 	// logger middleware
 }
 
@@ -94,6 +97,7 @@ type GameHand struct {
  */
 
 type PageData struct {
+	SiteRoot    string
 	Session     Session
 	UserPage    UserPage
 	Game        Game
