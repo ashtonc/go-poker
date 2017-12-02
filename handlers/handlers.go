@@ -6,7 +6,6 @@ import (
 
 	"poker/database"
 	"poker/models"
-	"poker/sessions"
 
 	"github.com/gorilla/mux"
 )
@@ -14,19 +13,14 @@ import (
 // This simply redirects users to /poker/
 func HomeRedirect(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 	})
 }
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Populate the data needed for the page (these should nearly all be external functions)
-		var session = sessions.GetSession()
-		session.PageHome = true
-
-		pagedata := models.PageData{
-			Session: session,
-		}
+		pagedata := getPageData("sessionid", "Home")
 
 		// Execute the template with our page data
 		template := env.Templates["Home"]
@@ -42,19 +36,19 @@ func Login(env *models.Env) http.Handler {
 			userName := request.FormValue("username")
 			name := request.FormValue("username")
 			pass := request.FormValue("password")
-			redirectTarget := "/poker/login/"
+			redirectTarget := env.SiteRoot + "/login/"
 			if name != "" && pass != "" {
 
 				// .. check credentials ..
 				setSession(userName, name, response)
-				redirectTarget = "/poker/game/"
+				redirectTarget = env.SiteRoot + "/game/"
 			}
 			//redirect to "404 page not found if user "
 			http.Redirect(response, request, redirectTarget, 302)
 		} else {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
-				Session: models.Session{
+				Session: &models.Session{
 					LoggedIn:  false,
 					PageLogin: true,
 				},
@@ -71,7 +65,7 @@ func Login(env *models.Env) http.Handler {
 func Logout(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//clearSession(response)
-		http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 	})
 }
 
@@ -81,7 +75,7 @@ func Register(env *models.Env) http.Handler {
 		if r.Method == "GET" {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
-				Session: models.Session{
+				Session: &models.Session{
 					LoggedIn: false,
 					PageUser: true,
 				},
@@ -107,23 +101,18 @@ func ViewUser(env *models.Env) http.Handler {
 			log.Print("Player " + username + " not found")
 
 			// For now, just redirect them to the home page
-			http.Redirect(w, r, "/poker/", http.StatusTemporaryRedirect)
+			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 			return
 		}
 
-		var session = sessions.GetSession()
-		session.PageUser = true
-
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: session,
-			UserPage: models.UserPage{
-				MatchesSession: true,
-				Username:       user.Username,
-				Name:           user.Name,
-				Email:          user.Email,
-				PictureUrl:     user.PictureUrl,
-			},
+		// Populate the data needed for the page
+		pagedata := getPageData("sessionid", "ViewUser")
+		pagedata.UserPage = models.UserPage{
+			MatchesSession: true,
+			Username:       user.Username,
+			Name:           user.Name,
+			Email:          user.Email,
+			PictureUrl:     user.PictureUrl,
 		}
 
 		// Execute the template with our page data
@@ -139,18 +128,13 @@ func EditUser(env *models.Env) http.Handler {
 		vars := mux.Vars(r)
 		username := vars["username"]
 
-		var session = sessions.GetSession()
-		session.PageUser = true
-
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: session,
-			UserPage: models.UserPage{
-				MatchesSession: true,
-				Username:       username,
-				Name:           "User Name",
-				Email:          "user@email.ca",
-			},
+		// Populate the data needed for the page
+		pagedata := getPageData("sessionid", "EditUser")
+		pagedata.UserPage = models.UserPage{
+			MatchesSession: true,
+			Username:       username,
+			Name:           "User Name",
+			Email:          "user@email.ca",
 		}
 
 		// Execute the template with our page data
@@ -162,22 +146,17 @@ func EditUser(env *models.Env) http.Handler {
 func RedirectGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
-		http.Redirect(w, r, "/poker/game/play", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
 		// Else, send them to the lobby
-		//http.Redirect(w, r, "/poker/game/lobby", http.StatusTemporaryRedirect)
+		//http.Redirect(w, r, env.SiteRoot /game/lobby", http.StatusTemporaryRedirect)
 	})
 }
 
 func PlayGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		var session = sessions.GetSession()
-		session.PageGame = true
-
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: session,
-		}
+		// Populate the data needed for the page
+		pagedata := getPageData("sessionid", "PlayGame")
 
 		// Execute the template with our page data
 		template := env.Templates["PlayGame"]
@@ -195,14 +174,9 @@ func ViewLobby(env *models.Env) http.Handler {
 			log.Fatal(err)
 		}
 
-		var session = sessions.GetSession()
-		session.PageGame = true
-
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: session,
-			Lobby:   *lobby,
-		}
+		// Populate the data needed for the page
+		pagedata := getPageData("sessionid", "ViewLobby")
+		pagedata.Lobby = *lobby
 
 		// Execute the template with our page data
 		template := env.Templates["ViewLobby"]
@@ -213,13 +187,8 @@ func ViewLobby(env *models.Env) http.Handler {
 func WatchGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		var session = sessions.GetSession()
-		session.PageGame = true
-
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: session,
-		}
+		// Populate the data needed for the page
+		pagedata := getPageData("sessionid", "WatchGame")
 
 		// Execute the template with our page data
 		template := env.Templates["WatchGame"]
@@ -234,13 +203,9 @@ func Leaderboard(env *models.Env) http.Handler {
 			// Big error
 		}
 
-		var session = sessions.GetSession()
-		session.PageLeaderboard = true
-
-		pagedata := models.PageData{
-			Session:     session,
-			Leaderboard: *leaderboard,
-		}
+		// Populate the data needed for the page
+		pagedata := getPageData("sessionid", "ViewLobby")
+		pagedata.Leaderboard = *leaderboard
 
 		// Execute the template with our page data
 		template := env.Templates["Leaderboard"]

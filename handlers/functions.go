@@ -4,7 +4,33 @@ import (
 	"net/http"
 
 	"github.com/gorilla/securecookie"
+	"poker/models"
+	"poker/sessions"
 )
+
+func getPageData(sessionid string, page string) *models.PageData {
+	var pagedata *models.PageData
+	var session = sessions.GetSession(sessionid)
+
+	switch page {
+	case "Home":
+		session.PageHome = true
+	case "ViewUser", "EditUser":
+		session.PageUser = true
+	case "Login":
+		session.PageLogin = true
+	case "Register":
+		session.PageRegister = true
+	case "PlayGame", "WatchGame", "ViewLobby":
+		session.PageGame = true
+	case "Leaderboard":
+		session.PageLeaderboard = true
+	}
+
+	pagedata.Session = session
+
+	return pagedata
+}
 
 func getUserName(request *http.Request) (userName string) {
 	if cookie, err := request.Cookie("session"); err == nil {

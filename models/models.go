@@ -16,6 +16,7 @@ type Env struct {
 	Database  *sql.DB
 	Port      string
 	Templates map[string]*template.Template
+	SiteRoot  string
 	// authentication middleware
 	// logger middleware
 }
@@ -96,7 +97,8 @@ type GameHand struct {
  */
 
 type PageData struct {
-	Session     Session
+	SiteRoot    string
+	Session     *Session
 	UserPage    UserPage
 	Game        Game
 	Lobby       Lobby

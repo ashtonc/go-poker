@@ -34,6 +34,7 @@ func main() {
 		Database:  database,
 		Port:      ":8000",
 		Templates: templates,
+		SiteRoot:  "/poker",
 	}
 
 	// Deferred until main finishes, idiomatic
@@ -43,17 +44,17 @@ func main() {
 	router := mux.NewRouter()
 
 	router.Handle("/", handlers.HomeRedirect(env))
-	router.Handle("/poker/", handlers.Home(env))
-	router.Handle("/poker/login/", handlers.Login(env))
-	router.Handle("/poker/logout/", handlers.Logout(env))
-	router.Handle("/poker/register/", handlers.Register(env))
-	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}", handlers.ViewUser(env))
-	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))
-	router.Handle("/poker/game/", handlers.RedirectGame(env))
-	router.Handle("/poker/game/play", handlers.PlayGame(env))
-	router.Handle("/poker/game/lobby", handlers.ViewLobby(env))
-	router.Handle("/poker/game/watch", handlers.WatchGame(env))
-	router.Handle("/poker/leaderboard/", handlers.Leaderboard(env))
+	router.Handle(env.SiteRoot+"/", handlers.Home(env))
+	router.Handle(env.SiteRoot+"/login/", handlers.Login(env))
+	router.Handle(env.SiteRoot+"/logout/", handlers.Logout(env))
+	router.Handle(env.SiteRoot+"/register/", handlers.Register(env))
+	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}", handlers.ViewUser(env))
+	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))
+	router.Handle(env.SiteRoot+"/game/", handlers.RedirectGame(env))
+	router.Handle(env.SiteRoot+"/game/play", handlers.PlayGame(env))
+	router.Handle(env.SiteRoot+"/game/lobby", handlers.ViewLobby(env))
+	router.Handle(env.SiteRoot+"/game/watch", handlers.WatchGame(env))
+	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 
 	// Start the server
 	log.Print("Running server on port " + env.Port)
