@@ -46,23 +46,22 @@ func Home(env *models.Env) http.Handler {
 }
 
 func Login(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		// func Login(response http.ResponseWriter, request *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		if request.Method == "POST" {
-			userName := request.FormValue("username")
-			name := request.FormValue("username")
-			pass := request.FormValue("password")
+		if r.Method == "POST" {
+			userName := r.FormValue("username")
+			name := r.FormValue("username")
+			pass := r.FormValue("password")
 			redirectTarget := env.SiteRoot + "/login/"
 			if name != "" && pass != "" {
 
 				// .. check credentials ..
-				setSession(userName, name, response)
+				setSession(userName, name, w)
 				redirectTarget = env.SiteRoot + "/game/"
 			}
 			//redirect to "404 page not found if user "
-			http.Redirect(response, request, redirectTarget, 302)
-		} else {
+			http.Redirect(w, r, redirectTarget, 302)
+		} else if r.Method == "GET" {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
 				Session: models.Session{
@@ -73,7 +72,7 @@ func Login(env *models.Env) http.Handler {
 
 			// Execute the template with our page data
 			template := env.Templates["Login"]
-			template.Execute(response, pagedata)
+			template.Execute(w, pagedata)
 		}
 
 	})

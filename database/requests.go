@@ -104,13 +104,12 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 func UserRegister(env *models.Env, username string, name string, email string, password string) (error) {
 
 	sqlStatement := `  
-	INSERT INTO account (username, name, email, password_salt) 
+	INSERT INTO account (username, name, email, password) 
 	VALUES ($1, $2, $3, $4)`
 	_, err := env.Database.Exec(sqlStatement, username, name, email, password)
 	if err != nil {
 		panic(err)
 	}
-
 	return err
 }
 
