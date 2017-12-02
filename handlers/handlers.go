@@ -21,7 +21,7 @@ func HomeRedirect(env *models.Env) http.Handler {
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("User visited Home page.\n")
-		err := database.CreateLobbyEntries(env) // to be removed later, testing inserting lobbies into database
+		err := database.CreateLeaderboardEntries(env) // to be removed later, testing inserting lobbies into database
 		if err != nil {
 			panic("No database found")
 		}
@@ -103,6 +103,16 @@ func Register(env *models.Env) http.Handler {
 			template.Execute(w, pagedata)
 		} else if r.Method == "POST" {
 
+			pagedata := models.PageData{
+				Session: models.Session{
+					LoggedIn: false,
+					PageUser: true,
+				},
+			}
+
+			template := env.Templates["Register"]
+
+
 			fmt.Printf("User attempted to register.\n")
 			r.ParseForm()
 			username := r.PostFormValue("username")
@@ -111,12 +121,26 @@ func Register(env *models.Env) http.Handler {
 			email := r.PostFormValue("email")
 			password_repeat := r.PostFormValue("password-repeat")
 
+			if len(username) < 5 {
+				template.Execute(w, pagedata)
+			} else if len(name) < 1 {
+				template.Execute(w, pagedata)
+			} else if len(password) < 6 {
+				template.Execute(w, pagedata)
+			} else if password != password_repeat {
+				template.Execute(w, pagedata)
+			// } else if database.UserCount(env, username) == nil {
+			// 	panic("HI!")
+			}
+
 			err := database.UserRegister(env, username, name, email, password)
 			if err != nil {
 				panic("No database found")
 			}
 
 			fmt.Printf(username, password, name, email, password_repeat)
+			http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+
 		}
 	})
 }
@@ -229,6 +253,8 @@ func WatchGame(env *models.Env) http.Handler {
 
 func Leaderboard(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("User visited Leaderboard page.\n")
+
 		leaderboard, err := database.GetLeaderboard(env)
 		if err != nil {
 			// Big error
@@ -241,5 +267,8 @@ func Leaderboard(env *models.Env) http.Handler {
 		// Execute the template with our page data
 		template := env.Templates["Leaderboard"]
 		template.Execute(w, pagedata)
+
+		// fmt.Printf(leaderboard)
+
 	})
 }

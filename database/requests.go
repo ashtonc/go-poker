@@ -11,7 +11,7 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	var page models.UserPage
 	page.Username = userName
 
-	sqlStatement := `SELECT name, email, picture FROM user WHERE username=$1;`
+	sqlStatement := `SELECT name, email FROM user WHERE username=$1;`
 
 	row := env.Database.QueryRow(sqlStatement, page.Username)
 	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureUrl)
@@ -112,6 +112,16 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	}
 	return err
 }
+
+// func UserCount(env *models.Env, username string) (count int, error) {
+
+// 	sqlStatement := `SELECT COUNT(username) as count FROM account WHERE username=$1`	
+
+// 	count, err := env.Database.Exec(sqlStatement, username)
+
+// 	return count, err
+// }
+
 
 // Temporary function that adds entries to the game database
 func CreateLobbyEntries(env *models.Env) error {
