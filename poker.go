@@ -26,8 +26,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Generate our templates
-	templates := templates.BuildTemplates()
+	// Create a template cache
+	templates := templates.BuildTemplateCache()
 
 	// Populate our environment
 	env := &models.Env{

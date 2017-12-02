@@ -16,8 +16,7 @@ type Env struct {
 	Database  *sql.DB
 	Port      string
 	Templates map[string]*template.Template
-	// authentication middleware ****************************************************
-	// template cache middleware
+	// authentication middleware
 	// logger middleware
 }
 
