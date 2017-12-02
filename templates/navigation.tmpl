@@ -12,7 +12,7 @@
 					<a href="/poker/leaderboard/">Leaderboard</a>
 				</li>
 				<li{{ if .PageUser }} class="nav-current"{{ end }}>
-					{{ if .LoggedIn -}}<a href="/poker/user/{{ .Username }}">Profile{{ else }}<a href="/poker/register/">Register{{ end }}</a>
+					{{ if .LoggedIn -}}<a href="/poker/user/{{ .Username }}/view">Profile{{ else }}<a href="/poker/register/">Register{{ end }}</a>
 				</li>
 			</ul>
 			{{- end }}

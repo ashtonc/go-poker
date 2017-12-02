@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"fmt"
 
 	"poker/database"
 	"poker/models"
@@ -112,7 +112,6 @@ func Register(env *models.Env) http.Handler {
 
 			template := env.Templates["Register"]
 
-
 			fmt.Printf("User attempted to register.\n")
 			r.ParseForm()
 			username := r.PostFormValue("username")
@@ -129,8 +128,8 @@ func Register(env *models.Env) http.Handler {
 				template.Execute(w, pagedata)
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
-			// } else if database.UserCount(env, username) == nil {
-			// 	panic("HI!")
+				// } else if database.UserCount(env, username) == nil {
+				// 	panic("HI!")
 			}
 
 			err := database.UserRegister(env, username, name, email, password)
@@ -139,7 +138,7 @@ func Register(env *models.Env) http.Handler {
 			}
 
 			fmt.Printf(username, password, name, email, password_repeat)
-			http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+			http.Redirect(w, r, env.SiteRoot+"/game/", http.StatusTemporaryRedirect)
 
 		}
 	})
@@ -201,9 +200,9 @@ func EditUser(env *models.Env) http.Handler {
 func RedirectGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
-		http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 		// Else, send them to the lobby
-		//http.Redirect(w, r, env.SiteRoot /game/lobby", http.StatusTemporaryRedirect)
+		//http.Redirect(w, r, env.SiteRoot+"/lobby", http.StatusTemporaryRedirect)
 	})
 }
 

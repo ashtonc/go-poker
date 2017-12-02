@@ -48,12 +48,12 @@ func main() {
 	router.Handle(env.SiteRoot+"/login/", handlers.Login(env))
 	router.Handle(env.SiteRoot+"/logout/", handlers.Logout(env))
 	router.Handle(env.SiteRoot+"/register/", handlers.Register(env))
-	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}", handlers.ViewUser(env))
+	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/view", handlers.ViewUser(env))
 	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))
+	router.Handle(env.SiteRoot+"/lobby/", handlers.ViewLobby(env))
 	router.Handle(env.SiteRoot+"/game/", handlers.RedirectGame(env))
-	router.Handle(env.SiteRoot+"/game/play", handlers.PlayGame(env))
-	router.Handle(env.SiteRoot+"/game/lobby", handlers.ViewLobby(env))
-	router.Handle(env.SiteRoot+"/game/watch", handlers.WatchGame(env))
+	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/play", handlers.PlayGame(env))
+	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/watch", handlers.WatchGame(env))
 	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 
 	// Start the server
