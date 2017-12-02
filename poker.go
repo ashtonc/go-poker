@@ -56,6 +56,9 @@ func main() {
 	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/watch", handlers.WatchGame(env))
 	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 
+	// Initialize the games found in the database (imagine these as poker tables)
+	// gamelogic.InitializeGames(env)
+
 	// Start the server
 	log.Print("Running server on port " + env.Port + ".")
 	log.Fatal(http.ListenAndServe(env.Port, router))

@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// This simply redirects users to /poker/
+// This simply redirects users to the site root
 func HomeRedirect(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
@@ -20,22 +20,6 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("User visited Home page.\n")
-		err := database.CreateLeaderboardEntries(env) // to be removed later, testing inserting lobbies into database
-		if err != nil {
-			panic("No database found")
-		}
-
-		/*		// Populate the data needed for the page (these should nearly all be external functions)
-				vars := mux.Vars(r)
-				username := vars["username"]*/
-
-		/*		// Get the user page matching that username from the database
-				user, err := database.UserRegister(env, username)
-				if err != nil {
-					// TODO
-				}*/
-
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := getPageData("sessionid", "Home")
 
@@ -260,7 +244,7 @@ func Leaderboard(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewLobby")
+		pagedata := getPageData("sessionid", "Leaderboard")
 		pagedata.Leaderboard = *leaderboard
 
 		// Execute the template with our page data
