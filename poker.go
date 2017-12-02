@@ -11,25 +11,30 @@ import (
 	"poker/database"
 	"poker/handlers"
 	"poker/models"
+	"poker/templates"
 	//"poker/gamelogic"
 )
 
 func main() {
-	// Session variables. Should probably be included in the environment or
-	// taken from a config file somewhere.
+	// Connect to the database
 	db_user := "postgres"
 	db_password := "postgres"
 	db_name := "pokerdb"
 
-	server_port := "8000"
-
-	// Populate our environment
 	database, err := database.CreateDatabase(db_user, db_password, db_name)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	env := &models.Env{Database: database}
+	// Generate our templates
+	templates := templates.BuildTemplates()
+
+	// Populate our environment
+	env := &models.Env{
+		Database:  database,
+		Port:      "8000",
+		Templates: templates,
+	}
 
 	// Create a new router and initialize the handlers
 	router := mux.NewRouter()
@@ -41,16 +46,16 @@ func main() {
 	router.Handle("/poker/register/", handlers.Register(env))
 	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}", handlers.ViewUser(env))
 	router.Handle("/poker/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))
-	router.Handle("/poker/game/", handlers.RouteGame(env))
+	router.Handle("/poker/game/", handlers.RedirectGame(env))
 	router.Handle("/poker/game/play", handlers.PlayGame(env))
 	router.Handle("/poker/game/lobby", handlers.ViewLobby(env))
-	router.Handle("/poker/game/watch", handlers.ViewGame(env))
+	router.Handle("/poker/game/watch", handlers.WatchGame(env))
 	router.Handle("/poker/leaderboard/", handlers.Leaderboard(env))
 
 	// These functions are deferred until main finishes
 	defer env.Database.Close()
 
 	// Start the server
-	log.Print("Running server on port " + server_port + ".")
-	log.Fatal(http.ListenAndServe(":"+server_port, router))
+	log.Print("Running server on port " + env.Port + ".")
+	log.Fatal(http.ListenAndServe(":"+env.Port, router))
 }
