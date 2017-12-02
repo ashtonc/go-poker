@@ -101,19 +101,17 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 // 	return &users, err
 // }
 
-func UserRegister(env *models.Env, userName string) (*models.UserPage, error) {
-	var users models.UserPage
-	users.Username = userName
+func UserRegister(env *models.Env, username string, name string, email string, password string) (error) {
 
 	sqlStatement := `  
-	INSERT INTO account (username, name, email) 
-	VALUES ($1, $2, $3)`
-	_, err := env.Database.Exec(sqlStatement, "username!", "Jonathan", "fff@f.com")
+	INSERT INTO account (username, name, email, password_salt) 
+	VALUES ($1, $2, $3, $4)`
+	_, err := env.Database.Exec(sqlStatement, username, name, email, password)
 	if err != nil {
 		panic(err)
 	}
 
-	return &users, err
+	return err
 }
 
 // Temporary function that adds entries to the game database

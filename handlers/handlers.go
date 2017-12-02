@@ -112,7 +112,12 @@ func Register(env *models.Env) http.Handler {
 			email := r.PostFormValue("email")
 			password_repeat := r.PostFormValue("password-repeat")
 
-			
+			err := database.UserRegister(env, username, name, email, password)
+			if err != nil {
+				panic("No database found")
+			}
+
+			fmt.Printf(username, password, name, email, password_repeat)
 		}
 	})
 }
