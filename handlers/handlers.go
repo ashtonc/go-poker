@@ -3,6 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"fmt"
 
 	"poker/database"
 	"poker/models"
@@ -19,8 +20,8 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("TTTTT")
-		err := database.CreateLobbyEntries(env)
+		fmt.Printf("User visited Home page.\n")
+		err := database.CreateLobbyEntries(env) // to be removed later, testing inserting lobbies into database
 		if err != nil {
 			panic("No database found")
 		}
@@ -87,6 +88,7 @@ func Logout(env *models.Env) http.Handler {
 
 func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("User visited Register page.\n")
 
 		if r.Method == "GET" {
 			// Populate the data needed for the page (these should nearly all be external functions)
@@ -102,14 +104,16 @@ func Register(env *models.Env) http.Handler {
 			template.Execute(w, pagedata)
 		} else if r.Method == "POST" {
 
-			// fmt.Printf("test")
+			fmt.Printf("User attempted to register.\n")
+			fmt.Println("method:", r.Method)
 			r.ParseForm()
-		    fmt.Println(r)
-		    fmt.Println("username:", r.Form["username"])
-		    fmt.Println("password:", r.Form["password"])
-			
+			fmt.Println(r)
+			fmt.Println(r.Form) // print information on server side.
+			fmt.Println("path", r.URL.Path)
+			fmt.Println("scheme", r.URL.Scheme)
 
-
+		    fmt.Println("username: ", r.FormValue("username"))
+		    fmt.Println("password: ", r.PostFormValue("password"))
 		}
 	})
 }
