@@ -80,12 +80,12 @@ func Login(env *models.Env) http.Handler {
 	})
 }
 
-func Logout(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//clearSession(response)
-		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
-	})
-}
+// func Logout(env *models.Env) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		clearSession(response)
+// 		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+// 	})
+// }
 
 func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -129,6 +129,9 @@ func Register(env *models.Env) http.Handler {
 			} else if len(name) < 1 || !isAlpha(name) {
 				template.Execute(w, pagedata)
 				fmt.Printf("Incorrect input for name.\n")
+			} else if len(email) < 1 {
+				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for email.\n")
 			} else if len(password) < 6 {
 				template.Execute(w, pagedata)
 				fmt.Printf("Incorrect input for password.\n")
@@ -145,7 +148,8 @@ func Register(env *models.Env) http.Handler {
 					panic("No database found")
 				}
 
-				fmt.Printf(username, password, name, email, password_repeat)
+				// .. check credentials ..
+				setSession(username, name, w)
 				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 			}
 
