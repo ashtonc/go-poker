@@ -51,7 +51,7 @@ var upgrader = websocket.Upgrader{
 func (hub *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	socket, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println(err)
+		log.Print(err)
 		http.Error(w, "could not upgrade", http.StatusInternalServerError)
 		return
 	}

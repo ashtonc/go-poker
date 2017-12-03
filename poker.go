@@ -39,6 +39,7 @@ func main() {
 	defer env.Database.Close()
 
 	// Initialize the games found in the database (imagine these as poker tables)
+	// Currently causes a circular package dependency: gamelogic -> database -> gamelogic. Need to put the game objects in the models package.
 	// gamelogic.InitializeGames(env)
 
 	// Create a new router and initialize the handlers

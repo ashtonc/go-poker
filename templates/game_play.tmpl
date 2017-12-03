@@ -3,21 +3,50 @@
         <h1>Play</h1>
 		{{ template "game" . }}
         <form id="game-menu" method="POST">
-            <div>
-                <input type="button" value="Check">
+            <div id="discard">
+                <div>
+                    <div>
+                        <input type="checkbox" id="card1discard" value="card1discard">
+                        <label for="card1discard">Card 1</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="card2discard" value="card2discard">
+                        <label for="card1discard">Card 2</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="card3discard" value="card3discard">
+                        <label for="card1discard">Card 3</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="card4discard" value="card4discard">
+                        <label for="card1discard">Card 4</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="card5discard" value="card5discard">
+                        <label for="card1discard">Card 5</label>
+                    </div>
+                    <div>
+                        <input type="button" value="Discard">
+                    </div>
+                </div>
+                <div>
+                    <input type="button" value="Pass">
+                </div>
             </div>
-            <div>
-                <input type="button" value="Call">
-            </div>
-            <div>
-                <input type="button" value="Fold">
-            </div>
-            <div>
-                <label for="raise">Raise:</label>
-                <input id="raise" type="number">
-            </div>
-            <div>
-                <input type="submit" value="Bet">
+            <div id="betting">
+                <div>
+                    <input type="button" value="Check">
+                </div>
+                <div>
+                    <input type="button" value="Call">
+                </div>
+                <div>
+                    <input id="raise" type="range" min="0" max="1000" step="1">
+                    <input type="button" value="Raise">
+                </div>
+                <div>
+                    <input type="button" value="Fold">
+                </div>
             </div>
         </form>
 {{- end }}

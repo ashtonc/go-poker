@@ -83,12 +83,12 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 func GetLobby(env *models.Env) (*models.Lobby, error) {
 	var lobby models.Lobby
 
-	sqlStatement := `SELECT name, players FROM game;`
+	sqlStatement := `SELECT name FROM game;`
 	// , game_status WHERE game_status.description = 'open'
 
 	rows, err := env.Database.Query(sqlStatement)
 	if err != nil {
-		log.Fatal(err)
+		//	log.Fatal(err)
 	}
 
 	defer rows.Close()
