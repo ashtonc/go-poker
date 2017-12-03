@@ -2,8 +2,10 @@ package models
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"html/template"
+
+	_ "github.com/lib/pq"
+
 	"poker/gamelogic"
 )
 
@@ -18,7 +20,7 @@ type Env struct {
 	Port      string
 	Templates map[string]*template.Template
 	SiteRoot  string
-	Games     map[string]gamelogic.Game
+	Games     map[string]*gamelogic.Game
 	// authentication middleware
 	// logger middleware
 }

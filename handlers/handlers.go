@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
+
 	"poker/database"
 	"poker/models"
-
-	"github.com/gorilla/mux"
 )
 
 // This simply redirects users to the site root

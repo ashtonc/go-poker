@@ -1,8 +1,9 @@
 package database
 
 import (
-	_ "github.com/lib/pq"
 	"log"
+
+	_ "github.com/lib/pq"
 
 	"poker/models"
 )
@@ -19,11 +20,31 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	return &page, err
 }
 
-/*
-func GetGame(env *models.Env, gameId int) (*models.Game, error) {
+func GetGames(env *models.Env) ([]*gamelogic.Game, error) {
+	var games []*gamelogic.Game
 
+	/*
+		sqlStatement := `SELECT game.name, stakes. FROM game, game_stakes, game_status WHERE ...;`
+
+		rows, err := env.Database.Query(sqlStatement)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		defer rows.Close()
+
+		for rows.Next() {
+			//create some vars here
+			err = rows.Scan(&*var*, &*var*)
+			if err != nil {
+				log.Fatal(err)
+			}
+			games = append(games, *game object*)
+		}
+	*/
+
+	return games, err
 }
-*/
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	var leaderboard models.Leaderboard
@@ -101,7 +122,7 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 // 	return &users, err
 // }
 
-func UserRegister(env *models.Env, username string, name string, email string, password string) (error) {
+func UserRegister(env *models.Env, username string, name string, email string, password string) error {
 
 	sqlStatement := `  
 	INSERT INTO account (username, name, email, password) 
@@ -115,13 +136,12 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 
 // func UserCount(env *models.Env, username string) (count int, error) {
 
-// 	sqlStatement := `SELECT COUNT(username) as count FROM account WHERE username=$1`	
+// 	sqlStatement := `SELECT COUNT(username) as count FROM account WHERE username=$1`
 
 // 	count, err := env.Database.Exec(sqlStatement, username)
 
 // 	return count, err
 // }
-
 
 // Temporary function that adds entries to the game database
 func CreateLobbyEntries(env *models.Env) error {

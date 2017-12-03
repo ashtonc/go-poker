@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/securecookie"
+
 	"poker/models"
 	"poker/sessions"
 )
