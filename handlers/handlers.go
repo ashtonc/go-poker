@@ -233,16 +233,24 @@ func PlayGame(env *models.Env) http.Handler {
 
 func ViewLobby(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var lobby models.Lobby
 
-		lobby, err := database.GetLobby(env)
-		if err != nil {
-			// No lobby exists or worse error(?)
-			log.Fatal(err)
+		for _, listing := range env.Games {
+			if listing.Status == "open" {
+				lobby.Games = append(lobby.Games, listing)
+			}
+		}
+
+		if len(lobby.Games) > 0 {
+			// Sort the games here
+			lobby.Empty = false
+		} else {
+			lobby.Empty = true
 		}
 
 		// Populate the data needed for the page
 		pagedata := getPageData(env, "sessionid", "ViewLobby")
-		pagedata.Lobby = *lobby
+		pagedata.Lobby = lobby
 
 		// Execute the template with our page data
 		template := env.Templates["ViewLobby"]
@@ -266,7 +274,7 @@ func Leaderboard(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		leaderboard, err := database.GetLeaderboard(env)
 		if err != nil {
-			// Big error
+			// Big error maybe
 			log.Fatal(err)
 		}
 

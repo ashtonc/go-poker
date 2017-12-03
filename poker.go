@@ -7,7 +7,6 @@ import (
 	"github.com/gorilla/mux"
 
 	"poker/database"
-	//"poker/gamelogic"
 	"poker/handlers"
 	"poker/models"
 	"poker/templates"
@@ -19,7 +18,7 @@ func main() {
 	dbPassword := "postgres"
 	dbName := "pokerdb"
 
-	database, err := database.CreateDatabase(dbUser, dbPassword, dbName)
+	db, err := database.CreateDatabase(dbUser, dbPassword, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +28,7 @@ func main() {
 
 	// Populate our environment
 	env := &models.Env{
-		Database:  database,
+		Database:  db,
 		Port:      ":8000",
 		Templates: templates,
 		SiteRoot:  "/poker",
@@ -39,8 +38,12 @@ func main() {
 	defer env.Database.Close()
 
 	// Initialize the games found in the database (imagine these as poker tables)
-	// Currently causes a circular package dependency: gamelogic -> database -> gamelogic. Need to put the game objects in the models package.
-	// gamelogic.InitializeGames(env)
+	games, err := database.GetGames(env)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	database.InitializeGames(env, games)
 
 	// Create a new router and initialize the handlers
 	router := mux.NewRouter()

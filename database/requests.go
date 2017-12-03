@@ -7,7 +7,6 @@ import (
 	// Wraps database/sql for our postgres database
 	_ "github.com/lib/pq"
 
-	"poker/gamelogic"
 	"poker/models"
 )
 
@@ -23,30 +22,29 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	return &page, err
 }
 
-func GetGames(env *models.Env) ([]*gamelogic.Game, error) {
-	var games []*gamelogic.Game
+func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
+	gameMap := make(map[string]*models.GameListing)
 
-	/*
-		sqlStatement := `SELECT game.name, game_stakes.ante, etc FROM game, game_stakes, game_status WHERE ...;`
+	sqlStatement := `SELECT game.name, game.slug, game_stakes.ante, game_stakes.min_bet, game_stakes.max_bet, game_status.description FROM game, game_stakes, game_status WHERE game.game_status = game_status.id AND game.stakes = game_stakes.id;`
 
-		rows, err := env.Database.Query(sqlStatement)
+	rows, err := env.Database.Query(sqlStatement)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		var gameListing models.GameListing
+		gameListing.Players = 0
+
+		err = rows.Scan(&gameListing.Name, &gameListing.Slug, &gameListing.Ante, &gameListing.MinBet, &gameListing.MaxBet, &gameListing.Status)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		defer rows.Close()
+		gameMap[gameListing.Slug] = &gameListing
+	}
 
-		for rows.Next() {
-			//create some vars here
-			err = rows.Scan(&*var*, &*var*)
-			if err != nil {
-				log.Fatal(err)
-			}
-			games = append(games, *game object*)
-		}
-	*/
-
-	return games, nil
+	return gameMap, err
 }
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
@@ -68,7 +66,7 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		leaderboard.Entries = append(leaderboard.Entries, models.LeaderboardEntry{Username: username, Cash: cash})
+		leaderboard.Entries = append(leaderboard.Entries, &models.LeaderboardEntry{Username: username, Cash: cash})
 	}
 
 	if len(leaderboard.Entries) > 0 {
@@ -80,6 +78,7 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
+/* This is all nonsense, games are stored in memory
 func GetLobby(env *models.Env) (*models.Lobby, error) {
 	var lobby models.Lobby
 
@@ -100,7 +99,7 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		lobby.Games = append(lobby.Games, models.LobbyListing{Name: name, Players: players})
+		lobby.Games = append(lobby.Games, &models.GameListing{Name: name, Players: 0})
 	}
 
 	if len(lobby.Games) > 0 {
@@ -111,6 +110,7 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 
 	return &lobby, err
 }
+*/
 
 func UserRegister(env *models.Env, username string, name string, email string, password string) error {
 

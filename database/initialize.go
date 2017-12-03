@@ -6,6 +6,9 @@ import (
 
 	// Wraps database/sql for postgres
 	_ "github.com/lib/pq"
+
+	"poker/gamelogic"
+	"poker/models"
 )
 
 func CreateDatabase(username string, password string, name string) (database *sql.DB, err error) {
@@ -27,4 +30,17 @@ func CreateDatabase(username string, password string, name string) (database *sq
 	}
 
 	return db, nil
+}
+
+func InitializeGames(env *models.Env, gameMap map[string]*models.GameListing) {
+	for _, listing := range gameMap {
+		game, err := gamelogic.GameInit(listing.Ante, listing.MinBet, listing.MaxBet)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		listing.Game = game
+	}
+
+	env.Games = gameMap
 }

@@ -20,7 +20,7 @@ type Env struct {
 	Port      string
 	Templates map[string]*template.Template
 	SiteRoot  string
-	Games     map[string]*gamelogic.Game
+	Games     map[string]*GameListing
 	// authentication middleware
 	// logger middleware
 }
@@ -54,58 +54,6 @@ type UserAccount struct {
 }
 
 /*
- *    Game models
- */
-
-type Game struct {
-	Name    string
-	Stakes  GameStakes
-	Phase   GamePhase
-	Deck    GameDeck
-	Player1 GamePlayer
-	Player2 GamePlayer
-	Player3 GamePlayer
-	Player4 GamePlayer
-	Player5 GamePlayer
-	Player6 GamePlayer
-}
-
-type GamePhase struct {
-	Phase int
-}
-
-type GameDeck struct {
-	Cards [52]Card
-}
-
-type Card struct {
-	Face string
-	Suit string
-	Rank int
-}
-
-type GameStakes struct {
-	Ante   int64
-	MaxBet int64
-	MinBet int64
-}
-
-type GamePlayer struct {
-	Cash     int64
-	Hand     GameHand
-	Username string
-}
-
-type GameHand struct {
-	Card1      Card
-	Card2      Card
-	Card3      Card
-	Card4      Card
-	Card5      Card
-	PictureURL string
-}
-
-/*
  *    Template models
  */
 
@@ -120,14 +68,19 @@ type PageData struct {
 
 type Lobby struct {
 	Empty bool
-	Games []LobbyListing
+	Games []*GameListing
 }
 
-type LobbyListing struct {
+type GameListing struct {
 	Name    string
-	Stakes  gamelogic.GameStakes
+	Slug    string
+	Ante    int
+	MinBet  int
+	MaxBet  int
+	Status  string
 	Players int
-	Private bool
+	Private bool // Unused
+	Game    *gamelogic.Game
 }
 
 type LeaderboardEntry struct {
@@ -137,5 +90,5 @@ type LeaderboardEntry struct {
 
 type Leaderboard struct {
 	Empty   bool
-	Entries []LeaderboardEntry
+	Entries []*LeaderboardEntry
 }
