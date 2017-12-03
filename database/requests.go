@@ -1,8 +1,11 @@
 package database
 
 import (
-	_ "github.com/lib/pq"
+	"database/sql"
 	"log"
+
+	// Wraps database/sql for our postgres database
+	_ "github.com/lib/pq"
 
 	"poker/models"
 )
@@ -19,11 +22,31 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	return &page, err
 }
 
-/*
-func GetGame(env *models.Env, gameId int) (*models.Game, error) {
+func GetGames(env *models.Env) ([]*gamelogic.Game, error) {
+	var games []*gamelogic.Game
 
+	/*
+		sqlStatement := `SELECT game.name, game_stakes.ante, etc FROM game, game_stakes, game_status WHERE ...;`
+
+		rows, err := env.Database.Query(sqlStatement)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		defer rows.Close()
+
+		for rows.Next() {
+			//create some vars here
+			err = rows.Scan(&*var*, &*var*)
+			if err != nil {
+				log.Fatal(err)
+			}
+			games = append(games, *game object*)
+		}
+	*/
+
+	return games, err
 }
-*/
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	var leaderboard models.Leaderboard
@@ -101,7 +124,7 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 // 	return &users, err
 // }
 
-func UserRegister(env *models.Env, username string, name string, email string, password string) (error) {
+func UserRegister(env *models.Env, username string, name string, email string, password string) error {
 
 	sqlStatement := `  
 	INSERT INTO account (username, name, email, password) 
@@ -113,15 +136,26 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	return err
 }
 
-// func UserCount(env *models.Env, username string) (count int, error) {
+func UserCount(env *models.Env, username string) (count int) {
 
-// 	sqlStatement := `SELECT COUNT(username) as count FROM account WHERE username=$1`	
+	sqlStatement := `SELECT COUNT(*) as count FROM account WHERE username=$1`
 
-// 	count, err := env.Database.Exec(sqlStatement, username)
+	rows, err := env.Database.Query(sqlStatement, username)
+	if err != nil {
+		panic(err)
+	}
+	return checkCount(rows)
+}
 
-// 	return count, err
-// }
-
+func checkCount(rows *sql.Rows) (count int) {
+	for rows.Next() {
+		err := rows.Scan(&count)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return count
+}
 
 // Temporary function that adds entries to the game database
 func CreateLobbyEntries(env *models.Env) error {

@@ -31,9 +31,6 @@ func main() {
 	// Create a template cache
 	templates := templates.BuildTemplateCache()
 
-	// Initialize the games found in the database (imagine these as poker tables)
-	gamelogic.InitializeGames(env)
-
 	// Populate our environment
 	env := &models.Env{
 		Database:  database,
@@ -41,6 +38,9 @@ func main() {
 		Templates: templates,
 		SiteRoot:  "/poker",
 	}
+
+	// Initialize the games found in the database (imagine these as poker tables)
+	gamelogic.InitializeGames(env)
 
 	// Create a new router and initialize the handlers
 	router := mux.NewRouter()

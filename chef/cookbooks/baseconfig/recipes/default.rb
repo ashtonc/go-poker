@@ -34,6 +34,14 @@ execute 'get-securecookie' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/securecookie'
 end
+execute 'get-uuid' do
+  environment 'GOPATH' => '/go'
+  command 'go get -u github.com/satori/go.uuid'
+end
+execute 'get-gjson' do
+  environment 'GOPATH' => '/go'
+  command 'go get -u github.com/tidwall/gjson'
+end
 
 # Postgres setup.
 package "postgresql"

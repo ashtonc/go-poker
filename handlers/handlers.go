@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
+
+	"github.com/gorilla/mux"
 
 	"poker/database"
 	"poker/models"
-
-	"github.com/gorilla/mux"
 )
 
 // This simply redirects users to the site root
@@ -21,7 +22,7 @@ func HomeRedirect(env *models.Env) http.Handler {
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := getPageData("sessionid", "Home")
+		pagedata := getPageData(env, "sessionid", "Home")
 
 		// Execute the template with our page data
 		template := env.Templates["Home"]
@@ -95,6 +96,7 @@ func Register(env *models.Env) http.Handler {
 			}
 
 			template := env.Templates["Register"]
+			isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 
 			fmt.Printf("User attempted to register.\n")
 			r.ParseForm()
@@ -104,25 +106,33 @@ func Register(env *models.Env) http.Handler {
 			email := r.PostFormValue("email")
 			password_repeat := r.PostFormValue("password-repeat")
 
-			if len(username) < 5 {
+			if len(username) < 5 || !isAlpha(username) {
 				template.Execute(w, pagedata)
-			} else if len(name) < 1 {
+				fmt.Printf("Incorrect input for username.\n")
+			} else if len(name) < 1 || !isAlpha(name) {
 				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for name.\n")
 			} else if len(password) < 6 {
 				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for password.\n")
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
-				// } else if database.UserCount(env, username) == nil {
-				// 	panic("HI!")
-			}
+				fmt.Printf("The password field should match the password repeat field.\n")
+			} else if database.UserCount(env, username) > 0 {
+				fmt.Printf("ffff\n")
+				qqq := database.UserCount(env, username)
+				fmt.Printf("$1", qqq)
+				//REPLACE WITH PROPER PRINTF STATEMENT LATER
+			} else {
 
-			err := database.UserRegister(env, username, name, email, password)
-			if err != nil {
-				panic("No database found")
-			}
+				err := database.UserRegister(env, username, name, email, password)
+				if err != nil {
+					panic("No database found")
+				}
 
-			fmt.Printf(username, password, name, email, password_repeat)
-			http.Redirect(w, r, env.SiteRoot+"/game/", http.StatusTemporaryRedirect)
+				fmt.Printf(username, password, name, email, password_repeat)
+				http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+			}
 
 		}
 	})
@@ -144,7 +154,7 @@ func ViewUser(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewUser")
+		pagedata := getPageData(env, "sessionid", "ViewUser")
 		pagedata.UserPage = models.UserPage{
 			MatchesSession: true,
 			Username:       user.Username,
@@ -167,7 +177,7 @@ func EditUser(env *models.Env) http.Handler {
 		username := vars["username"]
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "EditUser")
+		pagedata := getPageData(env, "sessionid", "EditUser")
 		pagedata.UserPage = models.UserPage{
 			MatchesSession: true,
 			Username:       username,
@@ -194,7 +204,7 @@ func PlayGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "PlayGame")
+		pagedata := getPageData(env, "sessionid", "PlayGame")
 
 		// Execute the template with our page data
 		template := env.Templates["PlayGame"]
@@ -207,13 +217,12 @@ func ViewLobby(env *models.Env) http.Handler {
 
 		lobby, err := database.GetLobby(env)
 		if err != nil {
-			// No lobby exists or worse error
-			// return
+			// No lobby exists or worse error(?)
 			log.Fatal(err)
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewLobby")
+		pagedata := getPageData(env, "sessionid", "ViewLobby")
 		pagedata.Lobby = *lobby
 
 		// Execute the template with our page data
@@ -226,7 +235,7 @@ func WatchGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "WatchGame")
+		pagedata := getPageData(env, "sessionid", "WatchGame")
 
 		// Execute the template with our page data
 		template := env.Templates["WatchGame"]
@@ -239,10 +248,11 @@ func Leaderboard(env *models.Env) http.Handler {
 		leaderboard, err := database.GetLeaderboard(env)
 		if err != nil {
 			// Big error
+			log.Fatal(err)
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "Leaderboard")
+		pagedata := getPageData(env, "sessionid", "Leaderboard")
 		pagedata.Leaderboard = *leaderboard
 
 		// Execute the template with our page data

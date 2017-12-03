@@ -2,8 +2,10 @@ package database
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"log"
+
+	// Wraps database/sql for postgres
+	_ "github.com/lib/pq"
 )
 
 func CreateDatabase(username string, password string, name string) (database *sql.DB, err error) {
