@@ -42,7 +42,6 @@ type UserPage struct {
 	Username       string
 	Name           string
 	Email          string
-<<<<<<< HEAD
 	PictureUrl     string
 }
 
@@ -102,9 +101,7 @@ type GameHand struct {
 	Card3 Card
 	Card4 Card
 	Card5 Card
-=======
 	PictureURL     string
->>>>>>> 8071701eb2cedb714dd6b9ccc7e8c880d524d7a8
 }
 
 /*
