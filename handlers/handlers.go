@@ -135,17 +135,21 @@ func Register(env *models.Env) http.Handler {
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
 				fmt.Printf("The password field should match the password repeat field.\n")
-			// } else if database.UserCount(env, username) == nil {
-			// 	panic("HI!")
-			}
+			} else if database.UserCount(env, username) > 0 {
+				fmt.Printf("ffff\n")
+				qqq := database.UserCount(env, username)
+				fmt.Printf("$1", qqq)
+				//REPLACE WITH PROPER PRINTF STATEMENT LATER
+			} else {
 
-			err := database.UserRegister(env, username, name, email, password)
-			if err != nil {
-				panic("No database found")
-			}
+				err := database.UserRegister(env, username, name, email, password)
+				if err != nil {
+					panic("No database found")
+				}
 
-			fmt.Printf(username, password, name, email, password_repeat)
-			http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+				fmt.Printf(username, password, name, email, password_repeat)
+				http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+			}
 
 		}
 	})
