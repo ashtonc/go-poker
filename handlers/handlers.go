@@ -150,12 +150,12 @@ func Register(env *models.Env) http.Handler {
 				//REPLACE WITH PROPER PRINTF STATEMENT LATER
 			} else {
 				fmt.Printf("User has correctly registered!\n")
-				// err := database.UserRegister(env, username, name, email, password)
-				// if err != nil {
-				// 	panic("No database found")
-				// }
+				err := database.UserRegister(env, username, name, email, password)
+				if err != nil {
+					panic("No database found")
+				}
 
-				// fmt.Printf(username, password, name, email, password_repeat)
+				fmt.Printf(username, password, name, email, password_repeat)
 				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 			}
 
