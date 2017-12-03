@@ -29,7 +29,7 @@ func getPageData(env *models.Env, sessionid string, page string) models.PageData
 	case "Register":
 		session.PageUser = true
 		session.PageRegister = true
-	case "PlayGame", "WatchGame", "ViewLobby":
+	case "Game", "ViewLobby":
 		session.PageGame = true
 	case "Leaderboard":
 		session.PageLeaderboard = true

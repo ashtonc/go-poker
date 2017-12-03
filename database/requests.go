@@ -78,40 +78,6 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
-/* This is all nonsense, games are stored in memory
-func GetLobby(env *models.Env) (*models.Lobby, error) {
-	var lobby models.Lobby
-
-	sqlStatement := `SELECT name FROM game;`
-	// , game_status WHERE game_status.description = 'open'
-
-	rows, err := env.Database.Query(sqlStatement)
-	if err != nil {
-		//	log.Fatal(err)
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		var name string
-		var players int
-		err = rows.Scan(&name, &players)
-		if err != nil {
-			log.Fatal(err)
-		}
-		lobby.Games = append(lobby.Games, &models.GameListing{Name: name, Players: 0})
-	}
-
-	if len(lobby.Games) > 0 {
-		lobby.Empty = false
-	} else {
-		lobby.Empty = true
-	}
-
-	return &lobby, err
-}
-*/
-
 func UserRegister(env *models.Env, username string, name string, email string, password string) error {
 
 	sqlStatement := `  

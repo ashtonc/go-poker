@@ -219,14 +219,28 @@ func RedirectGame(env *models.Env) http.Handler {
 	})
 }
 
-func PlayGame(env *models.Env) http.Handler {
+func Game(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		gameslug := vars["gameslug"]
+		action := vars["action"]
 
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "PlayGame")
+		pagedata := getPageData(env, "sessionid", "Game")
+		template := env.Templates["WatchGame"] // hack
+
+		gameListing := env.Games[gameslug]
+		if gameListing == nil {
+			// Game doesn't exist
+			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+			return
+		}
+
+		// Choose our template based on the action
+		if action == "play" {
+			template = env.Templates["PlayGame"]
+		}
 
 		// Execute the template with our page data
-		template := env.Templates["PlayGame"]
 		template.Execute(w, pagedata)
 	})
 }
@@ -254,18 +268,6 @@ func ViewLobby(env *models.Env) http.Handler {
 
 		// Execute the template with our page data
 		template := env.Templates["ViewLobby"]
-		template.Execute(w, pagedata)
-	})
-}
-
-func WatchGame(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "WatchGame")
-
-		// Execute the template with our page data
-		template := env.Templates["WatchGame"]
 		template.Execute(w, pagedata)
 	})
 }

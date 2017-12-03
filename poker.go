@@ -57,8 +57,7 @@ func main() {
 	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))
 	router.Handle(env.SiteRoot+"/lobby/", handlers.ViewLobby(env))
 	router.Handle(env.SiteRoot+"/game/", handlers.RedirectGame(env))
-	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/play", handlers.PlayGame(env))
-	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/watch", handlers.WatchGame(env))
+	router.Handle(env.SiteRoot+"/game/{gameslug:[a-z0-9-]+}/{action:play|watch}", handlers.Game(env))
 	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 
 	// Start the server
