@@ -43,11 +43,23 @@ type Game struct {
 	Sitters []Player
 	Current_Player string
 	Current_Bet int
+	Bet_Counter int
 	Ant 	int
 	Max_bet 	int
 	Min_bet 	int
-	timer 	float
+	Dealer_Token int
+	Timer 	float
 }
+
+/*
+Phases:
+	0 -> betting 1
+	1 -> draw 1
+	2 -> betting 2
+	3 -> draw 2
+	4 -> betting 2
+	5 -> showdown
+	*/
 
 func init(ante int, min_bet int, max_bet int)error {
 	game = new(Game)
@@ -57,6 +69,7 @@ func init(ante int, min_bet int, max_bet int)error {
 		game.Ante = ante
 		game.Min_bet = min_bet
 		game.Max_bet = max_bet
+		game.Dealer_token = -1
 		for i, s := range(game.Seats){
 			s.Number = i + 1
 			s.occupied = false
@@ -82,6 +95,8 @@ type Player struct { /* A more complete player struct will likely be someplace e
 	Money     int
 	Hand      []Card
 	Folded    bool /*default value false */
+	Called 	  bool
+	Discarded bool
 	Bet       int
 	Hand_Rank int
 	Card_Hist [14]int
