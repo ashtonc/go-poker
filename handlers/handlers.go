@@ -207,8 +207,7 @@ func ViewLobby(env *models.Env) http.Handler {
 
 		lobby, err := database.GetLobby(env)
 		if err != nil {
-			// No lobby exists or worse error
-			// return
+			// No lobby exists or worse error(?)
 			log.Fatal(err)
 		}
 
@@ -239,6 +238,7 @@ func Leaderboard(env *models.Env) http.Handler {
 		leaderboard, err := database.GetLeaderboard(env)
 		if err != nil {
 			// Big error
+			log.Fatal(err)
 		}
 
 		// Populate the data needed for the page

@@ -24,7 +24,7 @@ func GetGames(env *models.Env) ([]*gamelogic.Game, error) {
 	var games []*gamelogic.Game
 
 	/*
-		sqlStatement := `SELECT game.name, stakes. FROM game, game_stakes, game_status WHERE ...;`
+		sqlStatement := `SELECT game.name, game_stakes.ante, etc FROM game, game_stakes, game_status WHERE ...;`
 
 		rows, err := env.Database.Query(sqlStatement)
 		if err != nil {
