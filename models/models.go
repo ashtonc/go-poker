@@ -53,10 +53,9 @@ type PageData struct {
 	SiteRoot    string
 	Session     Session
 	UserPage    UserPage
-	Game        Game
+	Game        gamelogic.Game
 	Lobby       Lobby
 	Leaderboard Leaderboard
-	Games       map[string]Game
 }
 
 type Lobby struct {
@@ -66,7 +65,7 @@ type Lobby struct {
 
 type LobbyListing struct {
 	Name    string
-	Stakes  GameStakes
+	Stakes  gamelogic.GameStakes
 	Players int
 	Private bool
 }

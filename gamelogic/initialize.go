@@ -1,10 +1,8 @@
 package gamelogic
 
-import (
-	"poker/database"
-	"poker/models"
-)
+import ()
 
+/*
 func InitializeGames(env *models.Env) {
 	games := database.GetGames()
 	gameMap := make(map[string]*gamelogic.Game)
@@ -16,3 +14,4 @@ func InitializeGames(env *models.Env) {
 
 	env.Games = gameMap
 }
+*/

@@ -21,11 +21,13 @@ func getPageData(env *models.Env, sessionid string, page string) models.PageData
 	switch page {
 	case "Home":
 		session.PageHome = true
-	case "ViewUser", "EditUser", "Login", "Register":
+	case "ViewUser", "EditUser":
 		session.PageUser = true
 	case "Login":
+		session.PageUser = true
 		session.PageLogin = true
 	case "Register":
+		session.PageUser = true
 		session.PageRegister = true
 	case "PlayGame", "WatchGame", "ViewLobby":
 		session.PageGame = true

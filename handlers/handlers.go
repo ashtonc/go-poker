@@ -160,7 +160,7 @@ func ViewUser(env *models.Env) http.Handler {
 			Username:       user.Username,
 			Name:           user.Name,
 			Email:          user.Email,
-			PictureUrl:     user.PictureUrl,
+			PictureURL:     user.PictureURL,
 		}
 
 		// Execute the template with our page data

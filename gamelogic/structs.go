@@ -2,13 +2,13 @@ package gamelogic
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"math/rand"
 	"os"
-	"sort"
+	//	"sort"
 	"strings"
 	"time"
-	"errors"
 )
 
 func Init_card_cat() ([]string, []string) {
@@ -43,14 +43,13 @@ type Game struct {
 	Players        []Player
 	Sitters        []Player
 	Current_Player string
-	Current_Bet int
-	Bet_Counter int
-	Ante 	int
-	Max_bet 	int
-	Min_bet 	int
-	Dealer_Token int
-	Timer 	time.Timer
-
+	Current_Bet    int
+	Bet_Counter    int
+	Ante           int
+	Max_bet        int
+	Min_bet        int
+	Dealer_Token   int
+	Timer          time.Timer
 }
 
 /*
@@ -63,16 +62,16 @@ Phases:
 	5 -> showdown
 */
 
-func GameInit(ante int, min_bet int, max_bet int)error {
+func GameInit(ante int, min_bet int, max_bet int) error {
 	game := new(Game)
-	if game == nil{
+	if game == nil {
 		return errors.New("Game failed to initiate.")
-	}else{
+	} else {
 		game.Ante = ante
 		game.Min_bet = min_bet
 		game.Max_bet = max_bet
 		game.Dealer_Token = -1
-		for i, s := range(game.Seats){
+		for i, s := range game.Seats {
 
 			s.Number = i + 1
 			s.Occupied = false
@@ -88,9 +87,9 @@ type GameStakes struct {
 }
 
 type Seat struct {
-	Number 		int
-	Occupied 	bool
-	Occupier 	string 
+	Number   int
+	Occupied bool
+	Occupier string
 }
 
 type Player struct { /* A more complete player struct will likely be someplace else in repo */
@@ -156,13 +155,11 @@ func (p *Player) show_hand() {
 func (p *Player) sort_hand_by_rank() {
 	fmt.Printf("About to sort %s hand by rank \n", p.Name)
 	hand := p.Hand
-	sort.Slice(hand[:], func(i, j int) bool {
+	/*sort.Slice(hand, func(i, j int) bool {
 		return hand[i].Rank < hand[j].Rank
-	})
+	})*/
 	p.Hand = hand
 }
-
-
 
 func (p *Player) find_four_of_kind_rank() int {
 	for k, v := range p.Card_Hist {

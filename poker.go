@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"poker/database"
-	"poker/gamelogic"
+	//"poker/gamelogic"
 	"poker/handlers"
 	"poker/models"
 	"poker/templates"
@@ -24,8 +24,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	defer env.Database.Close()
-
 	// Create a template cache
 	templates := templates.BuildTemplateCache()
 
@@ -37,8 +35,11 @@ func main() {
 		SiteRoot:  "/poker",
 	}
 
+	// Close the database after main finishes
+	defer env.Database.Close()
+
 	// Initialize the games found in the database (imagine these as poker tables)
-	gamelogic.InitializeGames(env)
+	// gamelogic.InitializeGames(env)
 
 	// Create a new router and initialize the handlers
 	router := mux.NewRouter()

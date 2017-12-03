@@ -7,6 +7,7 @@ import (
 	// Wraps database/sql for our postgres database
 	_ "github.com/lib/pq"
 
+	"poker/gamelogic"
 	"poker/models"
 )
 
@@ -17,7 +18,7 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	sqlStatement := `SELECT name, email FROM user WHERE username=$1;`
 
 	row := env.Database.QueryRow(sqlStatement, page.Username)
-	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureUrl)
+	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureURL)
 
 	return &page, err
 }
@@ -45,7 +46,7 @@ func GetGames(env *models.Env) ([]*gamelogic.Game, error) {
 		}
 	*/
 
-	return games, err
+	return games, nil
 }
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
