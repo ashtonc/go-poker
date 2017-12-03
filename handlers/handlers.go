@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 
 	"poker/database"
 	"poker/models"
@@ -95,6 +96,7 @@ func Register(env *models.Env) http.Handler {
 			}
 
 			template := env.Templates["Register"]
+			isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 
 			fmt.Printf("User attempted to register.\n")
 			r.ParseForm()
@@ -104,25 +106,33 @@ func Register(env *models.Env) http.Handler {
 			email := r.PostFormValue("email")
 			password_repeat := r.PostFormValue("password-repeat")
 
-			if len(username) < 5 {
+			if len(username) < 5 || !isAlpha(username) {
 				template.Execute(w, pagedata)
-			} else if len(name) < 1 {
+				fmt.Printf("Incorrect input for username.\n")
+			} else if len(name) < 1 || !isAlpha(name) {
 				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for name.\n")
 			} else if len(password) < 6 {
 				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for password.\n")
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
-				// } else if database.UserCount(env, username) == nil {
-				// 	panic("HI!")
-			}
+				fmt.Printf("The password field should match the password repeat field.\n")
+			} else if database.UserCount(env, username) > 0 {
+				fmt.Printf("ffff\n")
+				qqq := database.UserCount(env, username)
+				fmt.Printf("$1", qqq)
+				//REPLACE WITH PROPER PRINTF STATEMENT LATER
+			} else {
 
-			err := database.UserRegister(env, username, name, email, password)
-			if err != nil {
-				panic("No database found")
-			}
+				err := database.UserRegister(env, username, name, email, password)
+				if err != nil {
+					panic("No database found")
+				}
 
-			fmt.Printf(username, password, name, email, password_repeat)
-			http.Redirect(w, r, env.SiteRoot+"/game/", http.StatusTemporaryRedirect)
+				fmt.Printf(username, password, name, email, password_repeat)
+				http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+			}
 
 		}
 	})
