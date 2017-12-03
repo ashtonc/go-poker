@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"database/sql"
 
 	_ "github.com/lib/pq"
 
@@ -134,14 +135,30 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	return err
 }
 
-// func UserCount(env *models.Env, username string) (count int, error) {
+func UserCount(env *models.Env, username string) (count int) {
 
+<<<<<<< HEAD
 // 	sqlStatement := `SELECT COUNT(username) as count FROM account WHERE username=$1`
+=======
+	sqlStatement := `SELECT COUNT(*) as count FROM account WHERE username=$1`
+>>>>>>> master
 
-// 	count, err := env.Database.Exec(sqlStatement, username)
+	rows, err := env.Database.Query(sqlStatement, username)
+	if err != nil {
+		panic(err)
+	}
+	return checkCount(rows)
+}
 
-// 	return count, err
-// }
+func checkCount(rows *sql.Rows) (count int) {
+	for rows.Next() {
+		err:= rows.Scan(&count)
+		if err != nil {
+			panic(err)
+		}
+	}  
+	return count
+}
 
 // Temporary function that adds entries to the game database
 func CreateLobbyEntries(env *models.Env) error {
