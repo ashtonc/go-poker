@@ -22,7 +22,7 @@ func HomeRedirect(env *models.Env) http.Handler {
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := getPageData("sessionid", "Home")
+		pagedata := getPageData(env, "sessionid", "Home")
 
 		// Execute the template with our page data
 		template := env.Templates["Home"]
@@ -154,7 +154,7 @@ func ViewUser(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewUser")
+		pagedata := getPageData(env, "sessionid", "ViewUser")
 		pagedata.UserPage = models.UserPage{
 			MatchesSession: true,
 			Username:       user.Username,
@@ -177,7 +177,7 @@ func EditUser(env *models.Env) http.Handler {
 		username := vars["username"]
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "EditUser")
+		pagedata := getPageData(env, "sessionid", "EditUser")
 		pagedata.UserPage = models.UserPage{
 			MatchesSession: true,
 			Username:       username,
@@ -204,7 +204,7 @@ func PlayGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "PlayGame")
+		pagedata := getPageData(env, "sessionid", "PlayGame")
 
 		// Execute the template with our page data
 		template := env.Templates["PlayGame"]
@@ -222,7 +222,7 @@ func ViewLobby(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewLobby")
+		pagedata := getPageData(env, "sessionid", "ViewLobby")
 		pagedata.Lobby = *lobby
 
 		// Execute the template with our page data
@@ -235,7 +235,7 @@ func WatchGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "WatchGame")
+		pagedata := getPageData(env, "sessionid", "WatchGame")
 
 		// Execute the template with our page data
 		template := env.Templates["WatchGame"]
@@ -252,7 +252,7 @@ func Leaderboard(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "Leaderboard")
+		pagedata := getPageData(env, "sessionid", "Leaderboard")
 		pagedata.Leaderboard = *leaderboard
 
 		// Execute the template with our page data

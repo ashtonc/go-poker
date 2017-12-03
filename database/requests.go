@@ -1,9 +1,10 @@
 package database
 
 import (
-	"log"
 	"database/sql"
+	"log"
 
+	// Wraps database/sql for our postgres database
 	_ "github.com/lib/pq"
 
 	"poker/models"
@@ -137,11 +138,7 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 
 func UserCount(env *models.Env, username string) (count int) {
 
-<<<<<<< HEAD
-// 	sqlStatement := `SELECT COUNT(username) as count FROM account WHERE username=$1`
-=======
 	sqlStatement := `SELECT COUNT(*) as count FROM account WHERE username=$1`
->>>>>>> master
 
 	rows, err := env.Database.Query(sqlStatement, username)
 	if err != nil {
@@ -152,11 +149,11 @@ func UserCount(env *models.Env, username string) (count int) {
 
 func checkCount(rows *sql.Rows) (count int) {
 	for rows.Next() {
-		err:= rows.Scan(&count)
+		err := rows.Scan(&count)
 		if err != nil {
 			panic(err)
 		}
-	}  
+	}
 	return count
 }
 

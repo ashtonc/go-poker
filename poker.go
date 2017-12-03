@@ -36,7 +36,7 @@ func main() {
 		Database:  database,
 		Port:      ":8000",
 		Templates: templates,
-		SiteRoot:  "/poker", // this path is hardcoded into some templates, remember to fix that
+		SiteRoot:  "/poker",
 	}
 
 	// Initialize the games found in the database (imagine these as poker tables)

@@ -30,11 +30,11 @@ type Session struct {
 	Username        string
 	Name            string
 	PageHome        bool
-	PageLogin       bool
-	PageRegister    bool
 	PageUser        bool
 	PageGame        bool
 	PageLeaderboard bool
+	PageLogin       bool
+	PageRegister    bool
 }
 
 type UserPage struct {
@@ -42,7 +42,7 @@ type UserPage struct {
 	Username       string
 	Name           string
 	Email          string
-	PictureUrl     string
+	PictureURL     string
 }
 
 /*
