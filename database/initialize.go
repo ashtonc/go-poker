@@ -3,9 +3,12 @@ package database
 import (
 	"database/sql"
 	_ "github.com/lib/pq"
+	"log"
 )
 
 func CreateDatabase(username string, password string, name string) (database *sql.DB, err error) {
+	log.Print("Connecting to the database server...")
+
 	// Save information about our database in a string
 	dbinfo := "user=" + username + " password=" + password + " dbname=" + name + " sslmode=disable"
 

@@ -6,6 +6,8 @@ import (
 )
 
 func BuildTemplateCache() map[string]*template.Template {
+	log.Print("Building the template cache...")
+
 	templateCache := map[string]*template.Template{
 		"Home":        BuildWithError("templates/base.tmpl", "templates/head_base.tmpl", "templates/navigation.tmpl", "templates/index.tmpl"),
 		"Login":       BuildWithError("templates/base.tmpl", "templates/head_base.tmpl", "templates/navigation.tmpl", "templates/login.tmpl"),

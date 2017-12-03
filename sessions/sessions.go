@@ -4,8 +4,8 @@ import (
 	"poker/models"
 )
 
-// GetSession returns a session object with information about the current user. It should probably be passed a session ID that would be provided by the user.
-func GetSession() models.Session {
+// GetSession returns a session object with information about the current user.
+func GetSession(id string) models.Session {
 	var session models.Session
 
 	session.LoggedIn = true

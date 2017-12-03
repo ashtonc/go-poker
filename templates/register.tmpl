@@ -1,30 +1,30 @@
 {{ define "title" }} | Register{{ end }}
 {{ define "content" -}}
 		<h1>Register</h1>
-		<form method="POST">
+		<form action="" method="POST">
 			<div>
-				<label for="username">Username:</label>
-				<input id="username" type="text">
+				<label for="username">Username: <em>(minimum 5 characters)</em></label>
+				<input id="username" name="username" type="text">
 			</div>
 			<div>
-				<label for="name">Name:</label>
-				<input id="name" type="text">
+				<label for="name">Name: <em>(minimum 1 character)</em></label>
+				<input id="name" name="name" type="text">
 			</div>
 			<div>
 				<label for="email">Email:</label>
-				<input id="email" type="text">
+				<input id="email" name="email" type="email">
 			</div>
-			<div>
+<!-- 		<div>
 				<label for="profile-image">Profile Image:</label>
-				<!-- Profile Image Inputs -->
-			</div>
+				<!-- Profile Image Inputs
+			</div> --> 
 			<div>
-				<label for="password">Password:</label>
-				<input id="password" type="password">
+				<label for="password">Password: <em>(minimum 6 characters)</em></label>
+				<input id="password" name="password" type="password">
 			</div>
 			<div>
 				<label for="password-repeat">Repeat Password:</label>
-				<input id="password-repeat" type="password">
+				<input id="password-repeat" name="password-repeat" type="password">
 			</div>
 			<div>
 				<input type="submit" value="Register">

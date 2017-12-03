@@ -1,14 +1,14 @@
 {{ define "title" }} | Login{{ end }}
 {{ define "content" -}}
 		<h1>Login</h1>
-		<form method="POST">
+		<form action="" method="POST">
 			<div>
 				<label for="username">Username:</label>
-				<input id="username" type="text">
+				<input id="username" name="username" type="text">
 			</div>
 			<div>
 				<label for="password">Password:</label>
-				<input id="password" type="password">
+				<input id="password" name="password" type="password">
 			</div>
 			<div>
 				<input type="submit" value="Login">
