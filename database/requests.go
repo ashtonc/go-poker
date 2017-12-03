@@ -114,25 +114,60 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	return err
 }
 
-func UserCount(env *models.Env, username string) (count int) {
+func FindByUsername(env *models.Env, inputUsername string) (*models.UserAccount) {
+	var userAccount models.UserAccount
 
-	sqlStatement := `SELECT COUNT(*) as count FROM account WHERE username=$1`
+	sqlStatement := `SELECT username, name, email, password FROM account WHERE username=$1`
 
-	rows, err := env.Database.Query(sqlStatement, username)
+	rows, err := env.Database.Query(sqlStatement, inputUsername)
 	if err != nil {
 		panic(err)
 	}
-	return checkCount(rows)
+	rows.Next()
+	// var username string
+	// var name string
+	// var email string
+	// var password string
+	// err = rows.Scan(&username, &name, &email, &password)
+	err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.Password)
+	if err != nil {
+		panic(err)
+	}
+	//leaderboard.Entries = append(leaderboard.Entries, models.LeaderboardEntry{Username: username, Cash: cash})
+	// if userAccount.Username == "lol" {
+	// }
+
+	log.Fatal(userAccount)
+
+	return &userAccount
 }
 
-func checkCount(rows *sql.Rows) (count int) {
+func CheckCount(*models.UserAccount) (count int) {
+	count = 0
+
 	for rows.Next() {
-		err:= rows.Scan(&count)
+		count++
+	}  
+	return count
+}
+
+func CheckPassword(env *models.Env, inputUsername string, inputPassword string, rows *sql.Rows) (bool) {
+
+	for rows.Next() {
+		var username string
+		var password string
+
+		err := rows.Scan(&username, &password)
 		if err != nil {
 			panic(err)
 		}
+
+		if inputPassword == password {
+			return true
+		}
+
 	}  
-	return count
+	return false
 }
 
 

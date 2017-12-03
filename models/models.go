@@ -41,6 +41,13 @@ type UserPage struct {
 	PictureUrl     string
 }
 
+type UserAccount struct {
+	Username 		string
+	Name			string
+	Email			string
+	Password		string
+}
+
 /*
  *    Game models
  */

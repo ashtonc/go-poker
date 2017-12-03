@@ -50,18 +50,33 @@ func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		if r.Method == "POST" {
-			userName := r.FormValue("username")
-			name := r.FormValue("username")
-			pass := r.FormValue("password")
-			redirectTarget := env.SiteRoot + "/login/"
-			if name != "" && pass != "" {
-
-				// .. check credentials ..
-				setSession(userName, name, w)
-				redirectTarget = env.SiteRoot + "/game/"
+			// this code gets username and password from the POST form
+			r.ParseForm()
+			username := r.PostFormValue("username")
+			password := r.PostFormValue("password")
+			results := database.FindByUsername(env, username)
+			// Query the database to check if account even exists (via FindByUsername?)
+			if false {
+			// if database.CheckCount(results) == 0 {
+			// 	fmt.Printf("This user does not exist.\n")
+			} else {
+				fmt.Printf("ELSE\n")
+				fmt.Printf(username)
+				fmt.Printf(password)
+				garbage := database.CheckPassword(env, username, password, results)
+				fmt.Printf("\ngarbage below: \n")
+				fmt.Printf("qq", garbage)
 			}
-			//redirect to "404 page not found if user "
-			http.Redirect(w, r, redirectTarget, 302)
+			// Query the database to check if account.password == Login.password
+			// redirectTarget := env.SiteRoot + "/login/"
+			// if name != "" && pass != "" {
+
+			// 	// .. check credentials ..
+			// 	setSession(username, name, w)
+			// 	redirectTarget = env.SiteRoot + "/game/"
+			// }
+			// //redirect to "404 page not found if user "
+			// http.Redirect(w, r, redirectTarget, 302)
 		} else if r.Method == "GET" {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
@@ -135,10 +150,10 @@ func Register(env *models.Env) http.Handler {
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
 				fmt.Printf("The password field should match the password repeat field.\n")
-			} else if database.UserCount(env, username) > 0 {
+			} else if database.CheckCount(database.FindByUsername(env, username)) > 0 {
 				fmt.Printf("ffff\n")
-				qqq := database.UserCount(env, username)
-				fmt.Printf("$1", qqq)
+				// qqq := database.FindByUsername(env, username)
+				// fmt.Printf("$1", qqq)
 				//REPLACE WITH PROPER PRINTF STATEMENT LATER
 			} else {
 
