@@ -66,7 +66,7 @@ func Login(env *models.Env) http.Handler {
 
 				// .. check credentials ..
 				setSession(username, name, w)
-				
+
 				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 			}
 
@@ -179,7 +179,7 @@ func ViewUser(env *models.Env) http.Handler {
 			Username:       user.Username,
 			Name:           user.Name,
 			Email:          user.Email,
-			PictureUrl:     user.PictureUrl,
+			PictureSlug:    user.PictureSlug,
 		}
 
 		// Execute the template with our page data

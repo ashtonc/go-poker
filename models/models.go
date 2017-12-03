@@ -42,14 +42,15 @@ type UserPage struct {
 	Username       string
 	Name           string
 	Email          string
-	PictureUrl     string
+	Description    string
+	PictureSlug    string
 }
 
 type UserAccount struct {
-	Username 		string
-	Name			string
-	Email			string
-	Password		string
+	Username string
+	Name     string
+	Email    string
+	Password string
 }
 
 /*
@@ -96,12 +97,12 @@ type GamePlayer struct {
 }
 
 type GameHand struct {
-	Card1 Card
-	Card2 Card
-	Card3 Card
-	Card4 Card
-	Card5 Card
-	PictureURL     string
+	Card1      Card
+	Card2      Card
+	Card3      Card
+	Card4      Card
+	Card5      Card
+	PictureURL string
 }
 
 /*

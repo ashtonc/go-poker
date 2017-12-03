@@ -45,15 +45,19 @@ end
 
 # Postgres setup.
 package "postgresql"
-execute 'postgres-setup' do
-  command 'echo "CREATE DATABASE pokerdb;" | sudo -u postgres psql'
-end
-execute 'postgres-set-password' do
+execute 'postgres-password' do
   command 'echo "ALTER USER postgres WITH PASSWORD \'postgres\';" | sudo -u postgres psql'
 end
-execute 'database-setup' do
+execute 'postgres-create-db' do
+  command 'echo "CREATE DATABASE pokerdb;" | sudo -u postgres psql'
+end
+execute 'postgres-create-schema' do
   cwd '/go/src/poker/database'
   command 'sudo -u postgres psql pokerdb -f schema.sql'
+end
+execute 'postgres-initial-data' do
+  cwd '/go/src/poker/database'
+  command 'sudo -u postgres psql pokerdb -f data.sql'
 end
 
 # nginx setup

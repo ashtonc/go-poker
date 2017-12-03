@@ -13,12 +13,12 @@ import (
 
 func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	var page models.UserPage
+
+	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username=$1;`
+
+	row := env.Database.QueryRow(sqlStatement, userName)
+	err := row.Scan(&page.Name, &page.Email, &page.Description, &page.PictureSlug)
 	page.Username = userName
-
-	sqlStatement := `SELECT name, email FROM user WHERE username=$1;`
-
-	row := env.Database.QueryRow(sqlStatement, page.Username)
-	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureUrl)
 
 	return &page, err
 }
@@ -124,7 +124,7 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	return err
 }
 
-func FindByUsername(env *models.Env, inputUsername string) (models.UserAccount) {
+func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 	var userAccount models.UserAccount
 
 	sqlStatement := `SELECT username, name, email, password FROM account WHERE username=$1`

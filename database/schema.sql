@@ -1,16 +1,28 @@
+DROP TABLE IF EXISTS player_stats CASCADE;
+DROP TABLE IF EXISTS game_player CASCADE;
+DROP TABLE IF EXISTS round_hand CASCADE;
+DROP TABLE IF EXISTS card CASCADE;
+DROP TABLE IF EXISTS game_round CASCADE;
+DROP TABLE IF EXISTS round_phase CASCADE;
+DROP TABLE IF EXISTS game CASCADE;
+DROP TABLE IF EXISTS game_stakes CASCADE;
+DROP TABLE IF EXISTS game_status CASCADE;
+DROP TABLE IF EXISTS user_session CASCADE;
+DROP TABLE IF EXISTS account CASCADE;
+
 CREATE TABLE account (
 	id SERIAL PRIMARY KEY,
 	username VARCHAR(32),
 	name VARCHAR(256),
 	email VARCHAR(128),
-	password VARCHAR(256)
-	-- picture_slug VARCHAR(128),
-	-- description TEXT,
-	-- password_salt VARCHAR(256),
-	-- password_hash VARCHAR(256)
+	password VARCHAR(256),
+	picture_slug VARCHAR(128),
+	description TEXT,
+	password_salt VARCHAR(256),
+	password_hash VARCHAR(256)
 );
 
-CREATE TABLE session (
+CREATE TABLE user_session (
 	id SERIAL PRIMARY KEY,
 	token VARCHAR(256),
 	expiry_time TIMESTAMP,
