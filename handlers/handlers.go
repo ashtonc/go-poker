@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"fmt"
+	"regexp"
 
 	"poker/database"
 	"poker/models"
@@ -111,6 +112,7 @@ func Register(env *models.Env) http.Handler {
 			}
 
 			template := env.Templates["Register"]
+			isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 
 
 			fmt.Printf("User attempted to register.\n")
@@ -121,14 +123,18 @@ func Register(env *models.Env) http.Handler {
 			email := r.PostFormValue("email")
 			password_repeat := r.PostFormValue("password-repeat")
 
-			if len(username) < 5 {
+			if len(username) < 5 || !isAlpha(username) {
 				template.Execute(w, pagedata)
-			} else if len(name) < 1 {
+				fmt.Printf("Incorrect input for username.\n")
+			} else if len(name) < 1 || !isAlpha(name) {
 				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for name.\n")
 			} else if len(password) < 6 {
 				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for password.\n")
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
+				fmt.Printf("The password field should match the password repeat field.\n")
 			// } else if database.UserCount(env, username) == nil {
 			// 	panic("HI!")
 			}
