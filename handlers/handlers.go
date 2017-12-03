@@ -55,21 +55,14 @@ func Login(env *models.Env) http.Handler {
 			if username == "" || password == "" {
 				fmt.Printf("One or more fields were left blank.\n")
 				template.Execute(w, pagedata)
-				// fmt.Printf(env.SiteRoot)
-				// http.Redirect(w, nil, env.SiteRoot+"/login/", http.Get)
-				// http.Get(env.SiteRoot+"/login/")
-				// http.Redirect(nil, nil, env.SiteRoot+"/login", 303)
 			} else if userAccount.Username != username {
 				fmt.Printf("This user does not exist.\n")
 				template.Execute(w, pagedata)
-				// http.Redirect(w, r, env.SiteRoot+"/login/", http.Get)
 			} else if userAccount.Password != password {
 				fmt.Printf("The password is incorrect.\n")
 				template.Execute(w, pagedata)
-				// http.Redirect(w, r, env.SiteRoot+"/login/", http.Get)
 			} else {
 				fmt.Printf("Login successful.\n")
-				// if name != "" && pass != "" {
 
 				// .. check credentials ..
 				setSession(username, name, w)

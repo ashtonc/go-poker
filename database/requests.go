@@ -112,19 +112,6 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 	return &lobby, err
 }
 
-// func UserLogin(env *models.Env, userName string) (*models.UserPage, error) {
-// 	var users models.UserPage
-// 	users.Username = userName
-// 	// page.Password = password
-
-// 	sqlStatement := `SELECT * FROM user;`
-
-// 	row := env.Database.QueryRow(sqlStatement, "ghth")
-// 	err := row.Scan(&users.Username, &users.Name, &users.Email, &users.PictureUrl)
-
-// 	return &users, err
-// }
-
 func UserRegister(env *models.Env, username string, name string, email string, password string) error {
 
 	sqlStatement := `  
@@ -147,48 +134,14 @@ func FindByUsername(env *models.Env, inputUsername string) (models.UserAccount) 
 		panic(err)
 	}
 	for rows.Next() {
-		// var username string
-		// var name string
-		// var email string
-		// var password string
-		// err = rows.Scan(&username, &name, &email, &password)
 		err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.Password)
 		if err != nil {
 			panic(err)
 		}
 	}
-	//leaderboard.Entries = append(leaderboard.Entries, models.LeaderboardEntry{Username: username, Cash: cash})
-	// if userAccount.Username == "lol" {
-	// }
 
 	return userAccount
 }
-
-// func CheckCount(*models.UserAccount) (count int) {
-// 	count = 0
-
-// 	for rows.Next() {
-// 		count++
-// 	}  
-// 	return count
-// }
-
-// func CheckPassword(env *models.Env, inputUsername string, inputPassword string, databaseResults models.UserAccount) (bool) {
-
-// 	for rows.Next() {
-
-// 		err := rows.Scan(&username, &password)
-// 		if err != nil {
-// 			panic(err)
-// 		}
-
-// 		if inputPassword == password {
-// 			return true
-// 		}
-
-// 	}  
-// 	return false
-// }
 
 // Temporary function that adds entries to the game database
 func CreateLobbyEntries(env *models.Env) error {
