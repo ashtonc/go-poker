@@ -5,8 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	//"github.com/gorilla/securecookie"
-	//"github.com/gorilla/websockets"
 
 	"poker/database"
 	"poker/gamelogic"

@@ -10,7 +10,7 @@ func InitializeGames(env *models.Env) {
 	gameMap := make(map[string]*gamelogic.Game)
 
 	for game := range games {
-		game.Init()
+		game.GameInit()
 		m[game.Slug] = game
 	}
 
