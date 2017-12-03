@@ -32,9 +32,7 @@ CREATE TABLE game_stakes (
 CREATE TABLE game (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(256),
-	description TEXT,
 	slug VARCHAR(64),
-	players INTEGER,
 	game_status INTEGER REFERENCES game_status (id),
 	stakes INTEGER REFERENCES game_stakes (id)
 );

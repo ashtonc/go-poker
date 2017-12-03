@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/securecookie"
+
 	"poker/models"
 	"poker/sessions"
 )
@@ -13,7 +14,7 @@ var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(64),
 	securecookie.GenerateRandomKey(32))
 
-func getPageData(sessionid string, page string) models.PageData {
+func getPageData(env *models.Env, sessionid string, page string) models.PageData {
 	var pagedata models.PageData
 	session := sessions.GetSession(sessionid)
 
@@ -23,8 +24,10 @@ func getPageData(sessionid string, page string) models.PageData {
 	case "ViewUser", "EditUser":
 		session.PageUser = true
 	case "Login":
+		session.PageUser = true
 		session.PageLogin = true
 	case "Register":
+		session.PageUser = true
 		session.PageRegister = true
 	case "PlayGame", "WatchGame", "ViewLobby":
 		session.PageGame = true
@@ -33,6 +36,7 @@ func getPageData(sessionid string, page string) models.PageData {
 	}
 
 	pagedata.Session = session
+	pagedata.SiteRoot = env.SiteRoot
 
 	return pagedata
 }

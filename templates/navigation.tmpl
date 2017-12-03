@@ -1,18 +1,19 @@
 {{ define "navigation" -}}
+		{{ $siteroot := .SiteRoot -}}
 		<div id="navigation">
 			{{ with .Session -}}
 			<ul>
 				<li{{ if .PageHome }} class="nav-current">{{ else }}>{{ end }}
-					<a href="/poker/">Home</a>
+					<a href="{{ $siteroot }}/">Home</a>
 				</li>
 				<li{{ if .PageGame }} class="nav-current">{{ else }}>{{ end }}
-					<a href="/poker/game/">Play</a>
+					<a href="{{ $siteroot }}/game/">Play</a>
 				</li>
 				<li{{ if .PageLeaderboard }} class="nav-current">{{ else }}>{{ end }}
-					<a href="/poker/leaderboard/">Leaderboard</a>
+					<a href="{{ $siteroot }}/leaderboard/">Leaderboard</a>
 				</li>
 				<li{{ if .PageUser }} class="nav-current"{{ end }}>
-					{{ if .LoggedIn -}}<a href="/poker/user/{{ .Username }}">Profile{{ else }}<a href="/poker/register/">Register{{ end }}</a>
+					{{ if .LoggedIn -}}<a href="{{ $siteroot }}/user/{{ .Username }}/view">Profile{{ else }}<a href="{{ $siteroot }}/register/">Register{{ end }}</a>
 				</li>
 			</ul>
 			{{- end }}

@@ -5,23 +5,21 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	//"github.com/gorilla/securecookie"
-	//"github.com/gorilla/websockets"
 
 	"poker/database"
+	//"poker/gamelogic"
 	"poker/handlers"
 	"poker/models"
 	"poker/templates"
-	//"poker/gamelogic"
 )
 
 func main() {
 	// Connect to the database
-	db_user := "postgres"
-	db_password := "postgres"
-	db_name := "pokerdb"
+	dbUser := "postgres"
+	dbPassword := "postgres"
+	dbName := "pokerdb"
 
-	database, err := database.CreateDatabase(db_user, db_password, db_name)
+	database, err := database.CreateDatabase(dbUser, dbPassword, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,8 +35,11 @@ func main() {
 		SiteRoot:  "/poker",
 	}
 
-	// Deferred until main finishes, idiomatic
+	// Close the database after main finishes
 	defer env.Database.Close()
+
+	// Initialize the games found in the database (imagine these as poker tables)
+	// gamelogic.InitializeGames(env)
 
 	// Create a new router and initialize the handlers
 	router := mux.NewRouter()
@@ -48,15 +49,15 @@ func main() {
 	router.Handle(env.SiteRoot+"/login/", handlers.Login(env))
 	router.Handle(env.SiteRoot+"/logout/", handlers.Logout(env))
 	router.Handle(env.SiteRoot+"/register/", handlers.Register(env))
-	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}", handlers.ViewUser(env))
+	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/view", handlers.ViewUser(env))
 	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))
+	router.Handle(env.SiteRoot+"/lobby/", handlers.ViewLobby(env))
 	router.Handle(env.SiteRoot+"/game/", handlers.RedirectGame(env))
-	router.Handle(env.SiteRoot+"/game/play", handlers.PlayGame(env))
-	router.Handle(env.SiteRoot+"/game/lobby", handlers.ViewLobby(env))
-	router.Handle(env.SiteRoot+"/game/watch", handlers.WatchGame(env))
+	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/play", handlers.PlayGame(env))
+	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/watch", handlers.WatchGame(env))
 	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 
 	// Start the server
-	log.Print("Running server on port " + env.Port + ".")
+	log.Print("Running server at " + env.SiteRoot + " on port " + env.Port + ".")
 	log.Fatal(http.ListenAndServe(env.Port, router))
 }

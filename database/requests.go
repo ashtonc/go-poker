@@ -1,10 +1,13 @@
 package database
 
 import (
-	_ "github.com/lib/pq"
-	"log"
 	"database/sql"
+	"log"
 
+	// Wraps database/sql for our postgres database
+	_ "github.com/lib/pq"
+
+	"poker/gamelogic"
 	"poker/models"
 )
 
@@ -15,16 +18,36 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	sqlStatement := `SELECT name, email FROM user WHERE username=$1;`
 
 	row := env.Database.QueryRow(sqlStatement, page.Username)
-	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureUrl)
+	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureURL)
 
 	return &page, err
 }
 
-/*
-func GetGame(env *models.Env, gameId int) (*models.Game, error) {
+func GetGames(env *models.Env) ([]*gamelogic.Game, error) {
+	var games []*gamelogic.Game
 
+	/*
+		sqlStatement := `SELECT game.name, game_stakes.ante, etc FROM game, game_stakes, game_status WHERE ...;`
+
+		rows, err := env.Database.Query(sqlStatement)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		defer rows.Close()
+
+		for rows.Next() {
+			//create some vars here
+			err = rows.Scan(&*var*, &*var*)
+			if err != nil {
+				log.Fatal(err)
+			}
+			games = append(games, *game object*)
+		}
+	*/
+
+	return games, nil
 }
-*/
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	var leaderboard models.Leaderboard
@@ -102,7 +125,7 @@ func GetLobby(env *models.Env) (*models.Lobby, error) {
 // 	return &users, err
 // }
 
-func UserRegister(env *models.Env, username string, name string, email string, password string) (error) {
+func UserRegister(env *models.Env, username string, name string, email string, password string) error {
 
 	sqlStatement := `  
 	INSERT INTO account (username, name, email, password) 
@@ -154,6 +177,7 @@ func CheckCount(*models.UserAccount) (count int) {
 func CheckPassword(env *models.Env, inputUsername string, inputPassword string, rows *sql.Rows) (bool) {
 
 	for rows.Next() {
+<<<<<<< HEAD
 		var username string
 		var password string
 
@@ -169,7 +193,6 @@ func CheckPassword(env *models.Env, inputUsername string, inputPassword string, 
 	}  
 	return false
 }
-
 
 // Temporary function that adds entries to the game database
 func CreateLobbyEntries(env *models.Env) error {

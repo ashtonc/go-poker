@@ -2,10 +2,11 @@ package gamelogic
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"math/rand"
 	"os"
-	"sort"
+	//	"sort"
 	"strings"
 	"time"
 )
@@ -15,7 +16,6 @@ func Init_card_cat() ([]string, []string) {
 	suites := []string{"hearts", "spades", "clubs", "diamonds"}
 	return cardTypes, suites
 }
-
 
 func getIndex(array []string, item string) int {
 	for i := 0; i < len(array); i++ {
@@ -33,22 +33,23 @@ func Rand_init() {
 /*classes:   */
 
 type Game struct {
-	Name    string
-	Stakes  GameStakes
-	Phase   int
-	Pot 	int
-	Deck 	[]Card
-	Seats 	[6]Seat 
-	Players []Player
-	Sitters []Player
+	Name           string
+	Slug           string
+	Stakes         GameStakes
+	Phase          int
+	Pot            int
+	Deck           []Card
+	Seats          [6]Seat
+	Players        []Player
+	Sitters        []Player
 	Current_Player string
-	Current_Bet int
-	Bet_Counter int
-	Ant 	int
-	Max_bet 	int
-	Min_bet 	int
-	Dealer_Token int
-	Timer 	float
+	Current_Bet    int
+	Bet_Counter    int
+	Ante           int
+	Max_bet        int
+	Min_bet        int
+	Dealer_Token   int
+	Timer          time.Timer
 }
 
 /*
@@ -59,35 +60,36 @@ Phases:
 	3 -> draw 2
 	4 -> betting 2
 	5 -> showdown
-	*/
+*/
 
-func init(ante int, min_bet int, max_bet int)error {
-	game = new(Game)
-	if game == nil{
-		return error.New("Game failed to initiate.")
-	}else{
+func GameInit(ante int, min_bet int, max_bet int) error {
+	game := new(Game)
+	if game == nil {
+		return errors.New("Game failed to initiate.")
+	} else {
 		game.Ante = ante
 		game.Min_bet = min_bet
 		game.Max_bet = max_bet
-		game.Dealer_token = -1
-		for i, s := range(game.Seats){
+		game.Dealer_Token = -1
+		for i, s := range game.Seats {
+
 			s.Number = i + 1
-			s.occupied = false
+			s.Occupied = false
 		}
-		return
+		return nil
 	}
 }
 
 type GameStakes struct {
-	Ante   int64
-	MaxBet int64
-	MinBet int64
+	Ante   int
+	MaxBet int
+	MinBet int
 }
 
 type Seat struct {
-	number 		int
-	occupied 	bool
-	occupier 	string 
+	Number   int
+	Occupied bool
+	Occupier string
 }
 
 type Player struct { /* A more complete player struct will likely be someplace else in repo */
@@ -95,12 +97,12 @@ type Player struct { /* A more complete player struct will likely be someplace e
 	Money     int
 	Hand      []Card
 	Folded    bool /*default value false */
-	Called 	  bool
+	Called    bool
 	Discarded bool
 	Bet       int
 	Hand_Rank int
 	Card_Hist [14]int
-	Seat 		int
+	Seat      int
 }
 
 func (p *Player) pay_bet(amount int, pot int) int {
@@ -153,37 +155,10 @@ func (p *Player) show_hand() {
 func (p *Player) sort_hand_by_rank() {
 	fmt.Printf("About to sort %s hand by rank \n", p.Name)
 	hand := p.Hand
-	sort.Slice(hand[:], func(i, j int) bool {
+	/*sort.Slice(hand, func(i, j int) bool {
 		return hand[i].Rank < hand[j].Rank
-	})
+	})*/
 	p.Hand = hand
-}
-
-func (p *Player) place_bet(current int, max_bet int, min_bet int) int {
-	//options := []string {"call", "fold", "raise"}
-	//if current == 0{
-	//	options := append(options, "check")
-	//}
-	if p.Money < current {
-		p.Folded = true
-		return current
-		fmt.Printf("You need to have %d dollars to stay in the game and only have %d \n", current, p.Money)
-		fmt.Printf("You have no choice but to fold \n")
-	}
-	fmt.Printf("Place bet for player %s \n", p.Name)
-	value := place_bet_test(*p, current, min_bet, max_bet)
-	fmt.Printf("Value is %d \n", value)
-
-	/*
-		value = function(options, max_bet, min_bet)
-		function should show (or call something to show) the appropriate player a pop-up or something with
-		the options listed and ok button if call, return 0, if raise, return the amount added to bet,
-		if fold, return -1. Do not let player bet more than his current money or the maximum bet*/
-	if value == -1 {
-		p.Folded = true
-		return current
-	}
-	return value
 }
 
 func (p *Player) find_four_of_kind_rank() int {

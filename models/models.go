@@ -2,8 +2,11 @@ package models
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"html/template"
+
+	_ "github.com/lib/pq"
+
+	"poker/gamelogic"
 )
 
 /*
@@ -17,6 +20,7 @@ type Env struct {
 	Port      string
 	Templates map[string]*template.Template
 	SiteRoot  string
+	Games     map[string]*gamelogic.Game
 	// authentication middleware
 	// logger middleware
 }
@@ -26,11 +30,11 @@ type Session struct {
 	Username        string
 	Name            string
 	PageHome        bool
-	PageLogin       bool
-	PageRegister    bool
 	PageUser        bool
 	PageGame        bool
 	PageLeaderboard bool
+	PageLogin       bool
+	PageRegister    bool
 }
 
 type UserPage struct {
@@ -38,6 +42,7 @@ type UserPage struct {
 	Username       string
 	Name           string
 	Email          string
+<<<<<<< HEAD
 	PictureUrl     string
 }
 
@@ -97,6 +102,9 @@ type GameHand struct {
 	Card3 Card
 	Card4 Card
 	Card5 Card
+=======
+	PictureURL     string
+>>>>>>> 8071701eb2cedb714dd6b9ccc7e8c880d524d7a8
 }
 
 /*
@@ -107,7 +115,7 @@ type PageData struct {
 	SiteRoot    string
 	Session     Session
 	UserPage    UserPage
-	Game        Game
+	Game        gamelogic.Game
 	Lobby       Lobby
 	Leaderboard Leaderboard
 }
@@ -119,7 +127,7 @@ type Lobby struct {
 
 type LobbyListing struct {
 	Name    string
-	Stakes  GameStakes
+	Stakes  gamelogic.GameStakes
 	Players int
 	Private bool
 }

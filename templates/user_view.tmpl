@@ -6,10 +6,10 @@
 			<p>{{ .Name }}</p>
 			<p>{{ .Email }}</p>
 			<div id="profile-picture">
-				<img src="/poker/static/img/{{ .PictureUrl }}">
+				<img src="{{ .SiteRoot }}/static/img/{{ .PictureURL }}">
 			</div>
 			{{- if .MatchesSession }}
-			<a href="/poker/user/{{ .Username }}/edit">Edit</a>
+			<a href="{{ .SiteRoot }}/user/{{ .Username }}/edit">Edit</a>
 			{{- end }}
 			{{- end }}
 			{{ else }}

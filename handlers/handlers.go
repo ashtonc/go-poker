@@ -1,18 +1,18 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"fmt"
 	"regexp"
+
+	"github.com/gorilla/mux"
 
 	"poker/database"
 	"poker/models"
-
-	"github.com/gorilla/mux"
 )
 
-// This simply redirects users to /poker/
+// This simply redirects users to the site root
 func HomeRedirect(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
@@ -21,24 +21,8 @@ func HomeRedirect(env *models.Env) http.Handler {
 
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("User visited Home page.\n")
-		err := database.CreateLeaderboardEntries(env) // to be removed later, testing inserting lobbies into database
-		if err != nil {
-			panic("No database found")
-		}
-
-		/*		// Populate the data needed for the page (these should nearly all be external functions)
-				vars := mux.Vars(r)
-				username := vars["username"]*/
-
-		/*		// Get the user page matching that username from the database
-				user, err := database.UserRegister(env, username)
-				if err != nil {
-					// TODO
-				}*/
-
 		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := getPageData("sessionid", "Home")
+		pagedata := getPageData(env, "sessionid", "Home")
 
 		// Execute the template with our page data
 		template := env.Templates["Home"]
@@ -129,7 +113,6 @@ func Register(env *models.Env) http.Handler {
 			template := env.Templates["Register"]
 			isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 
-
 			fmt.Printf("User attempted to register.\n")
 			r.ParseForm()
 			username := r.PostFormValue("username")
@@ -178,7 +161,7 @@ func ViewUser(env *models.Env) http.Handler {
 		// Get the user page matching that username from the database
 		user, err := database.GetUserPage(env, username)
 		if err != nil {
-			log.Print("Player " + username + " not found.")
+			log.Print("User " + username + " not found.")
 
 			// For now, just redirect them to the home page
 			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
@@ -186,13 +169,13 @@ func ViewUser(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewUser")
+		pagedata := getPageData(env, "sessionid", "ViewUser")
 		pagedata.UserPage = models.UserPage{
 			MatchesSession: true,
 			Username:       user.Username,
 			Name:           user.Name,
 			Email:          user.Email,
-			PictureUrl:     user.PictureUrl,
+			PictureURL:     user.PictureURL,
 		}
 
 		// Execute the template with our page data
@@ -209,7 +192,7 @@ func EditUser(env *models.Env) http.Handler {
 		username := vars["username"]
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "EditUser")
+		pagedata := getPageData(env, "sessionid", "EditUser")
 		pagedata.UserPage = models.UserPage{
 			MatchesSession: true,
 			Username:       username,
@@ -226,9 +209,9 @@ func EditUser(env *models.Env) http.Handler {
 func RedirectGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
-		http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 		// Else, send them to the lobby
-		//http.Redirect(w, r, env.SiteRoot /game/lobby", http.StatusTemporaryRedirect)
+		//http.Redirect(w, r, env.SiteRoot+"/lobby", http.StatusTemporaryRedirect)
 	})
 }
 
@@ -236,7 +219,7 @@ func PlayGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "PlayGame")
+		pagedata := getPageData(env, "sessionid", "PlayGame")
 
 		// Execute the template with our page data
 		template := env.Templates["PlayGame"]
@@ -249,13 +232,12 @@ func ViewLobby(env *models.Env) http.Handler {
 
 		lobby, err := database.GetLobby(env)
 		if err != nil {
-			// No lobby exists or worse error
-			// return
+			// No lobby exists or worse error(?)
 			log.Fatal(err)
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewLobby")
+		pagedata := getPageData(env, "sessionid", "ViewLobby")
 		pagedata.Lobby = *lobby
 
 		// Execute the template with our page data
@@ -268,7 +250,7 @@ func WatchGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "WatchGame")
+		pagedata := getPageData(env, "sessionid", "WatchGame")
 
 		// Execute the template with our page data
 		template := env.Templates["WatchGame"]
@@ -278,22 +260,18 @@ func WatchGame(env *models.Env) http.Handler {
 
 func Leaderboard(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("User visited Leaderboard page.\n")
-
 		leaderboard, err := database.GetLeaderboard(env)
 		if err != nil {
 			// Big error
+			log.Fatal(err)
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData("sessionid", "ViewLobby")
+		pagedata := getPageData(env, "sessionid", "Leaderboard")
 		pagedata.Leaderboard = *leaderboard
 
 		// Execute the template with our page data
 		template := env.Templates["Leaderboard"]
 		template.Execute(w, pagedata)
-
-		// fmt.Printf(leaderboard)
-
 	})
 }
