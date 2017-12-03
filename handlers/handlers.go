@@ -32,45 +32,55 @@ func Home(env *models.Env) http.Handler {
 
 func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		template := env.Templates["Login"]
+
+		// Populate the data needed for the page (these should nearly all be external functions)
+		pagedata := models.PageData{
+			Session: models.Session{
+				LoggedIn:  false,
+				PageLogin: true,
+			},
+		}
 
 		if r.Method == "POST" {
+			fmt.Printf("POST for Login\n")
 			// this code gets username and password from the POST form
 			r.ParseForm()
 			username := r.PostFormValue("username")
 			password := r.PostFormValue("password")
 			userAccount := database.FindByUsername(env, username)
+			name := userAccount.Name
+
 			// Query the database to check if account even exists (via FindByUsername?)
-			if userAccount.Username != username {
-			// if database.CheckCount(results) == 0 {
+			if username == "" || password == "" {
+				fmt.Printf("One or more fields were left blank.\n")
+				template.Execute(w, pagedata)
+				// fmt.Printf(env.SiteRoot)
+				// http.Redirect(w, nil, env.SiteRoot+"/login/", http.Get)
+				// http.Get(env.SiteRoot+"/login/")
+				// http.Redirect(nil, nil, env.SiteRoot+"/login", 303)
+			} else if userAccount.Username != username {
 				fmt.Printf("This user does not exist.\n")
+				template.Execute(w, pagedata)
+				// http.Redirect(w, r, env.SiteRoot+"/login/", http.Get)
 			} else if userAccount.Password != password {
 				fmt.Printf("The password is incorrect.\n")
-				fmt.Printf("qq", userAccount)
+				template.Execute(w, pagedata)
+				// http.Redirect(w, r, env.SiteRoot+"/login/", http.Get)
 			} else {
 				fmt.Printf("Login successful.\n")
-				// Query the database to check if account.password == Login.password
-				// redirectTarget := env.SiteRoot + "/login/"
 				// if name != "" && pass != "" {
 
-				// 	// .. check credentials ..
-				// 	setSession(username, name, w)
-				// 	redirectTarget = env.SiteRoot + "/game/"
-				// }
-				// //redirect to "404 page not found if user "
+				// .. check credentials ..
+				setSession(username, name, w)
+				
 				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 			}
 
 		} else if r.Method == "GET" {
-			// Populate the data needed for the page (these should nearly all be external functions)
-			pagedata := models.PageData{
-				Session: models.Session{
-					LoggedIn:  false,
-					PageLogin: true,
-				},
-			}
+			fmt.Printf("GET login page\n")
 
 			// Execute the template with our page data
-			template := env.Templates["Login"]
 			template.Execute(w, pagedata)
 		}
 
