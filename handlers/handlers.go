@@ -127,7 +127,7 @@ func Register(env *models.Env) http.Handler {
 			username := r.PostFormValue("username")
 			password := r.PostFormValue("password")
 			name := r.PostFormValue("name")
-			// email := r.PostFormValue("email")
+			email := r.PostFormValue("email")
 			password_repeat := r.PostFormValue("password-repeat")
 
 			if len(username) < 5 || !isAlpha(username) {
@@ -145,9 +145,6 @@ func Register(env *models.Env) http.Handler {
 			} else if (database.FindByUsername(env, username)).Username == username {
 				template.Execute(w, pagedata)
 				fmt.Printf("This account name already exists.\n")
-				// qqq := database.FindByUsername(env, username)
-				// fmt.Printf("$1", qqq)
-				//REPLACE WITH PROPER PRINTF STATEMENT LATER
 			} else {
 				fmt.Printf("User has correctly registered!\n")
 				err := database.UserRegister(env, username, name, email, password)
