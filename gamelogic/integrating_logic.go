@@ -70,13 +70,13 @@ func (g *Game) Leave(name string)error{
 	g.Seats[p.Seat].occupied = false
 	if len(g.Players) > 0{
 		index = g.GetPlayerIndex(name)
-		g.Players[] = append(g.Players[:index], g.Sitters[index+1])
+		g.Players = append(g.Players[:index], g.Sitters[index+1])
 	}
 	return nil
 }
  
 func (g *Game) NewRound(players []Player, ante int, minBet int, maxBet int, dealterToken int)error{
-	for _, p in g.Sitters{
+	for _, p := range g.Sitters{
 		g.Players = append(g.Players, *p)
 	}
 	if len(g.Players) < 2{
