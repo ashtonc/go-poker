@@ -136,7 +136,7 @@ func ViewUser(env *models.Env) http.Handler {
 		// Get the user page matching that username from the database
 		user, err := database.GetUserPage(env, username)
 		if err != nil {
-			log.Print("Player " + username + " not found.")
+			log.Print("User " + username + " not found.")
 
 			// For now, just redirect them to the home page
 			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
@@ -236,8 +236,6 @@ func WatchGame(env *models.Env) http.Handler {
 
 func Leaderboard(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("User visited Leaderboard page.\n")
-
 		leaderboard, err := database.GetLeaderboard(env)
 		if err != nil {
 			// Big error
@@ -250,8 +248,5 @@ func Leaderboard(env *models.Env) http.Handler {
 		// Execute the template with our page data
 		template := env.Templates["Leaderboard"]
 		template.Execute(w, pagedata)
-
-		// fmt.Printf(leaderboard)
-
 	})
 }

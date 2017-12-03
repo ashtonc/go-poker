@@ -9,25 +9,30 @@ import (
 	//"github.com/gorilla/websockets"
 
 	"poker/database"
+	"poker/gamelogic"
 	"poker/handlers"
 	"poker/models"
 	"poker/templates"
-	//"poker/gamelogic"
 )
 
 func main() {
 	// Connect to the database
-	db_user := "postgres"
-	db_password := "postgres"
-	db_name := "pokerdb"
+	dbUser := "postgres"
+	dbPassword := "postgres"
+	dbName := "pokerdb"
 
-	database, err := database.CreateDatabase(db_user, db_password, db_name)
+	database, err := database.CreateDatabase(dbUser, dbPassword, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	defer env.Database.Close()
+
 	// Create a template cache
 	templates := templates.BuildTemplateCache()
+
+	// Initialize the games found in the database (imagine these as poker tables)
+	gamelogic.InitializeGames(env)
 
 	// Populate our environment
 	env := &models.Env{
@@ -36,9 +41,6 @@ func main() {
 		Templates: templates,
 		SiteRoot:  "/poker",
 	}
-
-	// Deferred until main finishes, idiomatic
-	defer env.Database.Close()
 
 	// Create a new router and initialize the handlers
 	router := mux.NewRouter()
@@ -56,10 +58,7 @@ func main() {
 	router.Handle(env.SiteRoot+"/game/{gameid:[a-z0-9-]+}/watch", handlers.WatchGame(env))
 	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 
-	// Initialize the games found in the database (imagine these as poker tables)
-	// gamelogic.InitializeGames(env)
-
 	// Start the server
-	log.Print("Running server on port " + env.Port + ".")
+	log.Print("Running server at " + env.SiteRoot + " on port " + env.Port + ".")
 	log.Fatal(http.ListenAndServe(env.Port, router))
 }

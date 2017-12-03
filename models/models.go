@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	"html/template"
+	"poker/gamelogic"
 )
 
 /*
@@ -17,6 +18,7 @@ type Env struct {
 	Port      string
 	Templates map[string]*template.Template
 	SiteRoot  string
+	Games     map[string]gamelogic.Game
 	// authentication middleware
 	// logger middleware
 }
@@ -42,57 +44,6 @@ type UserPage struct {
 }
 
 /*
- *    Game models
- */
-
-type Game struct {
-	Name    string
-	Stakes  GameStakes
-	Phase   GamePhase
-	Deck    GameDeck
-	Player1 GamePlayer
-	Player2 GamePlayer
-	Player3 GamePlayer
-	Player4 GamePlayer
-	Player5 GamePlayer
-	Player6 GamePlayer
-}
-
-type GamePhase struct {
-	Phase int
-}
-
-type GameDeck struct {
-	Cards [52]Card
-}
-
-type Card struct {
-	Face string
-	Suit string
-	Rank int
-}
-
-type GameStakes struct {
-	Ante   int64
-	MaxBet int64
-	MinBet int64
-}
-
-type GamePlayer struct {
-	Cash     int64
-	Hand     GameHand
-	Username string
-}
-
-type GameHand struct {
-	Card1 Card
-	Card2 Card
-	Card3 Card
-	Card4 Card
-	Card5 Card
-}
-
-/*
  *    Template models
  */
 
@@ -103,6 +54,7 @@ type PageData struct {
 	Game        Game
 	Lobby       Lobby
 	Leaderboard Leaderboard
+	Games       map[string]Game
 }
 
 type Lobby struct {
