@@ -38,29 +38,28 @@ func Login(env *models.Env) http.Handler {
 			r.ParseForm()
 			username := r.PostFormValue("username")
 			password := r.PostFormValue("password")
-			results := database.FindByUsername(env, username)
+			userAccount := database.FindByUsername(env, username)
 			// Query the database to check if account even exists (via FindByUsername?)
-			if false {
+			if userAccount.Username != username {
 			// if database.CheckCount(results) == 0 {
-			// 	fmt.Printf("This user does not exist.\n")
+				fmt.Printf("This user does not exist.\n")
+			} else if userAccount.Password != password {
+				fmt.Printf("The password is incorrect.\n")
+				fmt.Printf("qq", userAccount)
 			} else {
-				fmt.Printf("ELSE\n")
-				fmt.Printf(username)
-				fmt.Printf(password)
-				garbage := database.CheckPassword(env, username, password, results)
-				fmt.Printf("\ngarbage below: \n")
-				fmt.Printf("qq", garbage)
-			}
-			// Query the database to check if account.password == Login.password
-			// redirectTarget := env.SiteRoot + "/login/"
-			// if name != "" && pass != "" {
+				fmt.Printf("Login successful.\n")
+				// Query the database to check if account.password == Login.password
+				// redirectTarget := env.SiteRoot + "/login/"
+				// if name != "" && pass != "" {
 
-			// 	// .. check credentials ..
-			// 	setSession(username, name, w)
-			// 	redirectTarget = env.SiteRoot + "/game/"
-			// }
-			// //redirect to "404 page not found if user "
-			// http.Redirect(w, r, redirectTarget, 302)
+				// 	// .. check credentials ..
+				// 	setSession(username, name, w)
+				// 	redirectTarget = env.SiteRoot + "/game/"
+				// }
+				// //redirect to "404 page not found if user "
+				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
+			}
+
 		} else if r.Method == "GET" {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
@@ -118,7 +117,7 @@ func Register(env *models.Env) http.Handler {
 			username := r.PostFormValue("username")
 			password := r.PostFormValue("password")
 			name := r.PostFormValue("name")
-			email := r.PostFormValue("email")
+			// email := r.PostFormValue("email")
 			password_repeat := r.PostFormValue("password-repeat")
 
 			if len(username) < 5 || !isAlpha(username) {
@@ -133,20 +132,21 @@ func Register(env *models.Env) http.Handler {
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
 				fmt.Printf("The password field should match the password repeat field.\n")
-			} else if database.CheckCount(database.FindByUsername(env, username)) > 0 {
-				fmt.Printf("ffff\n")
+			} else if (database.FindByUsername(env, username)).Username == username {
+				template.Execute(w, pagedata)
+				fmt.Printf("This account name already exists.\n")
 				// qqq := database.FindByUsername(env, username)
 				// fmt.Printf("$1", qqq)
 				//REPLACE WITH PROPER PRINTF STATEMENT LATER
 			} else {
+				fmt.Printf("User has correctly registered!\n")
+				// err := database.UserRegister(env, username, name, email, password)
+				// if err != nil {
+				// 	panic("No database found")
+				// }
 
-				err := database.UserRegister(env, username, name, email, password)
-				if err != nil {
-					panic("No database found")
-				}
-
-				fmt.Printf(username, password, name, email, password_repeat)
-				http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+				// fmt.Printf(username, password, name, email, password_repeat)
+				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 			}
 
 		}
@@ -175,7 +175,7 @@ func ViewUser(env *models.Env) http.Handler {
 			Username:       user.Username,
 			Name:           user.Name,
 			Email:          user.Email,
-			PictureURL:     user.PictureURL,
+			PictureUrl:     user.PictureUrl,
 		}
 
 		// Execute the template with our page data

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"database/sql"
+	// "database/sql"
 	"log"
 
 	// Wraps database/sql for our postgres database
@@ -18,7 +18,7 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	sqlStatement := `SELECT name, email FROM user WHERE username=$1;`
 
 	row := env.Database.QueryRow(sqlStatement, page.Username)
-	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureURL)
+	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureUrl)
 
 	return &page, err
 }
@@ -137,7 +137,7 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	return err
 }
 
-func FindByUsername(env *models.Env, inputUsername string) (*models.UserAccount) {
+func FindByUsername(env *models.Env, inputUsername string) (models.UserAccount) {
 	var userAccount models.UserAccount
 
 	sqlStatement := `SELECT username, name, email, password FROM account WHERE username=$1`
@@ -146,53 +146,49 @@ func FindByUsername(env *models.Env, inputUsername string) (*models.UserAccount)
 	if err != nil {
 		panic(err)
 	}
-	rows.Next()
-	// var username string
-	// var name string
-	// var email string
-	// var password string
-	// err = rows.Scan(&username, &name, &email, &password)
-	err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.Password)
-	if err != nil {
-		panic(err)
+	for rows.Next() {
+		// var username string
+		// var name string
+		// var email string
+		// var password string
+		// err = rows.Scan(&username, &name, &email, &password)
+		err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.Password)
+		if err != nil {
+			panic(err)
+		}
 	}
 	//leaderboard.Entries = append(leaderboard.Entries, models.LeaderboardEntry{Username: username, Cash: cash})
 	// if userAccount.Username == "lol" {
 	// }
 
-	log.Fatal(userAccount)
-
-	return &userAccount
+	return userAccount
 }
 
-func CheckCount(*models.UserAccount) (count int) {
-	count = 0
+// func CheckCount(*models.UserAccount) (count int) {
+// 	count = 0
 
-	for rows.Next() {
-		count++
-	}  
-	return count
-}
+// 	for rows.Next() {
+// 		count++
+// 	}  
+// 	return count
+// }
 
-func CheckPassword(env *models.Env, inputUsername string, inputPassword string, rows *sql.Rows) (bool) {
+// func CheckPassword(env *models.Env, inputUsername string, inputPassword string, databaseResults models.UserAccount) (bool) {
 
-	for rows.Next() {
-<<<<<<< HEAD
-		var username string
-		var password string
+// 	for rows.Next() {
 
-		err := rows.Scan(&username, &password)
-		if err != nil {
-			panic(err)
-		}
+// 		err := rows.Scan(&username, &password)
+// 		if err != nil {
+// 			panic(err)
+// 		}
 
-		if inputPassword == password {
-			return true
-		}
+// 		if inputPassword == password {
+// 			return true
+// 		}
 
-	}  
-	return false
-}
+// 	}  
+// 	return false
+// }
 
 // Temporary function that adds entries to the game database
 func CreateLobbyEntries(env *models.Env) error {
