@@ -50,7 +50,7 @@ func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	var leaderboard models.Leaderboard
 
-	sqlStatement := `SELECT username, total_cash FROM player_stats, account WHERE player_stats.user_id = account.id;`
+	sqlStatement := `SELECT username, total_cash FROM account, player_stats WHERE player_stats.user_id = account.id;`
 
 	rows, err := env.Database.Query(sqlStatement)
 	if err != nil {
@@ -107,21 +107,6 @@ func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 	}
 
 	return userAccount
-}
-
-// Temporary function that adds entries to the game database
-func CreateLobbyEntries(env *models.Env) error {
-	// var leaderboard models.Leaderboard
-
-	sqlStatement := `  
-	INSERT INTO game (name) 
-	VALUES ($1)`
-	_, err := env.Database.Exec(sqlStatement, "my name")
-	if err != nil {
-		panic(err)
-	}
-
-	return err
 }
 
 // Temporary function that adds entries to the game database

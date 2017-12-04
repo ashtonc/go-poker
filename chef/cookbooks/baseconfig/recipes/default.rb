@@ -26,6 +26,10 @@ execute 'get-mux' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/mux'
 end
+execute 'get-websockets' do
+  environment 'GOPATH' => '/go'
+  command 'go get -u github.com/gorilla/websocket'
+end
 execute 'get-sessions' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/sessions'
@@ -41,6 +45,10 @@ end
 execute 'get-gjson' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/tidwall/gjson'
+end
+execute 'get-scrypt' do
+  environment 'GOPATH' => '/go'
+  command 'go get -u golang.org/x/crypto/scrypt'
 end
 
 # Postgres setup.

@@ -33,6 +33,8 @@ func CreateDatabase(username string, password string, name string) (database *sq
 }
 
 func InitializeGames(env *models.Env, gameMap map[string]*models.GameListing) {
+	log.Print("Initializing game objects from database...")
+
 	for _, listing := range gameMap {
 		game, err := gamelogic.GameInit(listing.Ante, listing.MinBet, listing.MaxBet)
 		if err != nil {

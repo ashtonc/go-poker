@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"html/template"
 
+	"github.com/gorilla/websocket"
 	_ "github.com/lib/pq"
 
 	"poker/gamelogic"
@@ -21,8 +22,8 @@ type Env struct {
 	Templates map[string]*template.Template
 	SiteRoot  string
 	Games     map[string]*GameListing
+	Upgrader  *websocket.Upgrader
 	// authentication middleware
-	// logger middleware
 }
 
 type Session struct {

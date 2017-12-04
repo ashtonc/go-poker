@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"regexp"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 
 	"poker/database"
 	"poker/models"
@@ -158,13 +160,14 @@ func Register(env *models.Env) http.Handler {
 	})
 }
 
-func ViewUser(env *models.Env) http.Handler {
+func User(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
+		action := vars["action"]
 
 		// Get the user page matching that username from the database
-		user, err := database.GetUserPage(env, username)
+		userPage, err := database.GetUserPage(env, username)
 		if err != nil {
 			log.Print("User " + username + " not found.")
 
@@ -173,50 +176,36 @@ func ViewUser(env *models.Env) http.Handler {
 			return
 		}
 
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "ViewUser")
-		pagedata.UserPage = models.UserPage{
-			MatchesSession: true,
-			Username:       user.Username,
-			Name:           user.Name,
-			Email:          user.Email,
-			PictureSlug:    user.PictureSlug,
+		var pagedata models.PageData
+		var template *template.Template
+
+		// Create our pagedata model
+		if action == "edit" {
+			pagedata = getPageData(env, "sessionid", "EditUser")
+			template = env.Templates["EditUser"]
+
+			log.Print("Editing player " + username + ".")
+		} else {
+			pagedata = getPageData(env, "sessionid", "ViewUser")
+			template = env.Templates["ViewUser"]
+
+			log.Print("Displaying player " + username + ".")
 		}
+		pagedata.UserPage = *userPage
 
 		// Execute the template with our page data
-		template := env.Templates["ViewUser"]
 		template.Execute(w, pagedata)
 
-		log.Print("Displaying player " + username + ".")
-	})
-}
-
-func EditUser(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		username := vars["username"]
-
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "EditUser")
-		pagedata.UserPage = models.UserPage{
-			MatchesSession: true,
-			Username:       username,
-			Name:           "User Name",
-			Email:          "user@email.ca",
-		}
-
-		// Execute the template with our page data
-		template := env.Templates["EditUser"]
-		template.Execute(w, pagedata)
 	})
 }
 
 func RedirectGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
-		http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
+		// http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
+
 		// Else, send them to the lobby
-		//http.Redirect(w, r, env.SiteRoot+"/lobby", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, env.SiteRoot+"/lobby/", http.StatusTemporaryRedirect)
 	})
 }
 
@@ -243,6 +232,31 @@ func Game(env *models.Env) http.Handler {
 
 		// Execute the template with our page data
 		template.Execute(w, pagedata)
+	})
+}
+
+func GameConnection(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		conn, err := env.Upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			log.Print(err)
+			return
+		}
+
+		msg := "Connected!"
+		err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
+		if err != nil {
+			log.Print(err)
+		} else {
+			_, _, err := conn.ReadMessage()
+			if err != nil {
+				log.Print(err)
+			} else {
+				log.Print("Reply recieved.")
+			}
+		}
+
+		conn.Close()
 	})
 }
 
