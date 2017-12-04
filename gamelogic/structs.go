@@ -62,10 +62,10 @@ Phases:
 	5 -> showdown
 */
 
-func GameInit(ante int, min_bet int, max_bet int) error {
+func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	game := new(Game)
 	if game == nil {
-		return errors.New("Game failed to initiate.")
+		return nil, errors.New("Game failed to initiate.")
 	} else {
 		game.Stakes.Ante = ante
 		game.Stakes.MinBet = min_bet
@@ -76,7 +76,7 @@ func GameInit(ante int, min_bet int, max_bet int) error {
 			s.Number = i + 1
 			s.Occupied = false
 		}
-		return nil
+		return nil, nil
 	}
 }
 

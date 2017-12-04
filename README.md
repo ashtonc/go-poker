@@ -4,6 +4,28 @@ This is the repository for the term project of group 15. It will be an implemeta
 
 To view our site, simply `vagrant up` and visit `localhost:8000/poker/`.
 
+## To do
+
+* Site
+	* Add games to the database
+	* View games from the lobby (fix it) - assigned a seat?
+* Websockets
+	* Client can establish a connection to the server (websockets, js + go)
+	* Client can send empty messages of each kind (js)
+	* Server can recieve these messages (go)
+	* Server can send game states (go) to all clients
+	* Client can recieve game states (js)
+	* Page is updated based on those game states (js)
+	* Client can send content in their messages (js)
+* Games
+	* Updated database after each round
+	* Make sure the game methods work?
+* Fixes
+	* Store password hashes instead of plain text (wtf)
+	* Maybe leaderboard (less important)
+	* Make registration work
+	* Make sessions work
+
 ## Project Checkpoint
 
 The majority of the work that has been completed on our website is not yet integrated together. We have designs that aren't yet visible, we have game logic that can't yet be interacted with, we have pages that can't be visited, etc. With that said, here is a list of what has been worked on:
@@ -53,11 +75,10 @@ Repository information:
 * Routing: https://github.com/gorilla/mux
 * Database: https://github.com/lib/pq
 * Session management: https://github.com/gorilla/sessions (not yet)
-* Websockets: https://github.com/gorilla/websocket (not yet)
+* Websockets: https://github.com/gorilla/websocket
 
 ## Server Log
 
 * `vagrant ssh`
 * `sudo su`
 * `tmux attach -t server` (or just `tmux a`)
-* TODO: set it up so the server log writes to /log or something

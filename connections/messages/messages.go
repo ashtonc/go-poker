@@ -39,4 +39,10 @@ const (
 
 	// KindPlayerTrade is sent when a player trades cards
 	KindPlayerTrade
+
+	// Kind for starting round
+	// KindStartRound
+
+	// Kind for finishing round
+	// KindFinishRound
 )

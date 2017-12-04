@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"regexp"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 
 	"poker/database"
 	"poker/models"
@@ -32,31 +34,48 @@ func Home(env *models.Env) http.Handler {
 
 func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		template := env.Templates["Login"]
+
+		// Populate the data needed for the page (these should nearly all be external functions)
+		pagedata := models.PageData{
+			Session: models.Session{
+				LoggedIn:  false,
+				PageLogin: true,
+			},
+		}
 
 		if r.Method == "POST" {
-			userName := r.FormValue("username")
-			name := r.FormValue("username")
-			pass := r.FormValue("password")
-			redirectTarget := env.SiteRoot + "/login/"
-			if name != "" && pass != "" {
+			fmt.Printf("POST for Login\n")
+			// this code gets username and password from the POST form
+			r.ParseForm()
+			username := r.PostFormValue("username")
+			password := r.PostFormValue("password")
+			userAccount := database.FindByUsername(env, username)
+			name := userAccount.Name
+
+			// Query the database to check if account even exists (via FindByUsername?)
+			if username == "" || password == "" {
+				fmt.Printf("One or more fields were left blank.\n")
+				template.Execute(w, pagedata)
+			} else if userAccount.Username != username {
+				fmt.Printf("This user does not exist.\n")
+				template.Execute(w, pagedata)
+			} else if userAccount.Password != password {
+				fmt.Printf("The password is incorrect.\n")
+				template.Execute(w, pagedata)
+			} else {
+				fmt.Printf("Login successful.\n")
 
 				// .. check credentials ..
-				setSession(userName, name, w)
-				redirectTarget = env.SiteRoot + "/game/"
-			}
-			//redirect to "404 page not found if user "
-			http.Redirect(w, r, redirectTarget, 302)
-		} else if r.Method == "GET" {
-			// Populate the data needed for the page (these should nearly all be external functions)
-			pagedata := models.PageData{
-				Session: models.Session{
-					LoggedIn:  false,
-					PageLogin: true,
-				},
+				setSession(username, name, w)
+
+				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 			}
 
+		} else if r.Method == "GET" {
+			fmt.Printf("GET login page\n")
+
 			// Execute the template with our page data
-			template := env.Templates["Login"]
 			template.Execute(w, pagedata)
 		}
 
@@ -65,7 +84,8 @@ func Login(env *models.Env) http.Handler {
 
 func Logout(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//clearSession(response)
+		fmt.Printf("User attempted to log out.\n")
+		clearSession(w)
 		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 	})
 }
@@ -112,39 +132,42 @@ func Register(env *models.Env) http.Handler {
 			} else if len(name) < 1 || !isAlpha(name) {
 				template.Execute(w, pagedata)
 				fmt.Printf("Incorrect input for name.\n")
+			} else if len(email) < 1 {
+				template.Execute(w, pagedata)
+				fmt.Printf("Incorrect input for email.\n")
 			} else if len(password) < 6 {
 				template.Execute(w, pagedata)
 				fmt.Printf("Incorrect input for password.\n")
 			} else if password != password_repeat {
 				template.Execute(w, pagedata)
 				fmt.Printf("The password field should match the password repeat field.\n")
-			} else if database.UserCount(env, username) > 0 {
-				fmt.Printf("ffff\n")
-				qqq := database.UserCount(env, username)
-				fmt.Printf("$1", qqq)
-				//REPLACE WITH PROPER PRINTF STATEMENT LATER
+			} else if (database.FindByUsername(env, username)).Username == username {
+				template.Execute(w, pagedata)
+				fmt.Printf("This account name already exists.\n")
 			} else {
-
+				fmt.Printf("User has correctly registered!\n")
 				err := database.UserRegister(env, username, name, email, password)
 				if err != nil {
 					panic("No database found")
 				}
 
-				fmt.Printf(username, password, name, email, password_repeat)
-				http.Redirect(w, r, env.SiteRoot+"/game/play", http.StatusTemporaryRedirect)
+				// .. check credentials ..
+				setSession(username, name, w)
+				http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 			}
 
 		}
 	})
 }
 
-func ViewUser(env *models.Env) http.Handler {
+func User(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
+		action := vars["action"]
 
 		// Get the user page matching that username from the database
-		user, err := database.GetUserPage(env, username)
+		userPage, err := database.GetUserPage(env, username)
 		if err != nil {
 			log.Print("User " + username + " not found.")
 
@@ -153,92 +176,113 @@ func ViewUser(env *models.Env) http.Handler {
 			return
 		}
 
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "ViewUser")
-		pagedata.UserPage = models.UserPage{
-			MatchesSession: true,
-			Username:       user.Username,
-			Name:           user.Name,
-			Email:          user.Email,
-			PictureURL:     user.PictureURL,
+		var pagedata models.PageData
+		var template *template.Template
+
+		// Create our pagedata model
+		if action == "edit" {
+			pagedata = getPageData(env, "sessionid", "EditUser")
+			template = env.Templates["EditUser"]
+
+			log.Print("Editing player " + username + ".")
+		} else {
+			pagedata = getPageData(env, "sessionid", "ViewUser")
+			template = env.Templates["ViewUser"]
+
+			log.Print("Displaying player " + username + ".")
 		}
+		pagedata.UserPage = *userPage
 
 		// Execute the template with our page data
-		template := env.Templates["ViewUser"]
 		template.Execute(w, pagedata)
 
-		log.Print("Displaying player " + username + ".")
-	})
-}
-
-func EditUser(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		username := vars["username"]
-
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "EditUser")
-		pagedata.UserPage = models.UserPage{
-			MatchesSession: true,
-			Username:       username,
-			Name:           "User Name",
-			Email:          "user@email.ca",
-		}
-
-		// Execute the template with our page data
-		template := env.Templates["EditUser"]
-		template.Execute(w, pagedata)
 	})
 }
 
 func RedirectGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
-		http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
+		// http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
+
 		// Else, send them to the lobby
-		//http.Redirect(w, r, env.SiteRoot+"/lobby", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, env.SiteRoot+"/lobby/", http.StatusTemporaryRedirect)
 	})
 }
 
-func PlayGame(env *models.Env) http.Handler {
+func Game(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		gameslug := vars["gameslug"]
+		action := vars["action"]
 
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "PlayGame")
+		pagedata := getPageData(env, "sessionid", "Game")
+		template := env.Templates["WatchGame"] // hack
+
+		gameListing := env.Games[gameslug]
+		if gameListing == nil {
+			// Game doesn't exist
+			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+			return
+		}
+
+		// Choose our template based on the action
+		if action == "play" {
+			template = env.Templates["PlayGame"]
+		}
 
 		// Execute the template with our page data
-		template := env.Templates["PlayGame"]
 		template.Execute(w, pagedata)
+	})
+}
+
+func GameConnection(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		conn, err := env.Upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			log.Print(err)
+			return
+		}
+
+		msg := "Connected!"
+		err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
+		if err != nil {
+			log.Print(err)
+		} else {
+			_, _, err := conn.ReadMessage()
+			if err != nil {
+				log.Print(err)
+			} else {
+				log.Print("Reply recieved.")
+			}
+		}
+
+		conn.Close()
 	})
 }
 
 func ViewLobby(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var lobby models.Lobby
 
-		lobby, err := database.GetLobby(env)
-		if err != nil {
-			// No lobby exists or worse error(?)
-			log.Fatal(err)
+		for _, listing := range env.Games {
+			if listing.Status == "open" {
+				lobby.Games = append(lobby.Games, listing)
+			}
+		}
+
+		if len(lobby.Games) > 0 {
+			// Sort the games here
+			lobby.Empty = false
+		} else {
+			lobby.Empty = true
 		}
 
 		// Populate the data needed for the page
 		pagedata := getPageData(env, "sessionid", "ViewLobby")
-		pagedata.Lobby = *lobby
+		pagedata.Lobby = lobby
 
 		// Execute the template with our page data
 		template := env.Templates["ViewLobby"]
-		template.Execute(w, pagedata)
-	})
-}
-
-func WatchGame(env *models.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "WatchGame")
-
-		// Execute the template with our page data
-		template := env.Templates["WatchGame"]
 		template.Execute(w, pagedata)
 	})
 }
@@ -247,7 +291,7 @@ func Leaderboard(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		leaderboard, err := database.GetLeaderboard(env)
 		if err != nil {
-			// Big error
+			// Big error maybe
 			log.Fatal(err)
 		}
 

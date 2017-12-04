@@ -1,58 +1,56 @@
 package database
 
 import (
-	"database/sql"
+	// "database/sql"
 	"log"
 
 	// Wraps database/sql for our postgres database
 	_ "github.com/lib/pq"
 
-	"poker/gamelogic"
 	"poker/models"
 )
 
 func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	var page models.UserPage
+
+	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username=$1;`
+
+	row := env.Database.QueryRow(sqlStatement, userName)
+	err := row.Scan(&page.Name, &page.Email, &page.Description, &page.PictureSlug)
 	page.Username = userName
-
-	sqlStatement := `SELECT name, email FROM user WHERE username=$1;`
-
-	row := env.Database.QueryRow(sqlStatement, page.Username)
-	err := row.Scan(&page.Name, &page.Email, &page.Email, &page.PictureURL)
 
 	return &page, err
 }
 
-func GetGames(env *models.Env) ([]*gamelogic.Game, error) {
-	var games []*gamelogic.Game
+func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
+	gameMap := make(map[string]*models.GameListing)
 
-	/*
-		sqlStatement := `SELECT game.name, game_stakes.ante, etc FROM game, game_stakes, game_status WHERE ...;`
+	sqlStatement := `SELECT game.name, game.slug, game_stakes.ante, game_stakes.min_bet, game_stakes.max_bet, game_status.description FROM game, game_stakes, game_status WHERE game.game_status = game_status.id AND game.stakes = game_stakes.id;`
 
-		rows, err := env.Database.Query(sqlStatement)
+	rows, err := env.Database.Query(sqlStatement)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		var gameListing models.GameListing
+		gameListing.Players = 0
+
+		err = rows.Scan(&gameListing.Name, &gameListing.Slug, &gameListing.Ante, &gameListing.MinBet, &gameListing.MaxBet, &gameListing.Status)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		defer rows.Close()
+		gameMap[gameListing.Slug] = &gameListing
+	}
 
-		for rows.Next() {
-			//create some vars here
-			err = rows.Scan(&*var*, &*var*)
-			if err != nil {
-				log.Fatal(err)
-			}
-			games = append(games, *game object*)
-		}
-	*/
-
-	return games, nil
+	return gameMap, err
 }
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	var leaderboard models.Leaderboard
 
-	sqlStatement := `SELECT username, total_cash FROM player_stats, account WHERE player_stats.user_id = account.id;`
+	sqlStatement := `SELECT username, total_cash FROM account, player_stats WHERE player_stats.user_id = account.id;`
 
 	rows, err := env.Database.Query(sqlStatement)
 	if err != nil {
@@ -68,7 +66,7 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		leaderboard.Entries = append(leaderboard.Entries, models.LeaderboardEntry{Username: username, Cash: cash})
+		leaderboard.Entries = append(leaderboard.Entries, &models.LeaderboardEntry{Username: username, Cash: cash})
 	}
 
 	if len(leaderboard.Entries) > 0 {
@@ -79,51 +77,6 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 
 	return &leaderboard, err
 }
-
-func GetLobby(env *models.Env) (*models.Lobby, error) {
-	var lobby models.Lobby
-
-	sqlStatement := `SELECT name, players FROM game;`
-	// , game_status WHERE game_status.description = 'open'
-
-	rows, err := env.Database.Query(sqlStatement)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		var name string
-		var players int
-		err = rows.Scan(&name, &players)
-		if err != nil {
-			log.Fatal(err)
-		}
-		lobby.Games = append(lobby.Games, models.LobbyListing{Name: name, Players: players})
-	}
-
-	if len(lobby.Games) > 0 {
-		lobby.Empty = false
-	} else {
-		lobby.Empty = true
-	}
-
-	return &lobby, err
-}
-
-// func UserLogin(env *models.Env, userName string) (*models.UserPage, error) {
-// 	var users models.UserPage
-// 	users.Username = userName
-// 	// page.Password = password
-
-// 	sqlStatement := `SELECT * FROM user;`
-
-// 	row := env.Database.QueryRow(sqlStatement, "ghth")
-// 	err := row.Scan(&users.Username, &users.Name, &users.Email, &users.PictureUrl)
-
-// 	return &users, err
-// }
 
 func UserRegister(env *models.Env, username string, name string, email string, password string) error {
 
@@ -137,40 +90,23 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	return err
 }
 
-func UserCount(env *models.Env, username string) (count int) {
+func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
+	var userAccount models.UserAccount
 
-	sqlStatement := `SELECT COUNT(*) as count FROM account WHERE username=$1`
+	sqlStatement := `SELECT username, name, email, password FROM account WHERE username=$1`
 
-	rows, err := env.Database.Query(sqlStatement, username)
+	rows, err := env.Database.Query(sqlStatement, inputUsername)
 	if err != nil {
 		panic(err)
 	}
-	return checkCount(rows)
-}
-
-func checkCount(rows *sql.Rows) (count int) {
 	for rows.Next() {
-		err := rows.Scan(&count)
+		err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.Password)
 		if err != nil {
 			panic(err)
 		}
 	}
-	return count
-}
 
-// Temporary function that adds entries to the game database
-func CreateLobbyEntries(env *models.Env) error {
-	// var leaderboard models.Leaderboard
-
-	sqlStatement := `  
-	INSERT INTO game (name) 
-	VALUES ($1)`
-	_, err := env.Database.Exec(sqlStatement, "my name")
-	if err != nil {
-		panic(err)
-	}
-
-	return err
+	return userAccount
 }
 
 // Temporary function that adds entries to the game database

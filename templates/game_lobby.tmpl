@@ -1,5 +1,6 @@
 {{ define "title" }} | Lobby{{ end }}
 {{ define "content" -}}
+		{{ $siteroot := .SiteRoot -}}
 		<h1>Lobby</h1>
 		<div id="content">
 			{{ with .Lobby -}}
@@ -12,14 +13,16 @@
 						<th scope="col">Title</th>
 						<th scope="col">Stakes</th>
 						<th scope="col">Players</th>
+						<th scope="col">Link</th>
 					</tr>
 				</thead>
 				<tbody>
-					{{ range . -}}
+					{{ range .Games -}}
 					<tr>
-						<td>{{ .Title }}</td>
-						<td>{{ .Stakes }}</td>
-						<td>{{ .PlayerCount }}/{{ .MaxPlayers }}</td>
+						<td>{{ .Name }}</td>
+						<td>Ante: {{ .Ante }}, Min: {{ .MinBet }}, Max: {{ .MaxBet }}</td>
+						<td>{{ .Players }}/6</td>
+						<td><a href="{{ $siteroot }}/game/{{ .Slug }}/play">Join</a>, <a href="{{ $siteroot }}/game/{{ .Slug }}/watch">Watch</a></td>
 					</tr>
 					{{- end}}
 				</tbody>

@@ -26,6 +26,10 @@ execute 'get-mux' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/mux'
 end
+execute 'get-websockets' do
+  environment 'GOPATH' => '/go'
+  command 'go get -u github.com/gorilla/websocket'
+end
 execute 'get-sessions' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/sessions'
@@ -42,18 +46,26 @@ execute 'get-gjson' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/tidwall/gjson'
 end
+execute 'get-scrypt' do
+  environment 'GOPATH' => '/go'
+  command 'go get -u golang.org/x/crypto/scrypt'
+end
 
 # Postgres setup.
 package "postgresql"
-execute 'postgres-setup' do
-  command 'echo "CREATE DATABASE pokerdb;" | sudo -u postgres psql'
-end
-execute 'postgres-set-password' do
+execute 'postgres-password' do
   command 'echo "ALTER USER postgres WITH PASSWORD \'postgres\';" | sudo -u postgres psql'
 end
-execute 'database-setup' do
+execute 'postgres-create-db' do
+  command 'echo "CREATE DATABASE pokerdb;" | sudo -u postgres psql'
+end
+execute 'postgres-create-schema' do
   cwd '/go/src/poker/database'
   command 'sudo -u postgres psql pokerdb -f schema.sql'
+end
+execute 'postgres-initial-data' do
+  cwd '/go/src/poker/database'
+  command 'sudo -u postgres psql pokerdb -f data.sql'
 end
 
 # nginx setup

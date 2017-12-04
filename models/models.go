@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"html/template"
 
+	"github.com/gorilla/websocket"
 	_ "github.com/lib/pq"
 
 	"poker/gamelogic"
@@ -20,9 +21,9 @@ type Env struct {
 	Port      string
 	Templates map[string]*template.Template
 	SiteRoot  string
-	Games     map[string]*gamelogic.Game
+	Games     map[string]*GameListing
+	Upgrader  *websocket.Upgrader
 	// authentication middleware
-	// logger middleware
 }
 
 type Session struct {
@@ -42,7 +43,15 @@ type UserPage struct {
 	Username       string
 	Name           string
 	Email          string
-	PictureURL     string
+	Description    string
+	PictureSlug    string
+}
+
+type UserAccount struct {
+	Username string
+	Name     string
+	Email    string
+	Password string
 }
 
 /*
@@ -60,14 +69,19 @@ type PageData struct {
 
 type Lobby struct {
 	Empty bool
-	Games []LobbyListing
+	Games []*GameListing
 }
 
-type LobbyListing struct {
+type GameListing struct {
 	Name    string
-	Stakes  gamelogic.GameStakes
+	Slug    string
+	Ante    int
+	MinBet  int
+	MaxBet  int
+	Status  string
 	Players int
-	Private bool
+	Private bool // Unused
+	Game    *gamelogic.Game
 }
 
 type LeaderboardEntry struct {
@@ -77,5 +91,5 @@ type LeaderboardEntry struct {
 
 type Leaderboard struct {
 	Empty   bool
-	Entries []LeaderboardEntry
+	Entries []*LeaderboardEntry
 }
