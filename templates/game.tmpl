@@ -1,45 +1,43 @@
 {{ define "game" -}}
+		{{ with .GameListing -}}
+        <h1>{{ .Name }}</h1>
 		{{ with .Game -}}
+		{{ $deckSize := len .Deck }}
+
+<!--
+
+Game:
+	Phase          int        `json: "phase"`
+	Seats          [6]Seat    `json: "seats"`
+	Players        []Player   `json: "players"`
+	Sitters        []Player   `json: "sitters"`
+	Current_Player string     `json: "current_player"`
+	Current_Bet    int        `json: "current_bet"`
+	Bet_Counter    int        `json: "bet_counter"`
+	Ante           int        `json: "ante"`
+	Max_bet        int        `json: "max_bet"`
+	Min_bet        int        `json: "min_bet"`
+	Dealer_Token   int        `json: "dealer_token"`
+	Timer          time.Timer `json: "timer"`
+
+Seats:
+	Number   int    `json: "number"`
+	Occupied bool   `json: "occupied"`
+	Occupier string `json: "occupier"`
+
+-->
+
 		<div id="game">
 			<div id="game-info">
-				<div id="deck"></div>
-				<div id="pot">$10,000</div>
+				<div id="deck">Cards: {{ $deckSize }}</div>
+				<div id="pot">{{ .Pot }}</div>
 			</div>
+			{{ range .Seats -}}
 			<div class="seat player-1 empty">
 				<div class="player-info">
 					<div class="image"></div>
-					<div class="name">Something</div>
-					<div class="stack">$0</div>
-				</div>
-				<div class="hand">
-					<div class="card card-1 none"></div>
-					<div class="card card-2 none"></div>
-					<div class="card card-3 none"></div>
-					<div class="card card-4 none"></div>
-					<div class="card card-5 none"></div>
-				</div>
-				<div class="timer"></div>
-			</div>
-			<div class="seat player-2 occupied">
-				<div class="player-info">
-					<div class="image"></div>
-					<div class="name">Player One</div>
-					<div class="stack">$50000</div>
-				</div>
-				<div class="hand">
-					<div class="card card-1 none"></div>
-					<div class="card card-2 none"></div>
-					<div class="card card-3 none"></div>
-					<div class="card card-4 none"></div>
-					<div class="card card-5 none"></div>
-				</div>
-				<div class="timer"></div>
-			</div>
-			<div class="seat player-3 empty">
-				<div class="player-info">
-					<div class="image"></div>
 					<div class="name"></div>
-					<div class="stack">$0</div>
+					<div class="stack"></div>
 				</div>
 				<div class="hand">
 					<div class="card card-1 none"></div>
@@ -50,51 +48,8 @@
 				</div>
 				<div class="timer"></div>
 			</div>
-			<div class="seat player-4 empty">
-				<div class="player-info">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack">$0</div>
-				</div>
-				<div class="hand">
-					<div class="card card-1 none"></div>
-					<div class="card card-2 none"></div>
-					<div class="card card-3 none"></div>
-					<div class="card card-4 none"></div>
-					<div class="card card-5 none"></div>
-				</div>
-				<div class="timer"></div>
-			</div>
-			<div class="seat player-5 occupied">
-				<div class="player-info">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack">$0</div>
-				</div>
-				<div class="hand">
-					<div class="card card-1 none"></div>
-					<div class="card card-2 none"></div>
-					<div class="card card-3 none"></div>
-					<div class="card card-4 none"></div>
-					<div class="card card-5 none"></div>
-				</div>
-				<div class="timer"></div>
-			</div>
-			<div class="seat player-6 empty">
-				<div class="player-info">
-					<div class="image"></div>
-					<div class="name"></div>
-					<div class="stack">$0</div>
-				</div>
-				<div class="hand">
-					<div class="card card-1 none"></div>
-					<div class="card card-2 none"></div>
-					<div class="card card-3 none"></div>
-					<div class="card card-4 none"></div>
-					<div class="card card-5 none"></div>
-				</div>
-				<div class="timer"></div>
-			</div>
+			{{- end }}
 		</div>
+		{{- end }}
 		{{- end }}
 {{- end }}

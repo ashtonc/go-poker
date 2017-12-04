@@ -72,11 +72,10 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 		game.Stakes.MaxBet = max_bet
 		game.Dealer_Token = -1
 		for i, s := range game.Seats {
-
 			s.Number = i + 1
 			s.Occupied = false
 		}
-		return nil, nil
+		return game, nil
 	}
 }
 

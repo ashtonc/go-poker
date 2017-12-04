@@ -21,7 +21,7 @@
 					<tr>
 						<td>{{ .Name }}</td>
 						<td>Ante: {{ .Ante }}, Min: {{ .MinBet }}, Max: {{ .MaxBet }}</td>
-						<td>{{ .Players }}/6</td>
+						<td>{{ .PlayerCount }}/6</td>
 						<td><a href="{{ $siteroot }}/game/{{ .Slug }}/play">Join</a>, <a href="{{ $siteroot }}/game/{{ .Slug }}/watch">Watch</a></td>
 					</tr>
 					{{- end}}
