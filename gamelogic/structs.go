@@ -33,23 +33,23 @@ func Rand_init() {
 /*classes:   */
 
 type Game struct {
-	Name           string
-	Slug           string
-	Stakes         GameStakes
-	Phase          int
-	Pot            int
-	Deck           []Card
-	Seats          [6]Seat
-	Players        []Player
-	Sitters        []Player
-	Current_Player string
-	Current_Bet    int
-	Bet_Counter    int
-	Ante           int
-	Max_bet        int
-	Min_bet        int
-	Dealer_Token   int
-	Timer          time.Timer
+	Name           string 		 `json: "name"`
+	Slug           string 		`json: "slug"`	
+	Stakes         GameStakes	`json: "stakes"`
+	Phase          int 			`json: "phase"`
+	Pot            int 			`json: "pot"`
+	Deck           []Card 		`josn: "deck"`
+	Seats          [6]Seat 		`json: "seats"`
+	Players        []Player 	`json: "players"`
+	Sitters        []Player      `json: "sitters"`
+	Current_Player string 		`json: "current_player"`
+	Current_Bet    int   		`json: "current_bet"`
+	Bet_Counter    int 			`json: "bet_counter"`
+	//Ante           int 			'json: "ante"'
+	//Max_bet        int 			'json': "max_bet"
+	//Min_bet        int 			'json: "min_bet"'
+	Dealer_Token   int 			`json: "dealer_token"`
+	//Timer          time.Timer 	'json:"timer"'
 }
 
 /*
@@ -67,9 +67,9 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	if game == nil {
 		return nil, errors.New("Game failed to initiate.")
 	} else {
-		game.Ante = ante
-		game.Min_bet = min_bet
-		game.Max_bet = max_bet
+		game.Stakes.Ante = ante
+		game.Stakes.MinBet = min_bet
+		game.Stakes.MaxBet = max_bet
 		game.Dealer_Token = -1
 		for i, s := range game.Seats {
 
@@ -81,28 +81,28 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 }
 
 type GameStakes struct {
-	Ante   int
-	MaxBet int
-	MinBet int
+	Ante   int 	`json: "ante"`
+	MaxBet int   `json: "maxbet"`
+	MinBet int    `json: "minbet"`
 }
 
 type Seat struct {
-	Number   int
-	Occupied bool
-	Occupier string
+	Number   int     `json: "number"`
+	Occupied bool    `json: "occupied"`
+	Occupier string   `json: "occupier"`
 }
 
 type Player struct { /* A more complete player struct will likely be someplace else in repo */
-	Name      string
-	Money     int
-	Hand      []Card
-	Folded    bool /*default value false */
-	Called    bool
-	Discarded bool
-	Bet       int
-	Hand_Rank int
-	Card_Hist [14]int
-	Seat      int
+	Name      string     `json: "name"`
+	Money     int         `json: "money"`
+	Hand      []Card      `json: "hand"`
+	Folded    bool         `json: "folded"`
+	Called    bool        `json: "called"`
+	Discarded bool         `json: "discarded"`
+	Bet       int            `json: "bet"`
+	Hand_Rank int             `json: "hand_rank"`
+	Card_Hist [14]int       `json: "card_hist"`
+	Seat      int              `json: "seat"`
 }
 
 func (p *Player) pay_bet(amount int, pot int) int {
@@ -225,9 +225,9 @@ func (p *Player) second_best_pair() int {
 //}
 
 type Card struct {
-	Face string
-	Suit string
-	Rank int
+	Face string     `json: "face"`
+	Suit string     `json: "suit"`
+	Rank int         `json: "rank"`
 }
 
 func newCard(face string, suit string, cardTypes []string) *Card {
