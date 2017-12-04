@@ -235,7 +235,7 @@ func Game(env *models.Env) http.Handler {
 	})
 }
 
-func GameConnection(env *models.Env) http.Handler {
+func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		conn, err := env.Upgrader.Upgrade(w, r, nil)
 		if err != nil {
