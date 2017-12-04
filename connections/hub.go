@@ -9,7 +9,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// This code 'borrowed' from https://outcrawl.com/realtime-collaborative-drawing-go/
+// This code adapted from https://outcrawl.com/realtime-collaborative-drawing-go/
 
 type Hub struct {
 	// Registered clients

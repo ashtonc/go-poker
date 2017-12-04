@@ -245,6 +245,7 @@ func WebsocketConnection(env *models.Env) http.Handler {
 		}
 
 		msg := "Connected!"
+
 		err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		if err != nil {
 			log.Print("Couldn't write message.")
