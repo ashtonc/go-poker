@@ -52,7 +52,7 @@ type Game struct {
 	Timer          time.Timer `json: "timer"`
 }
 
-/*
+/* --> do this with a set of constants **
 Phases:
 	0 -> betting 1
 	1 -> draw 1
@@ -66,17 +66,21 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	game := new(Game)
 	if game == nil {
 		return nil, errors.New("Game failed to initiate.")
-	} else {
-		game.Stakes.Ante = ante
-		game.Stakes.MinBet = min_bet
-		game.Stakes.MaxBet = max_bet
-		game.Dealer_Token = -1
-		for i, s := range game.Seats {
-			s.Number = i + 1
-			s.Occupied = false
-		}
-		return game, nil
 	}
+
+	game.Stakes.Ante = ante
+	game.Stakes.MinBet = min_bet
+	game.Stakes.MaxBet = max_bet
+	game.Dealer_Token = -1
+
+	for i := 0; i < 6; i++ {
+		var seat Seat
+		seat.Number = i + 1
+		seat.Occupied = false
+		game.Seats[i] = seat
+	}
+
+	return game, nil
 }
 
 type GameStakes struct {

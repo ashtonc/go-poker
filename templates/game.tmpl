@@ -20,10 +20,27 @@ Game:
 	Dealer_Token   int        `json: "dealer_token"`
 	Timer          time.Timer `json: "timer"`
 
-Seats:
+Seat:
 	Number   int    `json: "number"`
 	Occupied bool   `json: "occupied"`
 	Occupier string `json: "occupier"`
+
+Player:
+	Name      string  `json: "name"`
+	Money     int     `json: "money"`
+	Hand      []Card  `json: "hand"`
+	Folded    bool    `json: "folded"`
+	Called    bool    `json: "called"`
+	Discarded bool    `json: "discarded"`
+	Bet       int     `json: "bet"`
+	Hand_Rank int     `json: "hand_rank"`
+	Card_Hist [14]int `json: "card_hist"`
+	Seat      int     `json: "seat"`
+
+Card:
+	Face string `json: "face"`
+	Suit string `json: "suit"`
+	Rank int    `json: "rank"`
 
 -->
 
@@ -33,7 +50,7 @@ Seats:
 				<div id="pot">{{ .Pot }}</div>
 			</div>
 			{{ range .Seats -}}
-			<div class="seat player-1 empty">
+			<div class="seat player-{{ .Number }} {{ if .Occupied}}occupied{{ else }}empty{{ end }}">
 				<div class="player-info">
 					<div class="image"></div>
 					<div class="name"></div>
@@ -48,7 +65,7 @@ Seats:
 				</div>
 				<div class="timer"></div>
 			</div>
-			{{- end }}
+			{{ end }}
 		</div>
 		{{- end }}
 		{{- end }}
