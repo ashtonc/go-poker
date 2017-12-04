@@ -51,7 +51,7 @@ func main() {
 	router.Handle("/", handlers.HomeRedirect(env))
 	router.Handle(env.SiteRoot+"/", handlers.Home(env))
 	router.Handle(env.SiteRoot+"/login/", handlers.Login(env))
-	// router.Handle(env.SiteRoot+"/logout/", handlers.Logout(env))
+	router.Handle(env.SiteRoot+"/logout/", handlers.Logout(env))
 	router.Handle(env.SiteRoot+"/register/", handlers.Register(env))
 	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/view", handlers.ViewUser(env))
 	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/edit", handlers.EditUser(env))

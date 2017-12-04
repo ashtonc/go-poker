@@ -80,12 +80,13 @@ func Login(env *models.Env) http.Handler {
 	})
 }
 
-// func Logout(env *models.Env) http.Handler {
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		clearSession(response)
-// 		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
-// 	})
-// }
+func Logout(env *models.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("User attempted to log out.\n")
+		clearSession(w)
+		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+	})
+}
 
 func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
