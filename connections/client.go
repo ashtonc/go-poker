@@ -3,6 +3,7 @@ package connections
 import (
 	"github.com/gorilla/websocket"
 	uuid "github.com/satori/go.uuid"
+	"poker/gamelogic"
 )
 
 // This code 'borrowed' from https://outcrawl.com/realtime-collaborative-drawing-go/
@@ -10,7 +11,7 @@ import (
 type Client struct {
 	id  string
 	hub *Hub
-
+	//game *Game
 	// Websocket connection
 	socket *websocket.Conn
 
@@ -19,10 +20,11 @@ type Client struct {
 }
 
 // Client constructor
-func newClient(hub *Hub, socket *websocket.Conn) *Client {
+func newClient(hub *Hub, socket *websocket.Conn, game *Game) *Client {
 	return &Client{
 		id:       uuid.NewV4().String(),
 		hub:      hub,
+		game:	  game,
 		socket:   socket,
 		outbound: make(chan []byte),
 	}

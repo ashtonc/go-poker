@@ -74,3 +74,41 @@ func (hub *Hub) broadcast(message interface{}, ignore *Client) {
 		}
 	}
 }
+
+
+func (hub *Hub) onConnect(client *Client) {
+  log.Println("client connected: ", client.socket.RemoteAddr())
+  // Make list of all users
+  users := []message.User{}
+  for _, c := range hub.clients {
+    users = append(users, message.User{ID: c.id, Name: c.Name})
+  }
+  // Notify user joined
+  hub.send(message.NewWatcher(client.name, users), client)
+  hub.broadcast(message.NewWatcherJoins(client.id, client.name), client)
+}
+
+
+func (hub *Hub) onJoin (client *Client){
+	log.Println("client joins game:" client.socket.RemoteAddr())
+
+}
+
+func (hub *Hub) onDisconnect(client *Client) {
+  log.Println("client disconnected: ", client.socket.RemoteAddr())
+  client.close()
+  // Find index of client
+  i := -1
+  for j, c := range hub.clients {
+    if c.id == client.id {
+      i = j
+      break
+    }
+  }
+  // Delete client from list
+  copy(hub.clients[i:], hub.clients[i+1:])
+  hub.clients[len(hub.clients)-1] = nil
+  hub.clients = hub.clients[:len(hub.clients)-1]
+  // Notify user left
+  hub.broadcast(message.NewLeftTable(client.id), nil)
+}

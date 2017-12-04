@@ -40,10 +40,10 @@ func (g *Game) Join(name string, buyin int, seatNumber int)error{
 	if g.Seats[seatNumber].Occupied == true {
 		return errors.New("Seat is already Occupied")
 	}
-	if buyin > g.Ante*100{
+	if buyin > g.Stakes.Ante*100{
 		return errors.New("Buyin exceeds the limit for this table")
 	}
-	if buyin < g.Ante+50{
+	if buyin < g.Stales.Ante*50{
 		return errors.New("Buyin is too low for this table")
 	}
 	player := new(Player)

@@ -2,10 +2,25 @@ package messages
 
 const (
 	// KindConnected is sent when a player connects
-	KindConnected = iota + 1
+	KindWatching = iota + 1
 
 	// KindPlayerJoined is sent when a player joins
-	KindPlayerJoined
+	KindWatcherJoins
+
+	//KindLeftTable when player leave table
+	KindLeftTable
+
+	KindSitting
+
+	KindSitterJoins
+
+	KindLeftSeat
+
+	KindPlaying
+
+	KindPlayerJoins
+
+	KindLeftGame
 
 	// KindPlayerQuit is sent when a player leaves
 	KindPlayerQuit
