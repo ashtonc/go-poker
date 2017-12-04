@@ -10,11 +10,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8000
 
   config.vm.synced_folder "./", "/go/src/poker"
+  config.vm.synced_folder "./static/", "/vagrant/static"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
   cpus = "1"
   memory = "512" # MB
+
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--cpus", cpus, "--memory", memory]
     vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"] # speed up boot https://bugs.launchpad.net/cloud-images/+bug/1627844

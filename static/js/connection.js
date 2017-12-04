@@ -1,10 +1,13 @@
+$(document).ready(function(){
+	WebSocketTest();
+});
+
 function WebSocketTest() {
 	if ("WebSocket" in window) {
 		alert("WebSocket is supported by your Browser!");
 		// Let us open a web socket
-		var ws = new WebSocket("ws://localhost:8000/poker/game/limit-10/ws");
-		// don't hardcode this
-		// WebSocket('ws://' + location.hostname + ':8000');
+		var ws = new WebSocket("ws://localhost:8000/poker/ws");
+		// don't hardcode this: WebSocket('ws://' + location.hostname + ':8000' + '/poker/ws'); or something
 
 		ws.onopen = function () {
 			alert("WS is opened...");

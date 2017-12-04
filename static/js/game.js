@@ -1,3 +1,5 @@
+/*
+
 $(document).ready(function(){
 	var numberOfPlayers = 6;
 	$('.player-1').find('.image').addClass('yourTurn');
@@ -91,3 +93,5 @@ $(document).ready(function(){
 		e.preventDefault();
 	});
 });
+
+*/

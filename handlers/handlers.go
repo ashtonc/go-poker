@@ -235,10 +235,11 @@ func Game(env *models.Env) http.Handler {
 	})
 }
 
-func GameConnection(env *models.Env) http.Handler {
+func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		conn, err := env.Upgrader.Upgrade(w, r, nil)
 		if err != nil {
+			log.Print("Couldn't upgrade.")
 			log.Print(err)
 			return
 		}
@@ -246,10 +247,12 @@ func GameConnection(env *models.Env) http.Handler {
 		msg := "Connected!"
 		err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		if err != nil {
+			log.Print("Couldn't write message.")
 			log.Print(err)
 		} else {
 			_, _, err := conn.ReadMessage()
 			if err != nil {
+				log.Print("Couldn't read message.")
 				log.Print(err)
 			} else {
 				log.Print("Reply recieved.")
