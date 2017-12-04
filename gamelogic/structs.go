@@ -38,7 +38,7 @@ type Game struct {
 	Stakes         GameStakes `json: "stakes"`
 	Phase          int        `json: "phase"`
 	Pot            int        `json: "pot"`
-	Deck           []Card     `josn: "deck"`
+	Deck           []Card     `json: "deck"`
 	Seats          [6]Seat    `json: "seats"`
 	Players        []Player   `json: "players"`
 	Sitters        []Player   `json: "sitters"`
