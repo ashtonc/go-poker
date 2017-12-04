@@ -31,6 +31,9 @@ func main() {
 	var upgrader = websocket.Upgrader{
 		ReadBufferSize:  2048,
 		WriteBufferSize: 2048,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
 	}
 
 	// Populate our environment

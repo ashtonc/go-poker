@@ -1,3 +1,7 @@
+$(document).ready(function(){
+	WebSocketTest();
+});
+
 function WebSocketTest() {
 	if ("WebSocket" in window) {
 		alert("WebSocket is supported by your Browser!");
