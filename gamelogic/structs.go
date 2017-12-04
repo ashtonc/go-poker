@@ -90,9 +90,9 @@ type GameStakes struct {
 }
 
 type Seat struct {
-	Number   int    `json: "number"`
-	Occupied bool   `json: "occupied"`
-	Occupier string `json: "occupier"`
+	Number   int     `json: "number"`
+	Occupied bool    `json: "occupied"`
+	Occupier *Player `json: "occupier"`
 }
 
 type Player struct { /* A more complete player struct will likely be someplace else in repo */

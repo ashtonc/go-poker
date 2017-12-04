@@ -8,7 +8,6 @@
 
 Game:
 	Phase          int        `json: "phase"`
-	Seats          [6]Seat    `json: "seats"`
 	Players        []Player   `json: "players"`
 	Sitters        []Player   `json: "sitters"`
 	Current_Player string     `json: "current_player"`
@@ -21,9 +20,7 @@ Game:
 	Timer          time.Timer `json: "timer"`
 
 Seat:
-	Number   int    `json: "number"`
-	Occupied bool   `json: "occupied"`
-	Occupier string `json: "occupier"`
+	Occupier *Player `json: "occupier"`
 
 Player:
 	Name      string  `json: "name"`
@@ -52,9 +49,13 @@ Card:
 			{{ range .Seats -}}
 			<div class="seat player-{{ .Number }} {{ if .Occupied}}occupied{{ else }}empty{{ end }}">
 				<div class="player-info">
-					<div class="image"></div>
+					{{ if .Occupier -}}
+					<div class="image"><img src=""></div>
 					<div class="name"></div>
 					<div class="stack"></div>
+					{{- else -}}
+					<div class="image"></div>
+					{{- end }}
 				</div>
 				<div class="hand">
 					<div class="card card-1 none"></div>
@@ -65,7 +66,7 @@ Card:
 				</div>
 				<div class="timer"></div>
 			</div>
-			{{ end }}
+			{{ end -}}
 		</div>
 		{{- end }}
 		{{- end }}
