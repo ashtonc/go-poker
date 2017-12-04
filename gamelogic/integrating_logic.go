@@ -7,15 +7,15 @@ import(
 	_"bufio"
   	_"os"  
   	"errors"
-  	"time"
+ // 	"time"
   	"fmt"
   	"math/rand"
 )
 
-func (g *Game)SetTimer(amount int){
+/*func (g *Game)SetTimer(amount int){
 	timer := time.NewTimer(time.Second * 10)
  	g.Timer = *timer
-}
+} */
 
 
 func (g *Game)GetPlayerIndex(name string)(int, error){
@@ -43,7 +43,7 @@ func (g *Game) Join(name string, buyin int, seatNumber int)error{
 	if buyin > g.Stakes.Ante*100{
 		return errors.New("Buyin exceeds the limit for this table")
 	}
-	if buyin < g.Stales.Ante*50{
+	if buyin < g.Stakes.Ante*50{
 		return errors.New("Buyin is too low for this table")
 	}
 	player := new(Player)
@@ -138,7 +138,7 @@ func (g *Game)NewRound(players []Player, ante int, minBet int, maxBet int, dealt
 	 		}
 	 		d++
 	 	}
-	 g.SetTimer(11)
+	// g.SetTimer(11)
 	 return nil
 	}
 
@@ -202,8 +202,8 @@ func (g *Game)Call(p_name string)error{
 		if g.Bet_Counter == 0{
 			g.Next_Phase()
 		}
-		timer := time.NewTimer(time.Second * 10)
- 		g.Timer = *timer
+		//timer := time.NewTimer(time.Second * 10)
+ 		//g.Timer = *timer
 		return nil
 	}else{
 		return error
@@ -223,7 +223,7 @@ func (g *Game)Next_Player()string{
 			}
 		}
 	}
-	g.SetTimer(10)
+//	g.SetTimer(10)
 	}	
 	return "-1"
 }
