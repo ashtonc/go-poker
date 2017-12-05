@@ -1,10 +1,8 @@
 package database
 
 import (
-	// "database/sql"
 	"log"
 
-	// Wraps database/sql for our postgres database
 	_ "github.com/lib/pq"
 
 	"poker/models"
@@ -13,7 +11,7 @@ import (
 func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	var page models.UserPage
 
-	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username=$1;`
+	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username = $1;`
 
 	row := env.Database.QueryRow(sqlStatement, userName)
 	err := row.Scan(&page.Name, &page.Email, &page.Description, &page.PictureSlug)
@@ -45,6 +43,17 @@ func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
 	}
 
 	return gameMap, err
+}
+
+func GetSession(env *models.Env, sessionid string) (*models.Session, error) {
+	var session models.Session
+
+	sqlStatement := `SELECT account.username, user_session.expiry_time FROM account, user_session WHERE account.id = user_session.user_id AND user_session.token = $1;`
+
+	row := env.Database.QueryRow(sqlStatement, sessionid)
+	err := row.Scan(&session.Username, &session.Expiry)
+
+	return &session, err
 }
 
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
@@ -93,7 +102,7 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 	var userAccount models.UserAccount
 
-	sqlStatement := `SELECT username, name, email, password FROM account WHERE username=$1`
+	sqlStatement := `SELECT username, name, email, password FROM account WHERE username = $1`
 
 	rows, err := env.Database.Query(sqlStatement, inputUsername)
 	if err != nil {
