@@ -50,6 +50,7 @@ type Game struct {
 	Min_bet        int        `json: "min_bet"`
 	Dealer_Token   int        `json: "dealer_token"`
 	Timer          time.Timer `json: "timer"`
+	Winner		   *Player 	   `json: "winner"`
 }
 
 /* --> do this with a set of constants **
@@ -135,9 +136,7 @@ func (p *Player) stay_in(difference int) bool {
 	} else if input == "Y" || input == "y" {
 		stay = true
 	}
-
 	/* show_fun() letting player know that he or she is out of the game */
-
 	/* stay = show_func(difference) player p gets a pop up asking if he or she wishes to keep up with
 	the latest bet in order to remain in the game */
 	if stay == false {
