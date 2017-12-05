@@ -18,7 +18,6 @@ CREATE TABLE account (
 	password VARCHAR(256),
 	picture_slug VARCHAR(128),
 	description TEXT,
-	password_salt VARCHAR(256),
 	password_hash VARCHAR(256)
 );
 

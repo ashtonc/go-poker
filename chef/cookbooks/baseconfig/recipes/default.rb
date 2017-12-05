@@ -46,9 +46,9 @@ execute 'get-gjson' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/tidwall/gjson'
 end
-execute 'get-scrypt' do
+execute 'get-bcrypt' do
   environment 'GOPATH' => '/go'
-  command 'go get -u golang.org/x/crypto/scrypt'
+  command 'go get -u golang.org/x/crypto/bcrypt'
 end
 
 # Postgres setup.
