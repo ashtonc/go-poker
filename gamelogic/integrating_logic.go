@@ -9,6 +9,7 @@ import(
  // 	"time"
   	"fmt"
   	"math/rand"
+  	"log"
 )
 
 /*func (g *Game)SetTimer(amount int){
@@ -35,7 +36,17 @@ func (g *Game) GetSitterIndex(name string) (int, error) {
 	return 0, errors.New("There is no sitter of that name")
 }
 
-func (g *Game) Join(name string, buyin int, seatNumber int) error {
+func (g *Game)Get_current_player_name()string{
+	current, err := g.GetPlayerIndex(g.Current_Player)
+	if err != nil{
+		log.Fatal(err)
+	}
+	player := g.Players[current].Name
+	return player
+}
+
+
+func (g *Game)Join(name string, buyin int, seatNumber int) error {
 	if g.Seats[seatNumber].Occupied == true {
 		return errors.New("Seat is already Occupied")
 	}
@@ -52,7 +63,7 @@ func (g *Game) Join(name string, buyin int, seatNumber int) error {
 	player.Discarded = false
 	player.Folded = false
 	player.Called = false
-	g.Sitters = append(g.Players, *player)
+	g.Sitters = append(g.Sitters, *player)
 	g.Seats[seatNumber].Occupied = true
 	g.Seats[seatNumber].Occupier = player
 	return nil
@@ -104,25 +115,26 @@ func draw(d []Card) Card {
 	return crd
 }
 
-func (g *Game) NewRound(ante int, minBet int, maxBet int, dealterToken int) error {
+func (g *Game) NewRound(dealterToken int) error {
 	for _, p := range g.Sitters {
 		g.Players = append(g.Players, p)
+		fmt.Printf("%s added to g.Players \n", p.Name)
 	}
+	fmt.Printf(" Number of players: %d \n", len(g.Players))
 	if len(g.Players) < 2 {
 		return errors.New("A round of Poker requires at least two players")
 	}
-	g.Phase = 1
+	g.Phase = 0
 	g.Bet_Counter = -1
-	g.Stakes.MaxBet = maxBet
-	g.Stakes.MinBet = minBet
+	g.Current_Bet = 0
 	g.Dealer_Token = dealterToken + 1
 	g.Current_Player = g.Players[dealterToken].Name
 	cardTypes, suites := Init_card_cat()
 	g.Pot = 0
 	// ant played by each player
 	for i := 0; i < len(g.Players); i++ {
-		g.Players[i].Money -= ante
-		g.Pot += ante
+		g.Players[i].Money -= g.Ante
+		g.Pot += g.Ante
 	}
 	//Create deck, shuffle cards, deal cards to players
 	g.Deck = createDeck(cardTypes, suites)
@@ -133,6 +145,7 @@ func (g *Game) NewRound(ante int, minBet int, maxBet int, dealterToken int) erro
 	 			card := draw(g.Deck)
 	 			g.Deck = g.Deck[1:]
 	 			g.Players[i].Hand = append(g.Players[i].Hand, card)
+	 			//fmt.Printf(" Player %d is %s \n", i, g.Players[i].Name)
 	 			fmt.Printf(" %s is delt a %s of %s \n ", g.Players[i].Name, card.Face, card.Suit)
 	 		}
 	 		d++
@@ -143,6 +156,9 @@ func (g *Game) NewRound(ante int, minBet int, maxBet int, dealterToken int) erro
 // Eachetting round lasts until each player has either: (a) folded (b) called
 func (g *Game) Bet(p_name string, bet int) error {
 	pindex, error := g.GetPlayerIndex(p_name)
+	if g.Phase != 0 && g.Phase != 2 && g.Phase != 3{
+		return errors.New("Game is not in a betting phase!")
+	} 
 	if error == nil {
 		if g.Players[pindex].Folded == true {
 			return errors.New("Player has already folded and so cannot bet")
@@ -156,12 +172,13 @@ func (g *Game) Bet(p_name string, bet int) error {
 		if bet < g.Stakes.MinBet {
 			return errors.New("Bet is below the minimum bet")
 		}
-		if bet <= g.Current_Bet {
-			return errors.New("New bet must be geater than the current bet")
-		}
-		g.Players[pindex].Money -= bet
-		g.Pot += bet
-		g.Current_Bet = bet
+		balance := g.Current_Bet - g.Players[pindex].Bet
+		fmt.Printf("%s owes a balance of %d and raises by %d \n", g.Players[pindex].Name, balance, bet)
+		g.Players[pindex].Money -= (bet + balance)
+		g.Pot += bet + (balance)
+		fmt.Printf("The pot is currently %d \n", g.Pot)
+		g.Current_Bet += bet
+		g.Players[pindex].Bet = g.Current_Bet
 		g.ResetBetCounter()
 		g.Current_Player = g.Next_Player()
 		//g.check_if_betting_ends()
@@ -181,28 +198,56 @@ func (g *Game) ResetBetCounter() {
 }
 
 func (g *Game) Call(p_name string) error {
-	pindex, error := g.GetPlayerIndex(p_name)
-	if error == nil {
 
+	if g.Phase != 0 && g.Phase != 2 && g.Phase != 3{
+		return errors.New("Game is not in a betting phase!")
+	} 
+	pindex, err := g.GetPlayerIndex(p_name)
+	if err == nil {
 		if g.Players[pindex].Folded == true {
 			return errors.New("Player has already folded and cannot call.")
 		}
 		if g.Current_Bet > g.Players[pindex].Money {
 			return errors.New("bet exceeds player's money")
 		}
-		g.Players[pindex].Money -= g.Current_Bet
+		balance := g.Current_Bet - g.Players[pindex].Bet
+		g.Players[pindex].Money -= balance
+		fmt.Printf("Current game bet: %d, current bet of %s: %d, pays %d \n", 
+			g.Current_Bet, g.Players[pindex].Name, g.Players[pindex].Bet, balance)
+		g.Players[pindex].Bet = g.Current_Bet
 		g.Players[pindex].Called = true
-		g.Pot += g.Current_Bet
+		g.Pot += balance
 		g.Current_Player = g.Next_Player()
 		g.Bet_Counter -= 1
 		if g.Bet_Counter == 0 {
+			err := g.Check_if_end_of_bet_correct()
+			if err != nil{
+				return err
+			}
+			g.reset_bets()
 			g.Next_Phase()
+			fmt.Printf("Phase has been incremented to %d because the bet counter is zero \n", g.Phase)
 		}
-
-		return nil
 	} else {
-		return error
+		return err
 	}
+	return nil
+}
+
+func (g *Game)Check_if_end_of_bet_correct() error{
+	for _, p := range g.Players{
+		if p.Bet != g.Current_Bet{
+			return errors.New("Not all players made same bet at end of betting round!")
+		}
+	}
+	return nil
+}
+
+func (g *Game)reset_bets(){
+	for i:= range g.Players{
+		g.Players[i].Bet = 0
+	}
+	g.Current_Bet = 0
 }
 
 func (g *Game) Next_Player() string {
@@ -244,7 +289,13 @@ func (g *Game) Fold(player_name string)error{
 			g.Bet_Counter -= 1
 		}
 		if g.Bet_Counter == 0 {
+			err := g.Check_if_end_of_bet_correct()
+			if err != nil{
+				return err
+			}
 			g.Next_Phase()
+			g.reset_bets()
+			fmt.Printf("The game phase has been incremented to %d because the bet countrs is 0 \n")
 		}
 	}
 	return nil
@@ -265,6 +316,9 @@ func (g *Game)post_bet_winner_check() (error, *Player){
 }
 
 func (g *Game) Check(player_name string) error {
+	if g.Phase != 0 && g.Phase != 2 && g.Phase != 3{
+		return errors.New("Game is not in a betting phase!")
+	} 
 	pindex, err := g.GetPlayerIndex(player_name)
 	if err == nil {
 		if g.Current_Bet > g.Players[pindex].Bet {
@@ -274,7 +328,14 @@ func (g *Game) Check(player_name string) error {
 			g.Bet_Counter -= 1
 		}
 		if g.Bet_Counter == 0 {
+			err := g.Check_if_end_of_bet_correct()
+			if err != nil{
+				return err
+			}
 			g.Next_Phase()
+			g.reset_bets()
+			fmt.Printf("The game phase has been incremented to %d because the bet counter went to 0\n", g.Phase)
+
 		}
 	}
 	return nil
@@ -321,9 +382,10 @@ func (g *Game) Discard(playerID string, cardIndexes []int) error {
 			for i := range g.Players {
 				g.Players[i].Discarded = false
 				g.Next_Phase()
+				fmt.Printf("The game phase has been incremented to %d because all players have discarded \n", g.Phase)
 				return nil
 			}
-			g.Phase += 1
+			//g.Phase += 1
 			g.Current_Player = g.Players[g.Dealer_Token].Name
 			return nil
 		}
