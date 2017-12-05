@@ -15,19 +15,6 @@ type PageData struct {
 	Leaderboard *Leaderboard
 }
 
-type Session struct {
-	LoggedIn        bool
-	Uuid			string
-	Username        string
-	Name            string
-	PageHome        bool
-	PageUser        bool
-	PageGame        bool
-	PageLeaderboard bool
-	PageLogin       bool
-	PageRegister    bool
-}
-
 type UserPage struct {
 	MatchesSession bool
 	Username       string

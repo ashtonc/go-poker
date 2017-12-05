@@ -122,14 +122,6 @@ func Register(env *models.Env) http.Handler {
 				template := env.Templates["Register"]
 				template.Execute(w, pagedata)
 			} else if r.Method == "POST" {
-				// Populate the data needed for the page (these should nearly all be external functions)
-				pagedata := models.PageData{
-					Session: &models.Session{
-						LoggedIn: false,
-						PageUser: true,
-					},
-				}
-
 				template := env.Templates["Register"]
 				isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString // only accounts with letters are permitted
 
