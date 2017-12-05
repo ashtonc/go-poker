@@ -11,26 +11,17 @@ import (
 	"time"
 )
 
-func Init_card_cat() ([]string, []string) {
-	cardTypes := []string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"}
-	suites := []string{"hearts", "spades", "clubs", "diamonds"}
-	return cardTypes, suites
-}
-
-func getIndex(array []string, item string) int {
-	for i := 0; i < len(array); i++ {
-		if array[i] == item {
-			return i
-		}
-	}
-	return -1
-}
-
-func Rand_init() {
-	rand.Seed(time.Now().UTC().UnixNano())
-}
-
 /*classes:   */
+
+/* --> do this with a set of constants **
+Phases:
+	0 -> betting 1
+	1 -> draw 1
+	2 -> betting 2
+	3 -> draw 2
+	4 -> betting 2
+	5 -> showdown
+*/
 
 type Game struct {
 	Name           string     `json: "name"`
@@ -53,15 +44,57 @@ type Game struct {
 	Winner		   *Player 	   `json: "winner"`
 }
 
-/* --> do this with a set of constants **
-Phases:
-	0 -> betting 1
-	1 -> draw 1
-	2 -> betting 2
-	3 -> draw 2
-	4 -> betting 2
-	5 -> showdown
-*/
+type GameStakes struct {
+	Ante   int `json: "ante"`
+	MaxBet int `json: "maxbet"`
+	MinBet int `json: "minbet"`
+}
+
+type Seat struct {
+	Number   int     `json: "number"`
+	Occupied bool    `json: "occupied"`
+	Occupier *Player `json: "occupier"`
+}
+
+type Player struct { /* A more complete player struct will likely be someplace else in repo */
+	Username    string  `json: "username"`
+	Name        string  `json: "name"`
+	PictureSlug string  `json: "pictureslug"`
+	Money       int     `json: "money"`
+	Hand        []Card  `json: "hand"`
+	Folded      bool    `json: "folded"`
+	Called      bool    `json: "called"`
+	Discarded   bool    `json: "discarded"`
+	Bet         int     `json: "bet"`
+	Hand_Rank   int     `json: "hand_rank"`
+	Card_Hist   [14]int `json: "card_hist"`
+	Seat        int     `json: "seat"`
+}
+
+type Card struct {
+	Face string `json: "face"`
+	Suit string `json: "suit"`
+	Rank int    `json: "rank"`
+}
+
+func Init_card_cat() ([]string, []string) {
+	cardTypes := []string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"}
+	suites := []string{"hearts", "spades", "clubs", "diamonds"}
+	return cardTypes, suites
+}
+
+func getIndex(array []string, item string) int {
+	for i := 0; i < len(array); i++ {
+		if array[i] == item {
+			return i
+		}
+	}
+	return -1
+}
+
+func Rand_init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
 
 func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	game := new(Game)
@@ -82,31 +115,6 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	}
 
 	return game, nil
-}
-
-type GameStakes struct {
-	Ante   int `json: "ante"`
-	MaxBet int `json: "maxbet"`
-	MinBet int `json: "minbet"`
-}
-
-type Seat struct {
-	Number   int     `json: "number"`
-	Occupied bool    `json: "occupied"`
-	Occupier *Player `json: "occupier"`
-}
-
-type Player struct { /* A more complete player struct will likely be someplace else in repo */
-	Name      string  `json: "name"`
-	Money     int     `json: "money"`
-	Hand      []Card  `json: "hand"`
-	Folded    bool    `json: "folded"`
-	Called    bool    `json: "called"`
-	Discarded bool    `json: "discarded"`
-	Bet       int     `json: "bet"`
-	Hand_Rank int     `json: "hand_rank"`
-	Card_Hist [14]int `json: "card_hist"`
-	Seat      int     `json: "seat"`
 }
 
 func (p *Player) pay_bet(amount int, pot int) int {
@@ -225,12 +233,6 @@ func (p *Player) second_best_pair() int {
 //	index := getIndex(p.Hand, card)
 //	p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
 //}
-
-type Card struct {
-	Face string `json: "face"`
-	Suit string `json: "suit"`
-	Rank int    `json: "rank"`
-}
 
 func newCard(face string, suit string, cardTypes []string) *Card {
 	crd := new(Card)
