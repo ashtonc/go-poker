@@ -26,4 +26,5 @@ type UserAccount struct {
 	Name     string
 	Email    string
 	Password string
+	//password here now refers to the password hash
 }

@@ -17,6 +17,7 @@ type PageData struct {
 
 type Session struct {
 	LoggedIn        bool
+	Uuid			string
 	Username        string
 	Name            string
 	PageHome        bool
