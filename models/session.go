@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"html/template"
+	"time"
 
 	"github.com/gorilla/websocket"
 	_ "github.com/lib/pq"
@@ -27,4 +28,16 @@ type UserAccount struct {
 	Email    string
 	Password string
 	//password here now refers to the password hash
+}
+
+type Session struct {
+	Username        string
+	Expiry          time.Time
+	LoggedIn        bool
+	PageHome        bool
+	PageUser        bool
+	PageGame        bool
+	PageLeaderboard bool
+	PageLogin       bool
+	PageRegister    bool
 }

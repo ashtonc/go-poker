@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	// "log"   -- use this instead of fmt
+	// "log"   --> use this instead of fmt
 	"net/http"
 	"regexp"
 
@@ -14,15 +14,12 @@ import (
 
 func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		template := env.Templates["Login"]
 
-		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: &models.Session{
-				LoggedIn:  false,
-				PageLogin: true,
-			},
-		}
+		// Populate the data needed for the page
+		pagedata := getPageData(env, "sessionid", "PageLogin")
+		pagedata.Session.LoggedIn = false
+
+		template := env.Templates["Login"]
 
 		fmt.Printf("User has visited the Login page.\n")
 		// the user should only be able to login if they are not logged in
@@ -108,6 +105,11 @@ func Logout(env *models.Env) http.Handler {
 func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("User visited Register page.\n")
+
+		// Populate the data needed for the page
+		pagedata := getPageData(env, "sessionid", "PageUser")
+		pagedata.Session.LoggedIn = false
+
 		// the user should only be able to register if they are not logged in
 		if _, err := r.Cookie("session"); err == nil {
 			fmt.Printf("The user is already logged in, so this page should not be available. Redirecting to play page.\n")
@@ -115,13 +117,6 @@ func Register(env *models.Env) http.Handler {
 		} else {
 
 			if r.Method == "GET" {
-				// Populate the data needed for the page (these should nearly all be external functions)
-				pagedata := models.PageData{
-					Session: &models.Session{
-						LoggedIn: false,
-						PageUser: true,
-					},
-				}
 
 				// Execute the template with our page data
 				template := env.Templates["Register"]

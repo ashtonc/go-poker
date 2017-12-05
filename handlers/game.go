@@ -27,7 +27,7 @@ func Game(env *models.Env) http.Handler {
 		action := vars["action"]
 
 		pagedata := getPageData(env, "sessionid", "Game")
-		template := env.Templates["WatchGame"] // hack
+		template := env.Templates["WatchGame"]
 
 		gameListing := env.Games[gameslug]
 		if gameListing == nil {

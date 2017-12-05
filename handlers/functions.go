@@ -18,7 +18,7 @@ var cookieHandler = securecookie.New(
 
 func getPageData(env *models.Env, sessionid string, page string) models.PageData {
 	var pagedata models.PageData
-	session := sessions.GetSession(sessionid)
+	session := sessions.GetSessionWithInfo(env, sessionid)
 
 	switch page {
 	case "Home":
