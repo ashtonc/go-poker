@@ -1,16 +1,18 @@
 # Group 15 - Five Card Draw
 
-This is the repository for the term project of group 15. It will be an implemetation of poker (specifically five card draw).
+This is the repository for the term project of group 15. It will be an implementation of poker (specifically five-card-draw).
 
-To view our site, simply `vagrant up` and visit `localhost:8000/poker/`.
+To view our site, simply clone the respository, `vagrant up`, and visit `localhost:8000/poker/`.
+
+The view the server log, `vagrant ssh` into the server, `sudo su` to switch to root, and `tmux a` to attach the server console.
 
 ## To do
 
 * Site
-	* Add games to the database
-	* View games from the lobby (fix it) - assigned a seat?
+	* [**DONE**] Add games to the database
+	* [**DONE**] View games from the lobby (fix it) - assigned a seat?
 * Websockets
-	* Client can establish a connection to the server (websockets, js + go)
+	* [**DONE**] Client can establish a connection to the server (websockets, js + go)
 	* Client can send empty messages of each kind (js)
 	* Server can recieve these messages (go)
 	* Server can send game states (go) to all clients
@@ -20,6 +22,7 @@ To view our site, simply `vagrant up` and visit `localhost:8000/poker/`.
 * Games
 	* Updated database after each round
 	* Make sure the game methods work?
+	* Design it properly
 * Fixes
 	* Store password hashes instead of plain text (wtf)
 	* Maybe leaderboard (less important)
@@ -76,9 +79,3 @@ Repository information:
 * Database: https://github.com/lib/pq
 * Session management: https://github.com/gorilla/sessions (not yet)
 * Websockets: https://github.com/gorilla/websocket
-
-## Server Log
-
-* `vagrant ssh`
-* `sudo su`
-* `tmux attach -t server` (or just `tmux a`)

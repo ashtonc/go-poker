@@ -38,7 +38,7 @@ type Game struct {
 	Stakes         GameStakes `json: "stakes"`
 	Phase          int        `json: "phase"`
 	Pot            int        `json: "pot"`
-	Deck           []Card     `josn: "deck"`
+	Deck           []Card     `json: "deck"`
 	Seats          [6]Seat    `json: "seats"`
 	Players        []Player   `json: "players"`
 	Sitters        []Player   `json: "sitters"`
@@ -46,13 +46,13 @@ type Game struct {
 	Current_Bet    int        `json: "current_bet"`
 	Bet_Counter    int        `json: "bet_counter"`
 	Ante           int        `json: "ante"`
-	Max_bet        int        `json': "max_bet"`
+	Max_bet        int        `json: "max_bet"`
 	Min_bet        int        `json: "min_bet"`
 	Dealer_Token   int        `json: "dealer_token"`
 	Timer          time.Timer `json: "timer"`
 }
 
-/*
+/* --> do this with a set of constants **
 Phases:
 	0 -> betting 1
 	1 -> draw 1
@@ -66,18 +66,21 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	game := new(Game)
 	if game == nil {
 		return nil, errors.New("Game failed to initiate.")
-	} else {
-		game.Stakes.Ante = ante
-		game.Stakes.MinBet = min_bet
-		game.Stakes.MaxBet = max_bet
-		game.Dealer_Token = -1
-		for i, s := range game.Seats {
-
-			s.Number = i + 1
-			s.Occupied = false
-		}
-		return nil, nil
 	}
+
+	game.Stakes.Ante = ante
+	game.Stakes.MinBet = min_bet
+	game.Stakes.MaxBet = max_bet
+	game.Dealer_Token = -1
+
+	for i := 0; i < 6; i++ {
+		var seat Seat
+		seat.Number = i + 1
+		seat.Occupied = false
+		game.Seats[i] = seat
+	}
+
+	return game, nil
 }
 
 type GameStakes struct {
@@ -87,9 +90,9 @@ type GameStakes struct {
 }
 
 type Seat struct {
-	Number   int    `json: "number"`
-	Occupied bool   `json: "occupied"`
-	Occupier string `json: "occupier"`
+	Number   int     `json: "number"`
+	Occupied bool    `json: "occupied"`
+	Occupier *Player `json: "occupier"`
 }
 
 type Player struct { /* A more complete player struct will likely be someplace else in repo */

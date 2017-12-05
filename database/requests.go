@@ -34,7 +34,7 @@ func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
 
 	for rows.Next() {
 		var gameListing models.GameListing
-		gameListing.Players = 0
+		gameListing.PlayerCount = 0
 
 		err = rows.Scan(&gameListing.Name, &gameListing.Slug, &gameListing.Ante, &gameListing.MinBet, &gameListing.MaxBet, &gameListing.Status)
 		if err != nil {

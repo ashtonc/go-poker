@@ -27,6 +27,26 @@ type Env struct {
 	//env.Games["slug"].Game gete you a game 
 }
 
+type UserAccount struct {
+	Username string
+	Name     string
+	Email    string
+	Password string
+}
+
+/*
+ *    Template models
+ */
+
+type PageData struct {
+	SiteRoot    string
+	Session     *Session
+	UserPage    *UserPage
+	GameListing *GameListing
+	Lobby       *Lobby
+	Leaderboard *Leaderboard
+}
+
 type Session struct {
 	LoggedIn        bool
 	Username        string
@@ -48,41 +68,20 @@ type UserPage struct {
 	PictureSlug    string
 }
 
-type UserAccount struct {
-	Username string
-	Name     string
-	Email    string
-	Password string
-}
-
-/*
- *    Template models
- */
-
-type PageData struct {
-	SiteRoot    string
-	Session     Session
-	UserPage    UserPage
-	Game        gamelogic.Game
-	Lobby       Lobby
-	Leaderboard Leaderboard
-}
-
 type Lobby struct {
 	Empty bool
 	Games []*GameListing
 }
 
 type GameListing struct {
-	Name    string
-	Slug    string
-	Ante    int
-	MinBet  int
-	MaxBet  int
-	Status  string
-	Players int
-	Private bool // Unused
-	Game    *gamelogic.Game
+	Name        string
+	Slug        string
+	Status      string
+	Ante        int
+	MinBet      int
+	MaxBet      int
+	PlayerCount int
+	Game        *gamelogic.Game
 }
 
 type LeaderboardEntry struct {

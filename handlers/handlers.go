@@ -38,7 +38,7 @@ func Login(env *models.Env) http.Handler {
 
 		// Populate the data needed for the page (these should nearly all be external functions)
 		pagedata := models.PageData{
-			Session: models.Session{
+			Session: &models.Session{
 				LoggedIn:  false,
 				PageLogin: true,
 			},
@@ -97,7 +97,7 @@ func Register(env *models.Env) http.Handler {
 		if r.Method == "GET" {
 			// Populate the data needed for the page (these should nearly all be external functions)
 			pagedata := models.PageData{
-				Session: models.Session{
+				Session: &models.Session{
 					LoggedIn: false,
 					PageUser: true,
 				},
@@ -109,7 +109,7 @@ func Register(env *models.Env) http.Handler {
 		} else if r.Method == "POST" {
 
 			pagedata := models.PageData{
-				Session: models.Session{
+				Session: &models.Session{
 					LoggedIn: false,
 					PageUser: true,
 				},
@@ -191,7 +191,7 @@ func User(env *models.Env) http.Handler {
 
 			log.Print("Displaying player " + username + ".")
 		}
-		pagedata.UserPage = *userPage
+		pagedata.UserPage = userPage
 
 		// Execute the template with our page data
 		template.Execute(w, pagedata)
@@ -225,6 +225,8 @@ func Game(env *models.Env) http.Handler {
 			return
 		}
 
+		pagedata.GameListing = gameListing
+
 		// Choose our template based on the action
 		if action == "play" {
 			template = env.Templates["PlayGame"]
@@ -245,6 +247,7 @@ func WebsocketConnection(env *models.Env) http.Handler {
 		}
 
 		msg := "Connected!"
+
 		err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		if err != nil {
 			log.Print("Couldn't write message.")
@@ -282,7 +285,7 @@ func ViewLobby(env *models.Env) http.Handler {
 
 		// Populate the data needed for the page
 		pagedata := getPageData(env, "sessionid", "ViewLobby")
-		pagedata.Lobby = lobby
+		pagedata.Lobby = &lobby
 
 		// Execute the template with our page data
 		template := env.Templates["ViewLobby"]
@@ -300,7 +303,7 @@ func Leaderboard(env *models.Env) http.Handler {
 
 		// Populate the data needed for the page
 		pagedata := getPageData(env, "sessionid", "Leaderboard")
-		pagedata.Leaderboard = *leaderboard
+		pagedata.Leaderboard = leaderboard
 
 		// Execute the template with our page data
 		template := env.Templates["Leaderboard"]

@@ -6,7 +6,7 @@ import (
 	"poker/gamelogic"
 )
 
-// This code 'borrowed' from https://outcrawl.com/realtime-collaborative-drawing-go/
+// This code adapted from https://outcrawl.com/realtime-collaborative-drawing-go/
 
 type Client struct {
 	id  string
@@ -24,7 +24,7 @@ func newClient(hub *Hub, socket *websocket.Conn, game *Game) *Client {
 	return &Client{
 		id:       uuid.NewV4().String(),
 		hub:      hub,
-		game:	  game,
+		game:     game,
 		socket:   socket,
 		outbound: make(chan []byte),
 	}

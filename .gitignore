@@ -11,3 +11,5 @@ log/*
 *.exe
 
 *.swp
+
+.vscode/
