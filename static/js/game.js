@@ -1,6 +1,6 @@
-/*
-
 $(document).ready(function(){
+	
+	/*
 	var numberOfPlayers = 6;
 	$('.player-1').find('.image').addClass('yourTurn');
 	$('.player-1').find('.timer').addClass('startTimer');
@@ -67,10 +67,6 @@ $(document).ready(function(){
 			$('.player-1').find('.timer').addClass('startTimer');
 		}
 	}
-	$('#game-menu').on('click', '#check', function(){
-		$('.startTimer').stop(true, true);
-		nextTurn();
-	});
 	$('#game-menu').on('click', '#call', function(){
 		$('.startTimer').stop(true, true);
 		nextTurn();
@@ -89,9 +85,20 @@ $(document).ready(function(){
 		$('.yourTurn').parent().find('.stack').text(amount);
 		nextTurn();
 	});
+	
+	*/
+	function updatePot(amount){
+		$('#game').find('#pot').text(amount);
+	}
+	$('#game-menu').on('click', '#check', function(){
+		/*
+		$('.startTimer').stop(true, true);
+		nextTurn();
+		*/
+		alert("Hello!");
+		updatePot(100000);
+	});
 	$('form').submit(function(e){
 		e.preventDefault();
 	});
 });
-
-*/
