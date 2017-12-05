@@ -1,10 +1,10 @@
-INSERT INTO account (id, username, name, email, password, picture_slug, description, password_salt, password_hash) VALUES
-	(1, 'adam', 'Adam Labecki', 'adam@email.com', 'nil', 'picture1.png', 'Description goes here...', 'hash'),
-	(2, 'ashton', 'Ashton Charbonneau', 'ashton@email.com', 'nil', 'picture2.png', 'Description goes here...', 'hash'),
-	(3, 'matthew', 'Matthew Tan', 'matthew@email.com', 'nil', 'picture3.png', 'Description goes here...', 'hash'),
-	(4, 'clayton', 'Clayton Jian', 'clayton@email.com', 'nil', 'picture4.png', 'Description goes here...', 'hash'),
-	(5, 'rimple', 'Rimpledeep Chahal', 'rimple@email.com', 'nil', 'picture5.png', 'Description goes here...', 'hash'),
-	(6, 'greg', 'Greg Baker', 'greg@email.com', 'nil', 'picture6.png', 'Description goes here...', 'hash');
+INSERT INTO account (id, username, name, email, picture_slug, description, password_hash) VALUES
+	(1, 'adam', 'Adam Labecki', 'adam@email.com', 'picture1.png', 'Description goes here...', 'hash'),
+	(2, 'ashton', 'Ashton Charbonneau', 'ashton@email.com', 'picture2.png', 'Description goes here...', 'hash'),
+	(3, 'matthew', 'Matthew Tan', 'matthew@email.com', 'picture3.png', 'Description goes here...', 'hash'),
+	(4, 'clayton', 'Clayton Jian', 'clayton@email.com', 'picture4.png', 'Description goes here...', 'hash'),
+	(5, 'rimple', 'Rimpledeep Chahal', 'rimple@email.com', 'picture5.png', 'Description goes here...', 'hash'),
+	(6, 'greg', 'Greg Baker', 'greg@email.com', 'picture6.png', 'Description goes here...', 'hash');
 
 INSERT INTO game_status (id, description) VALUES
 	(1, 'open'),

@@ -78,12 +78,12 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
-func UserRegister(env *models.Env, username string, name string, email string, password string) error {
+func UserRegister(env *models.Env, username string, name string, email string, password_hash string) error {
 
 	sqlStatement := `  
-	INSERT INTO account (username, name, email, password) 
+	INSERT INTO account (username, name, email, password_hash) 
 	VALUES ($1, $2, $3, $4)`
-	_, err := env.Database.Exec(sqlStatement, username, name, email, password)
+	_, err := env.Database.Exec(sqlStatement, username, name, email, password_hash)
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +93,7 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 	var userAccount models.UserAccount
 
-	sqlStatement := `SELECT username, name, email, password FROM account WHERE username=$1`
+	sqlStatement := `SELECT username, name, email, password_hash FROM account WHERE username=$1`
 
 	rows, err := env.Database.Query(sqlStatement, inputUsername)
 	if err != nil {
@@ -107,6 +107,17 @@ func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 	}
 
 	return userAccount
+}
+
+// Creates a new user session in the database
+func CreateSession(env *models.Env, id string) *models.Session {
+	var session models.Session
+
+	session.LoggedIn = true
+	session.Username = "adam"
+	session.Name = FindByUsername(env, session.Username).Name
+
+	return &session
 }
 
 // Temporary function that adds entries to the game database
