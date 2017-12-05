@@ -1,61 +1,34 @@
 {{ define "game" -}}
+		{{ $siteroot := .SiteRoot -}}
 		{{ with .GameListing -}}
         <h1>{{ .Name }}</h1>
 		{{ with .Game -}}
 		{{ $deckSize := len .Deck }}
-
-<!--
-
-Game:
-	Phase          int        `json: "phase"`
-	Players        []Player   `json: "players"`
-	Sitters        []Player   `json: "sitters"`
-	Current_Player string     `json: "current_player"`
-	Current_Bet    int        `json: "current_bet"`
-	Bet_Counter    int        `json: "bet_counter"`
-	Ante           int        `json: "ante"`
-	Max_bet        int        `json: "max_bet"`
-	Min_bet        int        `json: "min_bet"`
-	Dealer_Token   int        `json: "dealer_token"`
-	Timer          time.Timer `json: "timer"`
-
-Seat:
-	Occupier *Player `json: "occupier"`
-
-Player:
-	Name      string  `json: "name"`
-	Money     int     `json: "money"`
-	Hand      []Card  `json: "hand"`
-	Folded    bool    `json: "folded"`
-	Called    bool    `json: "called"`
-	Discarded bool    `json: "discarded"`
-	Bet       int     `json: "bet"`
-	Hand_Rank int     `json: "hand_rank"`
-	Card_Hist [14]int `json: "card_hist"`
-	Seat      int     `json: "seat"`
-
-Card:
-	Face string `json: "face"`
-	Suit string `json: "suit"`
-	Rank int    `json: "rank"`
-
--->
-
 		<div id="game">
 			<div id="game-info">
 				<div id="deck">Cards: {{ $deckSize }}</div>
 				<div id="pot">{{ .Pot }}</div>
 			</div>
 			{{ range .Seats -}}
-			<div class="seat player-{{ .Number }} {{ if .Occupied}}occupied{{ else }}empty{{ end }}">
+			<div class="seat player-{{ .Number }} {{ if .Occupied }}occupied{{ else }}empty{{ end }}">
+				{{ if .Occupied}}
+				{{ with .Occupier -}}
 				<div class="player-info">
-					{{ if .Occupier -}}
-					<div class="image"><img src=""></div>
+					<div class="image"><img src="{{ $siteroot }}/assets/img/{{ .PictureSlug }}"></div>
+					<div class="name"><a href="{{ $siteroot }}/user/{{ .Username }}/view">{{ .Username }}</a></div>
+					<div class="stack">{{ .Money }}</div>
+				</div>
+				<div class="hand">
+					{{ range $index, $hand := .Hand -}}
+					<div class="card card-{{ $index }} {{ .Face }} {{ .Suit }}"></div>
+					{{- end }}
+				</div>
+				{{ end }}
+				{{ else }}
+				<div class="player-info">
+					<div class="image"></div>
 					<div class="name"></div>
 					<div class="stack"></div>
-					{{- else -}}
-					<div class="image"></div>
-					{{- end }}
 				</div>
 				<div class="hand">
 					<div class="card card-1 none"></div>
@@ -64,6 +37,7 @@ Card:
 					<div class="card card-4 none"></div>
 					<div class="card card-5 none"></div>
 				</div>
+				{{ end }}
 				<div class="timer"></div>
 			</div>
 			{{ end -}}
