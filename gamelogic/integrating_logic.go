@@ -1,7 +1,6 @@
 /*(only class attributes needed for the game logic will be included here) */
 package gamelogic
 
-<<<<<<< HEAD
 import(
 	_"time"
 	_"bufio"
@@ -43,11 +42,7 @@ func (g *Game) Join(name string, buyin int, seatNumber int) error {
 	if buyin > g.Stakes.Ante*100 {
 		return errors.New("Buyin exceeds the limit for this table")
 	}
-<<<<<<< HEAD
-	if buyin < g.Stakes.Ante*50{
-=======
 	if buyin < g.Stakes.Ante*50 {
->>>>>>> ecf4b2a38403a8c5b2c26814ca83d6a37f402e76
 		return errors.New("Buyin is too low for this table")
 	}
 	player := new(Player)
@@ -141,6 +136,7 @@ func (g *Game) NewRound(players []Player, ante int, minBet int, maxBet int, deal
 	 		}
 	 		d++
 	 	}
+	 	return nil
 	}
 
 // Eachetting round lasts until each player has either: (a) folded (b) called
@@ -221,7 +217,7 @@ func (g *Game) Next_Player() string {
 				}
 			}
 		}
-		g.SetTimer(10)
+		//g.SetTimer(10)
 	}
 
 	return "-1"
