@@ -210,36 +210,42 @@ func User(env *models.Env) http.Handler {
 		username := vars["username"]
 		action := vars["action"]
 
-		// Get the user page matching that username from the database
-		userPage, err := database.GetUserPage(env, username)
-		if err != nil {
-			log.Print("User " + username + " not found.")
-
-			// For now, just redirect them to the home page
-			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
-			return
-		}
-
-		var pagedata models.PageData
-		var template *template.Template
-
-		// Create our pagedata model
-		if action == "edit" {
-			pagedata = getPageData(env, "sessionid", "EditUser")
-			template = env.Templates["EditUser"]
-
-			log.Print("Editing player " + username + ".")
+		// the user should only be able to edit pages if they are logged in
+		if _, err := r.Cookie("session"); err != nil { 
+			fmt.Printf("The user is NOT logged in, so this page should not be available. Redirecting to login page.\n")
+			http.Redirect(w, r, env.SiteRoot+"/login/", http.StatusTemporaryRedirect)
 		} else {
-			pagedata = getPageData(env, "sessionid", "ViewUser")
-			template = env.Templates["ViewUser"]
 
-			log.Print("Displaying player " + username + ".")
+			// Get the user page matching that username from the database
+			userPage, err := database.GetUserPage(env, username)
+			if err != nil {
+				log.Print("User " + username + " not found.")
+
+				// For now, just redirect them to the home page
+				http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+				return
+			}
+
+			var pagedata models.PageData
+			var template *template.Template
+
+			// Create our pagedata model
+			if action == "edit" {
+				pagedata = getPageData(env, "sessionid", "EditUser")
+				template = env.Templates["EditUser"]
+
+				log.Print("Editing player " + username + ".")
+			} else {
+				pagedata = getPageData(env, "sessionid", "ViewUser")
+				template = env.Templates["ViewUser"]
+
+				log.Print("Displaying player " + username + ".")
+			}
+			pagedata.UserPage = userPage
+
+			// Execute the template with our page data
+			template.Execute(w, pagedata)
 		}
-		pagedata.UserPage = userPage
-
-		// Execute the template with our page data
-		template.Execute(w, pagedata)
-
 	})
 }
 
@@ -255,29 +261,35 @@ func RedirectGame(env *models.Env) http.Handler {
 
 func Game(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		gameslug := vars["gameslug"]
-		action := vars["action"]
+		if _, err := r.Cookie("session"); err != nil { 
+			fmt.Printf("The user is NOT logged in, so this page should not be available. Redirecting to login page.\n")
+			http.Redirect(w, r, env.SiteRoot+"/login/", http.StatusTemporaryRedirect)
+		} else {
 
-		pagedata := getPageData(env, "sessionid", "Game")
-		template := env.Templates["WatchGame"] // hack
+			vars := mux.Vars(r)
+			gameslug := vars["gameslug"]
+			action := vars["action"]
 
-		gameListing := env.Games[gameslug]
-		if gameListing == nil {
-			// Game doesn't exist
-			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
-			return
+			pagedata := getPageData(env, "sessionid", "Game")
+			template := env.Templates["WatchGame"] // hack
+
+			gameListing := env.Games[gameslug]
+			if gameListing == nil {
+				// Game doesn't exist
+				http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+				return
+			}
+
+			pagedata.GameListing = gameListing
+
+			// Choose our template based on the action
+			if action == "play" {
+				template = env.Templates["PlayGame"]
+			}
+
+			// Execute the template with our page data
+			template.Execute(w, pagedata)
 		}
-
-		pagedata.GameListing = gameListing
-
-		// Choose our template based on the action
-		if action == "play" {
-			template = env.Templates["PlayGame"]
-		}
-
-		// Execute the template with our page data
-		template.Execute(w, pagedata)
 	})
 }
 
@@ -314,26 +326,33 @@ func ViewLobby(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var lobby models.Lobby
 
-		for _, listing := range env.Games {
-			if listing.Status == "open" {
-				lobby.Games = append(lobby.Games, listing)
-			}
-		}
-
-		if len(lobby.Games) > 0 {
-			// Sort the games here
-			lobby.Empty = false
+		// the user should only be able to view lobbies if they are logged in
+		if _, err := r.Cookie("session"); err != nil { 
+			fmt.Printf("The user is NOT logged in, so this page should not be available. Redirecting to login page.\n")
+			http.Redirect(w, r, env.SiteRoot+"/login/", http.StatusTemporaryRedirect)
 		} else {
-			lobby.Empty = true
+
+			for _, listing := range env.Games {
+				if listing.Status == "open" {
+					lobby.Games = append(lobby.Games, listing)
+				}
+			}
+
+			if len(lobby.Games) > 0 {
+				// Sort the games here
+				lobby.Empty = false
+			} else {
+				lobby.Empty = true
+			}
+
+			// Populate the data needed for the page
+			pagedata := getPageData(env, "sessionid", "ViewLobby")
+			pagedata.Lobby = &lobby
+
+			// Execute the template with our page data
+			template := env.Templates["ViewLobby"]
+			template.Execute(w, pagedata)
 		}
-
-		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "ViewLobby")
-		pagedata.Lobby = &lobby
-
-		// Execute the template with our page data
-		template := env.Templates["ViewLobby"]
-		template.Execute(w, pagedata)
 	})
 }
 
