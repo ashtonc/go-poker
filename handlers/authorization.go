@@ -17,12 +17,8 @@ func Login(env *models.Env) http.Handler {
 		template := env.Templates["Login"]
 
 		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := models.PageData{
-			Session: &models.Session{
-				LoggedIn:  false,
-				PageLogin: true,
-			},
-		}
+		pagedata := getPageData(env, "sessionid", "PageLogin")
+		pagedata.Session.LoggedIn = false
 
 		fmt.Printf("User has visited the Login page.\n")
 		// the user should only be able to login if they are not logged in
@@ -109,19 +105,17 @@ func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("User visited Register page.\n")
 		// the user should only be able to register if they are not logged in
+
+		// Populate the data needed for the page (these should nearly all be external functions)
+		pagedata := getPageData(env, "sessionid", "PageUser")
+		pagedata.Session.LoggedIn = false
+
 		if _, err := r.Cookie("session"); err == nil {
 			fmt.Printf("The user is already logged in, so this page should not be available. Redirecting to play page.\n")
 			http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 		} else {
 
 			if r.Method == "GET" {
-				// Populate the data needed for the page (these should nearly all be external functions)
-				pagedata := models.PageData{
-					Session: &models.Session{
-						LoggedIn: false,
-						PageUser: true,
-					},
-				}
 
 				// Execute the template with our page data
 				template := env.Templates["Register"]
