@@ -44,7 +44,7 @@ func Login(env *models.Env) http.Handler {
 				} else if userAccount.Username != username {
 					fmt.Printf("This user does not exist.\n")
 					template.Execute(w, pagedata)
-				} else if userAccount.Password != password {
+				} else if CheckPasswordHash(password, userAccount.Password) != true {
 					fmt.Printf("The password is incorrect.\n")
 					template.Execute(w, pagedata)
 				} else {
