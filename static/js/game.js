@@ -85,18 +85,26 @@ $(document).ready(function(){
 		$('.yourTurn').parent().find('.stack').text(amount);
 		nextTurn();
 	});
-	
 	*/
+	// Leave in until comment bug is fixed
+	function yourTurn(player){
+		$('#game').find(player).find('.image').addClass('yourTurn');
+	}
+	function folded(player){
+		$('#game').find(player).addClass('folded');
+	}
+	
+	function updatePot(amount){
+		$('#game').find('#pot').text(amount);
+	}
+	function updateHand(player, card1, card2, card3, card4, card5){
+		
+	}
 	function updatePot(amount){
 		$('#game').find('#pot').text(amount);
 	}
 	$('#game-menu').on('click', '#check', function(){
-		/*
-		$('.startTimer').stop(true, true);
-		nextTurn();
-		*/
-		alert("Hello!");
-		updatePot(100000);
+		
 	});
 	$('form').submit(function(e){
 		e.preventDefault();

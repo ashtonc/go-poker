@@ -88,15 +88,15 @@ type Player struct {
 	Card_Hist   [14]int `json:"-"`
 	Seat        int     `json:"-"`
 }
-
+/*
 type Card struct {
 	Face string `json:"face"`
 	Suit string `json:"suit"`
 	Rank int    `json:"-"`
 }
+*/
 
-
-
+/*
 func getIndex(array []string, item string) int {
 	for i := 0; i < len(array); i++ {
 		if array[i] == item {
@@ -105,6 +105,7 @@ func getIndex(array []string, item string) int {
 	}
 	return -1
 }
+*/
 
 
 func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {

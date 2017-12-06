@@ -42,11 +42,12 @@ func CreateSession(env *models.Env, username string) *models.Session {
 	session.LoggedIn = true
 
 	fmt.Printf("Session values: \n", session.Id, session.Username, session.Name, session.Email, session.UserId)
-	err := database.NewSession(env, "token", '18:00', session.UserId)
+	/*err := database.NewSession(env, "token", '18:00', session.UserId)
 	if err != nil {
 		// session not found,
 		session.LoggedIn = false
 	}
+	*/
 
 	return &session
 }
