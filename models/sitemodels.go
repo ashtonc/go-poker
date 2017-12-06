@@ -31,7 +31,12 @@ type UserAccount struct {
 }
 
 type Session struct {
+	Id				int
+	Uuid			string
+	Email			string
+	UserId			int
 	Username        string
+	Name			string
 	Expiry          time.Time
 	LoggedIn        bool
 	PageHome        bool
@@ -40,4 +45,8 @@ type Session struct {
 	PageLeaderboard bool
 	PageLogin       bool
 	PageRegister    bool
+}
+
+type UserIDSearch struct {
+	UserId			int
 }

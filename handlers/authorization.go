@@ -10,6 +10,7 @@ import (
 
 	"poker/database"
 	"poker/models"
+	"poker/sessions"
 )
 
 func Login(env *models.Env) http.Handler {
@@ -49,23 +50,6 @@ func Login(env *models.Env) http.Handler {
 					template.Execute(w, pagedata)
 				} else {
 					fmt.Printf("Login successful.\n")
-
-					// var store = sessions.NewCookieStore([]byte(username))
-					// session, err := store.Get(r, "session")
-					// if err != nil {
-					//     http.Error(w, err.Error(), http.StatusInternalServerError)
-					//     return
-					// }
-					// session.Options = &sessions.Options{
-					//     Path:     "/",
-					//     MaxAge:   86400, // log out
-					//     HttpOnly: true,
-					// }
-					// session.Values["username"] = username
-					// session.Values["name"] = name
-					// session.Save(r, w)
-
-					// fmt.Printf("session values: ", session.Values["username"], session.Values["name"], "\n")
 
 					// .. check credentials ..
 					setSession(username, name, w)
@@ -160,9 +144,10 @@ func Register(env *models.Env) http.Handler {
 					if err != nil {
 						panic("No database found")
 					}
-
 					// .. check credentials ..
 					setSession(username, name, w)
+					sessions.CreateSession(env, username)
+
 					http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 				}
 

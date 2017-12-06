@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"time"
 
 	_ "github.com/lib/pq"
 
@@ -135,4 +136,34 @@ func AddSessionData(env *models.Env, session models.Session) error {
 	*/
 
 	return nil
+}
+
+func GetUserID(env *models.Env, inputUsername string) models.UserIDSearch {
+	var userData models.UserIDSearch
+
+	sqlStatement := `SELECT id FROM account WHERE username=$1`
+
+	rows, err := env.Database.Query(sqlStatement, inputUsername)
+	if err != nil {
+		panic(err)
+	}
+	for rows.Next() {
+		err = rows.Scan(&userData.UserId)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return userData
+}
+
+func NewSession(env *models.Env, token string, expiry_time time.Time, user_id int) error {
+	sqlStatement := `  
+	INSERT INTO user_session (token, expiry_time, user_id) 
+	VALUES ($1, $2, $3)`
+	_, err := env.Database.Exec(sqlStatement, token, expiry_time, user_id)
+	if err != nil {
+		panic(err)
+	}
+	return err
 }
