@@ -1,17 +1,17 @@
-package connections
+package connection
 
 import (
 	"github.com/gorilla/websocket"
 	uuid "github.com/satori/go.uuid"
-	"poker/gamelogic"
 )
 
 // This code adapted from https://outcrawl.com/realtime-collaborative-drawing-go/
 
 type Client struct {
-	id  string
+	id string
+
 	hub *Hub
-	//game *Game
+
 	// Websocket connection
 	socket *websocket.Conn
 
@@ -20,11 +20,10 @@ type Client struct {
 }
 
 // Client constructor
-func newClient(hub *Hub, socket *websocket.Conn, game *Game) *Client {
+func newClient(hub *Hub, socket *websocket.Conn) *Client {
 	return &Client{
 		id:       uuid.NewV4().String(),
 		hub:      hub,
-		game:     game,
 		socket:   socket,
 		outbound: make(chan []byte),
 	}
@@ -32,14 +31,17 @@ func newClient(hub *Hub, socket *websocket.Conn, game *Game) *Client {
 
 // Read a message from the client and send it to the hub
 func (client *Client) read() {
+	// When the client disconnections, unregister them
 	defer func() {
 		client.hub.unregister <- client
 	}()
+
 	for {
 		_, data, err := client.socket.ReadMessage()
 		if err != nil {
 			break
 		}
+
 		client.hub.onMessage(data, client)
 	}
 }
@@ -53,6 +55,7 @@ func (client *Client) write() {
 				client.socket.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
+
 			client.socket.WriteMessage(websocket.TextMessage, data)
 		}
 	}

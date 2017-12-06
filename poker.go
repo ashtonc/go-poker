@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 
+	_ "poker/connection"
 	"poker/database"
 	"poker/handlers"
 	"poker/models"
@@ -31,6 +32,7 @@ func main() {
 	var upgrader = websocket.Upgrader{
 		ReadBufferSize:  2048,
 		WriteBufferSize: 2048,
+		// Allow all origins
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
@@ -69,7 +71,7 @@ func main() {
 	router.Handle(env.SiteRoot+"/game/", handlers.RedirectGame(env))
 	router.Handle(env.SiteRoot+"/game/{gameslug:[a-z0-9-]+}/{action:play|watch}", handlers.Game(env))
 	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
-	router.Handle(env.SiteRoot+"/ws", handlers.WebsocketConnection(env))
+	router.Handle(env.SiteRoot+"/game/{gameslug:[a-z0-9-]+}/ws", handlers.WebsocketConnection(env))
 
 	// Start the server
 	log.Print("Running server at " + env.SiteRoot + " on port " + env.Port + ".")
