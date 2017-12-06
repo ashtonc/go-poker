@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"poker/connection"
 	"poker/models"
 )
 
@@ -49,10 +50,13 @@ func Game(env *models.Env) http.Handler {
 
 func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//vars := mux.Vars(r)
+		//gameslug := vars["gameslug"]
 
 		// Choose the correct hub based on the session of the user
+		hub := connection.NewHub()
 
-		// hub.handleWebSocket(env, w, r)
-
+		// Get the user id from their session
+		hub.HandleWebSocket(env, w, r)
 	})
 }

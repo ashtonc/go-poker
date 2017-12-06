@@ -5,13 +5,13 @@ import (
 	"log"
 	"net/http"
 	// "github.com/gorilla/websocket"
-	// "github.com/tidwall/gjson"
+	"github.com/tidwall/gjson"
 
 	"poker/gamelogic"
 	"poker/models"
 )
 
-func (hub *Hub) handleWebSocket(env *models.Env, w http.ResponseWriter, r *http.Request) {
+func (hub *Hub) HandleWebSocket(env *models.Env, w http.ResponseWriter, r *http.Request) {
 	socket, err := env.Upgrader.Upgrade(w, r, nil)
 
 	if err != nil {
@@ -24,6 +24,7 @@ func (hub *Hub) handleWebSocket(env *models.Env, w http.ResponseWriter, r *http.
 	hub.clients = append(hub.clients, client)
 	hub.register <- client
 	client.run()
+	hub.send(GetGamestate(hub.game), client)
 }
 
 // This code adapted from https://outcrawl.com/realtime-collaborative-drawing-go/
@@ -42,7 +43,7 @@ type Hub struct {
 }
 
 // Hub constructor
-func newHub() *Hub {
+func NewHub() *Hub {
 	return &Hub{
 		// Create an unbuffered channel of clients
 		clients:    make([]*Client, 0),
@@ -77,7 +78,8 @@ func (hub *Hub) broadcast(message interface{}, ignore *Client) {
 }
 
 func (hub *Hub) onConnect(client *Client) {
-
+	log.Print(client.socket.RemoteAddr(), " connected to the game.")
+	hub.send(GetGamestate(hub.game), client)
 }
 
 func (hub *Hub) onDisconnect(client *Client) {
@@ -85,5 +87,22 @@ func (hub *Hub) onDisconnect(client *Client) {
 }
 
 func (hub *Hub) onMessage(data []byte, client *Client) {
+	kind := gjson.GetBytes(data, "kind").Int()
 
+	switch kind {
+	case KindTakeSeat:
+
+	case KindLeaveSeat:
+
+	case KindCheck:
+
+	case KindBet:
+
+	case KindCall:
+
+	case KindFold:
+
+	case KindDiscard:
+
+	}
 }
