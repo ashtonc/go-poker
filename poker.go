@@ -68,9 +68,10 @@ func main() {
 	router.Handle(env.SiteRoot+"/register/", handlers.Register(env))
 	router.Handle(env.SiteRoot+"/user/{username:[A-Za-z0-9-_.]+}/{action:view|edit}", handlers.User(env))
 	router.Handle(env.SiteRoot+"/lobby/", handlers.ViewLobby(env))
+	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
 	router.Handle(env.SiteRoot+"/game/", handlers.RedirectGame(env))
 	router.Handle(env.SiteRoot+"/game/{gameslug:[a-z0-9-]+}/{action:play|watch}", handlers.Game(env))
-	router.Handle(env.SiteRoot+"/leaderboard/", handlers.Leaderboard(env))
+	router.Handle(env.SiteRoot+"/game/{gameslug:[a-z0-9-]+}/{action:sit|leave|check|bet|call|fold|discard}", handlers.GameAction(env))
 	router.Handle(env.SiteRoot+"/game/{gameslug:[a-z0-9-]+}/ws", handlers.WebsocketConnection(env))
 
 	// Start the server

@@ -1,17 +1,15 @@
 package gamelogic
 
-import(
-	_"time"
-	_"bufio"
-  	_"os"  
-  	"errors"
- // 	"time"
-  	"fmt"
-  	
+import (
+	_ "bufio"
+	"errors"
+	_ "os"
+	_ "time"
+	// 	"time"
+	"fmt"
 )
 
-
-func (g *Game)Join(name string, buyin int, seatNumber int) error {
+func (g *Game) Join(name string, buyin int, seatNumber int) error {
 	if g.Seats[seatNumber].Occupied == true {
 		return errors.New("Seat is already Occupied")
 	}
@@ -34,7 +32,6 @@ func (g *Game)Join(name string, buyin int, seatNumber int) error {
 	return nil
 }
 
-
 func (g *Game) Leave(name string) error {
 	index, error := g.GetSitterIndex(name)
 	if error == nil {
@@ -52,7 +49,6 @@ func (g *Game) Leave(name string) error {
 	}
 	return nil
 }
-
 
 func (g *Game) NewRound(dealterToken int) error {
 	Rand_init()
@@ -84,25 +80,25 @@ func (g *Game) NewRound(dealterToken int) error {
 	g.Deck = createDeck(cardTypes, suites)
 	g.Deck = shuffle(g.Deck)
 	d := 0
-	 	for d < 5{
-	 		for i := 0; i < len(g.Players); i++{
-	 			card := draw(g.Deck)
-	 			g.Deck = g.Deck[1:]
-	 			g.Players[i].Hand = append(g.Players[i].Hand, card)
-	 			//fmt.Printf(" Player %d is %s \n", i, g.Players[i].Name)
-	 			fmt.Printf(" %s is delt a %s of %s \n ", g.Players[i].Name, card.Face, card.Suit)
-	 		}
-	 		d++
-	 	}
-	 	return nil
+	for d < 5 {
+		for i := 0; i < len(g.Players); i++ {
+			card := draw(g.Deck)
+			g.Deck = g.Deck[1:]
+			g.Players[i].Hand = append(g.Players[i].Hand, card)
+			//fmt.Printf(" Player %d is %s \n", i, g.Players[i].Name)
+			fmt.Printf(" %s is delt a %s of %s \n ", g.Players[i].Name, card.Face, card.Suit)
+		}
+		d++
 	}
+	return nil
+}
 
 // Eachetting round lasts until each player has either: (a) folded (b) called
 func (g *Game) Bet(p_name string, bet int) error {
 	pindex, error := g.GetPlayerIndex(p_name)
-	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4{
+	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
-	} 
+	}
 	if error == nil {
 		if g.Players[pindex].Folded == true {
 			return errors.New("Player has already folded and so cannot bet")
@@ -131,13 +127,11 @@ func (g *Game) Bet(p_name string, bet int) error {
 	return nil
 }
 
-
-
 func (g *Game) Call(p_name string) error {
 
-	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4{
+	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
-	} 
+	}
 	pindex, err := g.GetPlayerIndex(p_name)
 	if err == nil {
 		if g.Players[pindex].Folded == true {
@@ -148,7 +142,7 @@ func (g *Game) Call(p_name string) error {
 		}
 		balance := g.Current_Bet - g.Players[pindex].Bet
 		g.Players[pindex].Money -= balance
-		fmt.Printf("Current game bet: %d, current bet of %s: %d, pays %d \n", 
+		fmt.Printf("Current game bet: %d, current bet of %s: %d, pays %d \n",
 			g.Current_Bet, g.Players[pindex].Name, g.Players[pindex].Bet, balance)
 		g.Players[pindex].Bet = g.Current_Bet
 		g.Players[pindex].Called = true
@@ -159,7 +153,7 @@ func (g *Game) Call(p_name string) error {
 		g.Current_Player = g.Next_Player()
 		if g.Bet_Counter == 0 {
 			err := g.Check_if_end_of_bet_correct()
-			if err != nil{
+			if err != nil {
 				return err
 			}
 			g.reset_bets()
@@ -172,11 +166,10 @@ func (g *Game) Call(p_name string) error {
 	return nil
 }
 
-
-func (g *Game) Fold(player_name string)error{
-	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4{
+func (g *Game) Fold(player_name string) error {
+	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
-	} 
+	}
 	pindex, err := g.GetPlayerIndex(player_name)
 	if err == nil {
 		if g.Players[pindex].Folded == true {
@@ -188,7 +181,7 @@ func (g *Game) Fold(player_name string)error{
 		}
 		if g.Bet_Counter == 0 {
 			err := g.Check_if_end_of_bet_correct()
-			if err != nil{
+			if err != nil {
 				return err
 			}
 			g.Next_Phase()
@@ -199,11 +192,10 @@ func (g *Game) Fold(player_name string)error{
 	return nil
 }
 
-
 func (g *Game) Check(player_name string) error {
-	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4{
+	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
-	} 
+	}
 	pindex, err := g.GetPlayerIndex(player_name)
 	if err == nil {
 		if g.Current_Bet > g.Players[pindex].Bet {
@@ -214,7 +206,7 @@ func (g *Game) Check(player_name string) error {
 		}
 		if g.Bet_Counter == 0 {
 			err := g.Check_if_end_of_bet_correct()
-			if err != nil{
+			if err != nil {
 				return err
 			}
 			fmt.Printf("The game phase has been incremented to %d because the bet counter went to 0\n", g.Phase)
@@ -228,11 +220,10 @@ func (g *Game) Check(player_name string) error {
 	return nil
 }
 
-
-func (g *Game) Discard(playerID string, cardIndexes []int) error {
-	if g.Phase != 1 && g.Phase != 3{
+func (g *Game) Discard(playerID string, cardIndexes ...int) error {
+	if g.Phase != 1 && g.Phase != 3 {
 		return errors.New("Game is not in a  phase!")
-	} 
+	}
 	check := getHighestInt(cardIndexes)
 	pindex, err := g.GetPlayerIndex(playerID)
 	if err == nil {
@@ -243,31 +234,30 @@ func (g *Game) Discard(playerID string, cardIndexes []int) error {
 			g.Next_Phase()
 			fmt.Printf("The game phase has been incremented to %d because all players have discarded \n", g.Phase)
 			return nil
-			
+
 			//g.Phase += 1
 			//g.Current_Player = g.Players[g.Dealer_Token].Name
 			//return nil
-		}else if check > len(g.Players[pindex].Hand) {
+		} else if check > len(g.Players[pindex].Hand) {
 			return errors.New("Index is out of range for player's hand")
-		}else{
-		discard := g.Card_Discard(g.Players[pindex].Name, cardIndexes)
-		if discard == nil {
-			g.Redraw(g.Players[pindex].Name)
-			g.Players[pindex].Discarded = true
-			g.Current_Player = g.Next_Player()
-			if g.check_if_discard_phase_complete() == true{
-				fmt.Printf("The game phase has been incremented to %d because all players have discarded \n", g.Phase)
-				g.Next_Phase()
-			}
-			return nil
+		} else {
+			discard := g.Card_Discard(g.Players[pindex].Name, cardIndexes)
+			if discard == nil {
+				g.Redraw(g.Players[pindex].Name)
+				g.Players[pindex].Discarded = true
+				g.Current_Player = g.Next_Player()
+				if g.check_if_discard_phase_complete() == true {
+					fmt.Printf("The game phase has been incremented to %d because all players have discarded \n", g.Phase)
+					g.Next_Phase()
+				}
+				return nil
 			}
 		}
 	}
 	return err
-	}
+}
 
-
-func (g *Game)Showdown()*Player{
+func (g *Game) Showdown() *Player {
 	for i := 0; i < len(g.Players); i++ {
 		if g.Players[i].Folded == false {
 			g.Players[i].sort_hand_by_rank()
