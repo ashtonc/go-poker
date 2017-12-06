@@ -1,11 +1,10 @@
 package handlers
 
 import (
-	"log"
+	_ "log"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/websocket"
 
 	"poker/models"
 )
@@ -50,29 +49,10 @@ func Game(env *models.Env) http.Handler {
 
 func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		conn, err := env.Upgrader.Upgrade(w, r, nil)
-		if err != nil {
-			log.Print("Couldn't upgrade.")
-			log.Print(err)
-			return
-		}
 
-		msg := "Connected!"
+		// Choose the correct hub based on the session of the user
 
-		err = conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		if err != nil {
-			log.Print("Couldn't write message.")
-			log.Print(err)
-		} else {
-			_, _, err := conn.ReadMessage()
-			if err != nil {
-				log.Print("Couldn't read message.")
-				log.Print(err)
-			} else {
-				log.Print("Reply recieved.")
-			}
-		}
+		// hub.handleWebSocket(env, w, r)
 
-		conn.Close()
 	})
 }

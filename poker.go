@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 
+	_ "poker/connection"
 	"poker/database"
 	"poker/handlers"
 	"poker/models"
@@ -31,6 +32,7 @@ func main() {
 	var upgrader = websocket.Upgrader{
 		ReadBufferSize:  2048,
 		WriteBufferSize: 2048,
+		// Allow all origins
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},

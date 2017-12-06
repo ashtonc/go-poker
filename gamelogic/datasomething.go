@@ -4,7 +4,12 @@ import (
 	"encoding/json"
 )
 
-func (g Game) GetJsonBySeat(seat int) json.RawMessage {
+func (g Game) GetJsonBySeat(seat int) ([]byte, error) {
 
-	return nil
+	gameJson, err := json.Marshal(g)
+	if err != nil {
+		return nil, err
+	}
+
+	return gameJson, err
 }
