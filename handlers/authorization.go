@@ -155,7 +155,8 @@ func Register(env *models.Env) http.Handler {
 					fmt.Printf("This account name already exists.\n")
 				} else {
 					fmt.Printf("User has correctly registered!\n")
-					err := database.UserRegister(env, username, name, email, password)
+					password_hash, _ := HashPassword(password)
+					err := database.UserRegister(env, username, name, email, password_hash)
 					if err != nil {
 						panic("No database found")
 					}
