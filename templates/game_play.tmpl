@@ -34,18 +34,20 @@
             </div>
             <div id="betting">
                 <div>
-                    <input type="button" value="Check">
+                    <input type="button" id = "check" value="Check">
                 </div>
                 <div>
-                    <input type="button" value="Call">
+                    <input type="button" id = "call" value="Call">
                 </div>
                 <div>
                     <input id="raise" type="range" min="0" max="1000" step="1">
                     <input type="button" value="Raise">
                 </div>
                 <div>
-                    <input type="button" value="Fold">
+                    <input type="button" id = "fold" value="Fold">
                 </div>
             </div>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+			<script src="{{ .SiteRoot }}/assets/js/game.js"></script>
         </form>
 {{- end }}

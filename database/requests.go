@@ -1,10 +1,8 @@
 package database
 
 import (
-	// "database/sql"
 	"log"
 
-	// Wraps database/sql for our postgres database
 	_ "github.com/lib/pq"
 
 	"poker/models"
@@ -13,7 +11,7 @@ import (
 func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	var page models.UserPage
 
-	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username=$1;`
+	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username = $1;`
 
 	row := env.Database.QueryRow(sqlStatement, userName)
 	err := row.Scan(&page.Name, &page.Email, &page.Description, &page.PictureSlug)
@@ -47,6 +45,17 @@ func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
 	return gameMap, err
 }
 
+func GetSession(env *models.Env, sessionid string) (*models.Session, error) {
+	var session models.Session
+
+	sqlStatement := `SELECT account.username, user_session.expiry_time FROM account, user_session WHERE account.id = user_session.user_id AND user_session.token = $1;`
+
+	row := env.Database.QueryRow(sqlStatement, sessionid)
+	err := row.Scan(&session.Username, &session.Expiry)
+
+	return &session, err
+}
+
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	var leaderboard models.Leaderboard
 
@@ -78,12 +87,12 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
-func UserRegister(env *models.Env, username string, name string, email string, password string) error {
+func UserRegister(env *models.Env, username string, name string, email string, password_hash string) error {
 
 	sqlStatement := `  
-	INSERT INTO account (username, name, email, password) 
+	INSERT INTO account (username, name, email, password_hash) 
 	VALUES ($1, $2, $3, $4)`
-	_, err := env.Database.Exec(sqlStatement, username, name, email, password)
+	_, err := env.Database.Exec(sqlStatement, username, name, email, password_hash)
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +102,7 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 	var userAccount models.UserAccount
 
-	sqlStatement := `SELECT username, name, email, password FROM account WHERE username=$1`
+	sqlStatement := `SELECT username, name, email, password_hash FROM account WHERE username=$1`
 
 	rows, err := env.Database.Query(sqlStatement, inputUsername)
 	if err != nil {
@@ -109,17 +118,21 @@ func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 	return userAccount
 }
 
-// Temporary function that adds entries to the game database
-func CreateLeaderboardEntries(env *models.Env) error {
-	// var leaderboard models.Leaderboard
+// Saves the already created sessions object in the database
+func AddSessionData(env *models.Env, session models.Session) error {
 
-	sqlStatement := `  
-	INSERT INTO player_stats (total_hands) 
-	VALUES ($1)`
-	_, err := env.Database.Exec(sqlStatement, 1000)
-	if err != nil {
-		panic(err)
-	}
+	
 
-	return err
+	/*
+	This function should only create an entry in this table:
+
+	CREATE TABLE user_session (
+		id SERIAL PRIMARY KEY,
+		token VARCHAR(256),
+		expiry_time TIMESTAMP,
+		user_id INTEGER REFERENCES account (id)
+	);
+	*/
+
+	return nil
 }

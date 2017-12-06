@@ -24,9 +24,9 @@ The view the server log, `vagrant ssh` into the server, `sudo su` to switch to r
 	* Make sure the game methods work?
 	* Design it properly
 * Fixes
-	* Store password hashes instead of plain text (wtf)
+	* [**DONE**] Store password hashes instead of plain text ( :) )
 	* Maybe leaderboard (less important)
-	* Make registration work
+	* [**DONE**] Make registration work
 	* Make sessions work
 
 ## Project Checkpoint

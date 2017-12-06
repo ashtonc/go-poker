@@ -5,6 +5,8 @@ import (
 
 	"github.com/gorilla/securecookie"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"poker/models"
 	"poker/sessions"
 )
@@ -16,7 +18,7 @@ var cookieHandler = securecookie.New(
 
 func getPageData(env *models.Env, sessionid string, page string) models.PageData {
 	var pagedata models.PageData
-	session := sessions.GetSession(sessionid)
+	session := sessions.GetSessionWithInfo(env, sessionid)
 
 	switch page {
 	case "Home":
@@ -84,4 +86,14 @@ func clearSession(response http.ResponseWriter) {
 		MaxAge: -1,
 	}
 	http.SetCookie(response, cookie)
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 4)
+	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
