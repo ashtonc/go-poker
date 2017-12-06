@@ -24,24 +24,24 @@ Phases:
 */
 
 type Game struct {
-	Name           string     `json: "name"`
-	Slug           string     `json: "slug"`
-	Stakes         GameStakes `json: "stakes"`
-	Phase          int        `json: "phase"`
-	Pot            int        `json: "pot"`
-	Deck           []Card     `json: "deck"`
-	Seats          [6]Seat    `json: "seats"`
-	Players        []Player   `json: "players"`
-	Sitters        []Player   `json: "sitters"`
-	Current_Player string     `json: "current_player"`
-	Current_Bet    int        `json: "current_bet"`
-	Bet_Counter    int        `json: "bet_counter"`
-	Ante           int        `json: "ante"`
-	Max_bet        int        `json: "max_bet"`
-	Min_bet        int        `json: "min_bet"`
-	Dealer_Token   int        `json: "dealer_token"`
-	Timer          time.Timer `json: "timer"`
-	Winner		   *Player 	   `json: "winner"`
+	Name           string
+	Slug           string
+	Stakes         GameStakes
+	Phase          int
+	Pot            int
+	Deck           []Card
+	Seats          [6]Seat
+	Players        []Player
+	Sitters        []Player
+	Current_Player string
+	Current_Bet    int
+	Bet_Counter    int
+	Ante           int
+	Max_bet        int
+	Min_bet        int
+	Dealer_Token   int
+	Timer          time.Timer
+	Winner         *Player
 }
 
 type GameStakes struct {

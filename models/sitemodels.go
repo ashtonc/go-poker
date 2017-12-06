@@ -19,7 +19,6 @@ type Env struct {
 	Games     map[string]*GameListing
 	Upgrader  *websocket.Upgrader
 	// authentication middleware
-	//env.Games["slug"].Game gete you a game
 }
 
 type UserAccount struct {
