@@ -53,6 +53,7 @@ func Login(env *models.Env) http.Handler {
 
 					// .. check credentials ..
 					setSession(username, name, w)
+					sessions.CreateSession(env, username)
 
 					http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 				}
