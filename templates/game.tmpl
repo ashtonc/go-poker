@@ -20,7 +20,7 @@
 				</div>
 				<div class="hand">
 					{{ range $index, $card := .Hand -}}
-					<div class="card card-{{ $index }} {{ .Face }} {{ .Suit }}"></div>
+					<div class="card card-{{ $index }} {{ .Suit }} rank{{ .Face }}"></div>
 					{{ end -}}
 				</div>
 				{{ end }}
@@ -31,11 +31,11 @@
 					<div class="stack"></div>
 				</div>
 				<div class="hand">
-					<div class="card card-1 none"></div>
-					<div class="card card-2 none"></div>
-					<div class="card card-3 none"></div>
-					<div class="card card-4 none"></div>
-					<div class="card card-5 none"></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
 				</div>
 				{{ end }}
 				<div class="timer"></div>
