@@ -1,16 +1,11 @@
 package handlers
 
 import (
-	_ "log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"poker/connection"
 	"poker/models"
-	//for test
-	"fmt"
-	"log"
-	"math/rand"
 )
 
 func RedirectGame(env *models.Env) http.Handler {
@@ -41,106 +36,24 @@ func Game(env *models.Env) http.Handler {
 
 		pagedata.GamePage = gameListing
 
+		/* ****************** */
+		/* Put game code here */
+		/* ****************** */
+
+		// game := gameListing.game
+
+		/* ******************* */
+		/* Stop game code here */
+		/* ******************* */
+
 		// Choose our template based on the action
 		if action == "play" {
 			template = env.Templates["PlayGame"]
 		}
-		//create new game
-		game := gameListing.Game
-		game.Stakes.MaxBet = 20
-		game.Stakes.MinBet = 0
-		game.Stakes.Ante = 1
-		//create players for the game
-		p1err := game.Join("Ashton", "ashton", "picture1.png", 100, 0)
-		if p1err != nil {
-			fmt.Printf("Player 1 was not added to the game! \n")
-		}
-		p2err := game.Join("Adam", "adam", "picture2.png", 100, 1)
-		if p2err != nil {
-			fmt.Printf("Player 2 was not added to the game! \n")
-			log.Fatal(p2err)
-		}
-		p3err := game.Join("Matthew", "matt", "picture2.png", 100, 2)
-		if p3err != nil {
-			fmt.Printf("Player 3 was not added to the game! \n")
-			log.Fatal(p3err)
-		}
-		//Start a new round
-		dealterToken := 0
-		newErr := game.NewRound(dealterToken)
-		if newErr != nil {
-			log.Fatal(newErr)
-		}
-		fmt.Printf("Current Player is %s \n", game.Get_current_player_name())
-		//main round loop
-		for {
-			err, winner := game.Winner_check()
-			if err != nil {
-				log.Fatal(err)
-			}
-			if winner != nil {
-				fmt.Printf("A winner is %s \n", winner.Name)
-				break
-			}
-			if game.Phase == 0 || game.Phase == 2 || game.Phase == 4 {
-				player := game.Get_current_player_name()
-				decision := rand.Float32()
-				if decision < 0.25 {
-					fmt.Printf("Bet \n")
-					raise := rand.Intn(5)
-					err := game.Bet(player, raise)
-					if err != nil {
-						log.Fatal(err)
-					}
-				} else if decision < 0.88 {
-					pindex, err := game.GetPlayerIndex(player)
-					if err != nil {
-						log.Fatal(err)
-					}
-					if game.Players[pindex].Bet == game.Current_Bet {
-						fmt.Printf("Check \n")
-						err = game.Check(player)
-						if err != nil {
-							log.Fatal(err)
-						}
-					} else {
-						fmt.Printf("Call \n")
-						err := game.Call(player)
-						if err != nil {
-							log.Fatal(err)
-						}
-					}
-				} else {
-					fmt.Printf("Fold \n")
-					err := game.Fold(player)
-					if err != nil {
-						log.Fatal(err)
-					}
-				}
-			} else if game.Phase == 1 || game.Phase == 3 {
-				player := game.Get_current_player_name()
-				num_discard := rand.Intn(4)
-				fmt.Printf("%s will discard %d cards \n", player, num_discard)
 
-				discard := make([]int, 0)
-				for i := 0; i <= num_discard; i++ {
-					discard = append(discard, i)
-				}
-				err := game.Discard(player, discard...)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				//game.Phase == 5
-				winner := game.Showdown()
-				fmt.Printf("A winner is %s", winner.Name)
-				break
-			}
-		}
 		// Execute the template with our page data
 		template.Execute(w, pagedata)
 	})
-
 }
 
 func GameAction(env *models.Env) http.Handler {
