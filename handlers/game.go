@@ -81,6 +81,9 @@ func Game(env *models.Env) http.Handler {
 	})
 }
 
+
+
+
 func GameAction(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -113,57 +116,76 @@ func GameAction(env *models.Env) http.Handler {
 				// If the seat is occupied, tell them to get out of here
 
 				seat, _ := strconv.Atoi(r.PostFormValue("seat"))
+				buyin, _ := strconv.Atoi(r.PostFormValue("buyin"))
+				seat--
 
-				log.Print(username + " joined seat " + r.PostFormValue("seat"))
+				log.Print("Game " + gameslug + ": " + username + " joined seat " + r.PostFormValue("seat") + " with a buyin of " + r.PostFormValue("buyin"))
 
-				if seat <= 6 && seat >= 1 {
-					game.Join(pagedata.Identity.Name, username, "img", 100, seat)
+				if seat <= 5 && seat >= 0 && buyin > 0 {
+					game.Join(pagedata.Identity.Name, username, "img.png", buyin, seat)
 				}
-			}
-
-			if action == "leave" {
-				// Tell the game the player left
-				// Send them to the game lobby
-				game.Leave(username)
-			}
-
-			if action == "check" {
-				// Tell the game they checked
-				game.Check(username)
 			}
 
 			if action == "bet" {
 				// Get their bet amount
 				// Tell the game they bet n amount
+				bet, _ := strconv.Atoi(r.PostFormValue("bet"))
 
-				//game.Bet(username, betamount)
+				game.Bet(username, bet)
 
-			}
-
-			if action == "call" {
-				// Tell the game they called
-				game.Call(username)
-			}
-
-			if action == "fold" {
-				// Tell the game they folded
-				game.Fold(username)
 			}
 
 			if action == "discard" {
 				// Get the indices of the cards that they discarded
 				// Tell the game they discarded n cards
-				game.Discard(username, 1, 3, 4)
+
+				var discarded []int
+
+				if r.PostFormValue("card1discard") != "" {
+					discarded = append(discarded, 1)
+				}
+
+				if r.PostFormValue("card2discard") != "" {
+					discarded = append(discarded, 2)
+				}
+
+				if r.PostFormValue("card3discard") != "" {
+					discarded = append(discarded, 3)
+				}
+
+				if r.PostFormValue("card4discard") != "" {
+					discarded = append(discarded, 4)
+				}
+
+				if r.PostFormValue("card5discard") != "" {
+					discarded = append(discarded, 5)
+				}
+
+				log.Print(discarded)
+
+				game.Discard(username, discarded...)
 			}
 		}
 
-		if action == "start_round"{
-			fmt.Printf("Start round \n")
-			dealterToken := 0
-			newErr := game.NewRound(dealterToken)
-			if newErr != nil {
-				log.Print(newErr)
-				}
+		if action == "call" {
+			// Tell the game they called
+			game.Call(username)
+		}
+
+		if action == "leave" {
+			// Tell the game the player left
+			// Send them to the game lobby
+			game.Leave(username)
+		}
+
+		if action == "check" {
+			// Tell the game they checked
+			game.Check(username)
+		}
+
+		if action == "fold" {
+			// Tell the game they folded
+			game.Fold(username)
 		}
 
 		// Have the default here (back to game)
