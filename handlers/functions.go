@@ -3,89 +3,95 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gorilla/securecookie"
-
 	"golang.org/x/crypto/bcrypt"
 
+	"poker/database"
 	"poker/models"
-	"poker/sessions"
 )
 
-// Move the global variables in the env struct ************
-var cookieHandler = securecookie.New(
-	securecookie.GenerateRandomKey(64),
-	securecookie.GenerateRandomKey(32))
-
-func getPageData(env *models.Env, sessionid string, page string) models.PageData {
+func getPageData(env *models.Env, r *http.Request, sessionid string, page string) models.PageData {
 	var pagedata models.PageData
-	session := sessions.GetSessionWithInfo(env, sessionid)
+	pagedata.SiteRoot = env.SiteRoot
 
 	switch page {
 	case "Home":
-		session.PageHome = true
-	case "ViewUser", "EditUser":
-		session.PageUser = true
-	case "Login":
-		session.PageUser = true
-		session.PageLogin = true
-	case "Register":
-		session.PageUser = true
-		session.PageRegister = true
-	case "Game", "ViewLobby":
-		session.PageGame = true
+		pagedata.NavigationLevel = models.NAVIGATION_HOME
+	case "Game", "Lobby":
+		pagedata.NavigationLevel = models.NAVIGATION_GAME
 	case "Leaderboard":
-		session.PageLeaderboard = true
+		pagedata.NavigationLevel = models.NAVIGATION_LEADERBOARD
+	case "ViewUser", "EditUser", "Login", "Register":
+		pagedata.NavigationLevel = models.NAVIGATION_USER
+	case "Admin":
+		pagedata.NavigationLevel = models.NAVIGATION_ADMIN
 	}
 
-	pagedata.Session = session
-	pagedata.SiteRoot = env.SiteRoot
+	var identity models.Identity
+	pagedata.Identity = &identity
+	pagedata.Identity.LoggedIn = false
+
+	token, err := getSessionToken(env, r)
+	if err != nil {
+		return pagedata
+	}
+
+	session, err := database.GetSession(env, token)
+	if err != nil {
+		return pagedata
+	}
+
+	pagedata.Identity.LoggedIn = true
+	pagedata.Identity.AccountType = models.TYPE_USER_ACCOUNT
+	pagedata.Identity.Username = session.User.Username
+	pagedata.Identity.Name = session.User.Name
 
 	return pagedata
 }
 
-func getUserName(request *http.Request) (userName string) {
-	if cookie, err := request.Cookie("session"); err == nil {
-		cookieValue := make(map[string]string)
-		if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
-			userName = cookieValue["username"]
-		}
-	}
-	return userName
-}
-
-func getName(request *http.Request) (name string) {
-	if cookie, err := request.Cookie("session"); err == nil {
-		cookieValue := make(map[string]string)
-		if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
-			name = cookieValue["name"]
-		}
-	}
-	return name
-}
-
-func setSession(userName string, name string, response http.ResponseWriter) {
+func setSessionToken(env *models.Env, w http.ResponseWriter, r *http.Request, token string) error {
 	value := map[string]string{
-		"username": userName,
-		"name":     name,
+		"token": token,
 	}
-	if encoded, err := cookieHandler.Encode("session", value); err == nil {
+
+	encoded, err := env.CookieHandler.Encode("poker-470-session", value)
+	if err == nil {
 		cookie := &http.Cookie{
-			Name:  "session",
+			Name:  "poker-470-session",
 			Value: encoded,
 			Path:  "/",
 		}
-		http.SetCookie(response, cookie)
+
+		http.SetCookie(w, cookie)
+
+		return err
 	}
+
+	return err
 }
 
-func clearSession(response http.ResponseWriter) {
+func getSessionToken(env *models.Env, r *http.Request) (string, error) {
+	cookie, err := r.Cookie("poker-470-session")
+	if err == nil {
+		value := make(map[string]string)
+		if err = env.CookieHandler.Decode("poker-470-session", cookie.Value, &value); err == nil {
+			return value["token"], err
+		}
+
+		return "", err
+	}
+
+	return "", err
+}
+
+func clearSession(w http.ResponseWriter) {
 	cookie := &http.Cookie{
-		Name:   "session",
+		Name:   "poker-470-session",
 		Value:  "",
 		Path:   "/",
 		MaxAge: -1,
 	}
-	http.SetCookie(response, cookie)
+
+	http.SetCookie(w, cookie)
 }
 
 func HashPassword(password string) (string, error) {

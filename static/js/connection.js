@@ -16,18 +16,22 @@ function WebSocketTest() {
 			wsPath += pathArray[i];
 		}
 
-		var ws = new WebSocket(wsPath + "/ws");
+		wsPath += "/ws"
 
-		// don't hardcode this: WebSocket('ws://' + location.hostname + location.port + '/poker/ws'); or something
+		console.log("Opening websocket connection at " + wsPath)
+		var ws = new WebSocket(wsPath);
 
 		ws.onopen = function () {
 			alert("WS opened.");
 		};
 
-		ws.onmessage = function (evt) {
-			var received_msg = evt.data;
+		ws.onmessage = function (event) {
 			alert(received_msg);
-			ws.send("Message received")
+			var messages = event.data.split('\n');
+			for (var i = 0; i < messages.length; i++) {
+				var message = JSON.parse(messages[i]);
+				onMessage(message);
+			}
 		};
 
 		ws.onclose = function () {
@@ -41,43 +45,32 @@ function WebSocketTest() {
 	}
 }
 
-KindGameState = 1;
+KIND_GAME_STATE = 1;
+KIND_PLAYER_SITS = 2;
+KIND_PLAYER_LEAVES = 3;
+KIND_TIMED_OUT = 4;
 
-KindPlayerSits = 2;
-KindPlayerLeaves = 3;
-KindTimedOut = 4;
-
-KindTakeSeat = 5;
-KindLeaveSeat = 6;
-
-KindCheck = 7;
-KindBet = 8;
-KindCall = 9;
-KindFold = 10;
-KindDiscard = 11;
+KIND_TAKE_SEAT = 5;
+KIND_LEAVE_SEAT = 6
+KIND_CHECK = 7;
+KIND_BET = 8;
+KIND_CALL = 9;
+KIND_FOLD = 10;
+KIND_DISCARD = 11;
 
 function onMessage(message) {
 	switch (message.kind) {
-		case MESSAGE_WATCHING:
-			for (var i = 0; i < message.users.length; i++) {
-				var user = message.users[i];
-				otherWatchers[user.id] = user.name;
-			}
+		case KIND_GAME_STATE:
+
 			break;
-		case MESSAGE_WATCHER_JOINS:
-			otherWatchers[message.user.id] = message.user.name;
+		case KIND_PLAYER_SITS:
+
 			break;
-		case MESSAGE_LEFT_TABLE:
-			delete otherNames[message.userId];
-			update();
+		case KIND_PLAYER_LEAVES:
+
+			break;
+		case KIND_TIMED_OUT:
+
 			break;
 	}
 }
-
-socket.onmessage = function (event) {
-	var messages = event.data.split('\n');
-	for (var i = 0; i < messages.length; i++) {
-		var message = JSON.parse(messages[i]);
-		onMessage(message);
-	}
-};

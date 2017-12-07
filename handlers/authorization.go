@@ -6,19 +6,16 @@ import (
 	"net/http"
 	"regexp"
 
-	// "github.com/gorilla/sessions"
-
 	"poker/database"
 	"poker/models"
-	"poker/sessions"
 )
 
 func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "PageLogin")
-		pagedata.Session.LoggedIn = false
+		pagedata := getPageData(env, r, "sessionid", "PageLogin")
+		pagedata.Identity.LoggedIn = false
 
 		template := env.Templates["Login"]
 
@@ -36,7 +33,7 @@ func Login(env *models.Env) http.Handler {
 				username := r.PostFormValue("username")
 				password := r.PostFormValue("password")
 				userAccount := database.FindByUsername(env, username)
-				name := userAccount.Name
+				//name := userAccount.Name
 
 				// Query the database to check if account even exists (via FindByUsername?)
 				if username == "" || password == "" {
@@ -45,15 +42,17 @@ func Login(env *models.Env) http.Handler {
 				} else if userAccount.Username != username {
 					fmt.Printf("This user does not exist.\n")
 					template.Execute(w, pagedata)
-				} else if CheckPasswordHash(password, userAccount.Password) != true {
+				} else if CheckPasswordHash(password, userAccount.HashedPassword) != true {
 					fmt.Printf("The password is incorrect.\n")
 					template.Execute(w, pagedata)
 				} else {
 					fmt.Printf("Login successful.\n")
 
 					// .. check credentials ..
-					setSession(username, name, w)
-					sessions.CreateSession(env, username)
+					/*
+						setSession(username, name, w)
+						sessions.CreateSession(env, username)
+					*/
 
 					http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
 				}
@@ -71,18 +70,9 @@ func Login(env *models.Env) http.Handler {
 func Logout(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("User attempted to log out.\n")
-		// if a valid cookie exists
-		// if _, err := r.Cookie("session"); err == nil {
-		// 	cookieValue := make(map[string]string)
-		// 	if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
-		// 		loginUsername = cookieValue["username"]
-		// 		loginName  = cookieValue["name"]
-		// 	}
-		// } else {
-		// 	fmt.Printf("???")
-		// }
-		// fmt.Printf("session values: ", usera, userb, "\n")
+
 		clearSession(w)
+
 		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 	})
 }
@@ -92,8 +82,8 @@ func Register(env *models.Env) http.Handler {
 		fmt.Printf("User visited Register page.\n")
 
 		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "PageUser")
-		pagedata.Session.LoggedIn = false
+		pagedata := getPageData(env, r, "sessionid", "PageUser")
+		pagedata.Identity.LoggedIn = false
 
 		// the user should only be able to register if they are not logged in
 		if _, err := r.Cookie("session"); err == nil {
@@ -146,8 +136,10 @@ func Register(env *models.Env) http.Handler {
 						panic("No database found")
 					}
 					// .. check credentials ..
-					setSession(username, name, w)
-					sessions.CreateSession(env, username)
+					/*
+						setSession(username, name, w)
+						sessions.CreateSession(env, username)
+					*/
 
 					http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 				}

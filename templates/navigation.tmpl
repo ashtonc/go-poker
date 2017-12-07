@@ -1,21 +1,26 @@
 {{ define "navigation" -}}
 		{{ $siteroot := .SiteRoot -}}
 		<div id="navigation">
-			{{ with .Session -}}
 			<ul>
-				<li{{ if .PageHome }} class="nav-current">{{ else }}>{{ end }}
-					<a href="{{ $siteroot }}/">Home</a>
+				<li{{ if eq .NavigationLevel 1 }} class="nav-current">{{ else }}>{{ end }}
+					<a href="{{ .SiteRoot -}}/">Home</a>
 				</li>
-				<li{{ if .PageGame }} class="nav-current">{{ else }}>{{ end }}
-					<a href="{{ $siteroot }}/game/">Play</a>
+				<li{{ if eq .NavigationLevel 2 }} class="nav-current">{{ else }}>{{ end }}
+					<a href="{{ .SiteRoot -}}/game/">Play</a>
 				</li>
-				<li{{ if .PageLeaderboard }} class="nav-current">{{ else }}>{{ end }}
-					<a href="{{ $siteroot }}/leaderboard/">Leaderboard</a>
+				<li{{ if eq .NavigationLevel 3 }} class="nav-current">{{ else }}>{{ end }}
+					<a href="{{ .SiteRoot -}}/leaderboard/">Leaderboard</a>
 				</li>
-				<li{{ if .PageUser }} class="nav-current"{{ end }}>
-					{{ if .LoggedIn -}}<a href="{{ $siteroot }}/user/{{ .Username }}/view">Profile{{ else }}<a href="{{ $siteroot }}/register/">Register{{ end }}</a>
+				<li{{ if eq .NavigationLevel 4 }} class="nav-current">{{ else }}>{{ end }}
+				{{ with .Identity -}}
+					{{ if .LoggedIn -}}
+						<a href="{{ $siteroot }}/user/{{ .Username }}/view">{{ .Username }}
+					{{- else -}}
+						<a href="{{ $siteroot }}/register/">Register
+					{{- end }}
+						</a>
+				{{- end }}
 				</li>
 			</ul>
-			{{- end }}
 		</div>
 {{- end }}

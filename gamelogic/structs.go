@@ -45,9 +45,6 @@ type Game struct {
 	Current_Player string     `json:"-"`
 	Current_Bet    int        `json:"-"`
 	Bet_Counter    int        `json:"-"`
-	Ante           int        `json:"-"`
-	Max_bet        int        `json:"-"`
-	Min_bet        int        `json:"-"`
 	Dealer_Token   int        `json:"-"`
 	Timer          time.Timer `json:"-"`
 	Winner         *Player    `json:"-"`
@@ -75,8 +72,8 @@ type Seat struct {
 }
 
 type Player struct {
-	Username    string  `json:"username"`
 	Name        string  `json:"-"`
+	Username    string  `json:"username"`
 	PictureSlug string  `json:"pictureslug"`
 	Money       int     `json:"money"`
 	Hand        []Card  `json:"hand"`
@@ -88,6 +85,7 @@ type Player struct {
 	Card_Hist   [14]int `json:"-"`
 	Seat        int     `json:"-"`
 }
+
 /*
 type Card struct {
 	Face string `json:"face"`
@@ -106,7 +104,6 @@ func getIndex(array []string, item string) int {
 	return -1
 }
 */
-
 
 func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	game := new(Game)
@@ -129,7 +126,6 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 
 	return game, nil
 }
-
 
 func (p *Player) pay_bet(amount int, pot int) int {
 	p.Money -= amount

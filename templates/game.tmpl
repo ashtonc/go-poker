@@ -1,6 +1,6 @@
 {{ define "game" -}}
 		{{ $siteroot := .SiteRoot -}}
-		{{ with .GameListing -}}
+		{{ with .GamePage -}}
         <h1>{{ .Name }}</h1>
 		{{ with .Game -}}
 		{{ $deckSize := len .Deck }}
