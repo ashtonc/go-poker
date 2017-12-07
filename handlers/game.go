@@ -9,11 +9,6 @@ import (
 
 	"poker/connection"
 	"poker/models"
-	//for test
-	"fmt"
-	//"log"
-	//"math/rand"
-
 )
 
 func RedirectGame(env *models.Env) http.Handler {
@@ -47,24 +42,7 @@ func Game(env *models.Env) http.Handler {
 		/* Put game code here */
 		/* ****************** */
 
-		game := gameListing.Game
-		game.Stakes.MaxBet = 20
-		game.Stakes.MinBet = 0
-		game.Stakes.Ante = 1
-		p1err := game.Join("Ashton", "Ashton", " ", 100, 0)
-		if p1err != nil {
-			fmt.Printf("Player 1 was not added to the game! \n")
-		}
-		p2err := game.Join("Adam", "Adam",  " ", 100, 1)
-		if p2err != nil {
-			fmt.Printf("Player 2 was not added to the game! \n")
-			log.Print(p2err)
-		}
-		p3err := game.Join("Matthew", "Matthew", " ", 100, 2)
-		if p3err != nil {
-			fmt.Printf("Player 3 was not added to the game! \n")
-			log.Print(p3err)
-		//Start a new round
+		// game := gameListing.game
 
 		/* ******************* */
 		/* Stop game code here */
@@ -75,14 +53,11 @@ func Game(env *models.Env) http.Handler {
 		if action == "play" {
 			template = env.Templates["PlayGame"]
 		}
-}
+
 		// Execute the template with our page data
 		template.Execute(w, pagedata)
 	})
 }
-
-
-
 
 func GameAction(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -110,6 +85,12 @@ func GameAction(env *models.Env) http.Handler {
 
 		if r.Method == "POST" {
 			r.ParseForm()
+
+			if action == "start_round"{
+				log.Print("Start round \n")
+				_ = game.NewRound(game.Dealer_Token)
+			
+			}
 
 			if action == "sit" {
 				// Tell the game the player joined, and what seat they are trying to sit in
