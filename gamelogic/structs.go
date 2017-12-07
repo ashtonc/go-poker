@@ -86,13 +86,20 @@ type Player struct {
 	Seat        int     `json:"-"`
 }
 
-/*
 type Card struct {
 	Face string `json:"face"`
 	Suit string `json:"suit"`
 	Rank int    `json:"-"`
 }
-*/
+
+func newCard(face string, suit string, cardTypes []string) *Card {
+	crd := new(Card)
+	crd.Face = face
+	crd.Suit = suit
+	rank := getIndex(cardTypes, face)
+	crd.Rank = rank
+	return crd
+}
 
 /*
 func getIndex(array []string, item string) int {
@@ -243,18 +250,3 @@ func (p *Player) second_best_pair() int {
 //	index := getIndex(p.Hand, card)
 //	p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
 //}
-
-type Card struct {
-	Face string `json:"face"`
-	Suit string `json:"suit"`
-	Rank int    `json:"-"`
-}
-
-func newCard(face string, suit string, cardTypes []string) *Card {
-	crd := new(Card)
-	crd.Face = face
-	crd.Suit = suit
-	rank := getIndex(cardTypes, face)
-	crd.Rank = rank
-	return crd
-}
