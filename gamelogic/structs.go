@@ -12,7 +12,7 @@ import (
 )
 
 func Init_card_cat() ([]string, []string) {
-	cardTypes := []string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "Ace"}
+	cardTypes := []string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"}
 	suites := []string{"hearts", "spades", "clubs", "diamonds"}
 	return cardTypes, suites
 }
