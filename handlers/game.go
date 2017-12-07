@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 
@@ -81,46 +83,56 @@ func GameAction(env *models.Env) http.Handler {
 			return
 		}
 
-		if action == "sit" {
-			// Tell the game the player joined, and what seat they are trying to sit in
-			// If the seat is occupied, tell them to get out of here
+		if r.Method == "POST" {
+			r.ParseForm()
 
-			game.Join(pagedata.Identity.Name, username, "img", 200, 2)
-		}
+			if action == "sit" {
+				// Tell the game the player joined, and what seat they are trying to sit in
+				// If the seat is occupied, tell them to get out of here
 
-		if action == "leave" {
-			// Tell the game the player left
-			// Send them to the game lobby
-			game.Leave(username)
-		}
+				seat, _ := strconv.Atoi(r.PostFormValue("seat"))
 
-		if action == "check" {
-			// Tell the game they checked
-			game.Check(username)
-		}
+				log.Print(username + " joined seat " + r.PostFormValue("seat"))
 
-		if action == "bet" {
-			// Get their bet amount
-			// Tell the game they bet n amount
+				if seat <= 6 && seat >= 1 {
+					game.Join(pagedata.Identity.Name, username, "img", 100, seat)
+				}
+			}
 
-			//game.Bet(username, betamount)
+			if action == "leave" {
+				// Tell the game the player left
+				// Send them to the game lobby
+				game.Leave(username)
+			}
 
-		}
+			if action == "check" {
+				// Tell the game they checked
+				game.Check(username)
+			}
 
-		if action == "call" {
-			// Tell the game they called
-			game.Call(username)
-		}
+			if action == "bet" {
+				// Get their bet amount
+				// Tell the game they bet n amount
 
-		if action == "fold" {
-			// Tell the game they folded
-			game.Fold(username)
-		}
+				//game.Bet(username, betamount)
 
-		if action == "discard" {
-			// Get the indices of the cards that they discarded
-			// Tell the game they discarded n cards
-			game.Discard(username, 1, 3, 4)
+			}
+
+			if action == "call" {
+				// Tell the game they called
+				game.Call(username)
+			}
+
+			if action == "fold" {
+				// Tell the game they folded
+				game.Fold(username)
+			}
+
+			if action == "discard" {
+				// Get the indices of the cards that they discarded
+				// Tell the game they discarded n cards
+				game.Discard(username, 1, 3, 4)
+			}
 		}
 
 		// Have the default here (back to game)
