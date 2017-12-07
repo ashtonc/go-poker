@@ -22,7 +22,7 @@ CREATE TABLE account (
 
 CREATE TABLE user_session (
 	id SERIAL PRIMARY KEY,
-	token VARCHAR(256),
+	token VARCHAR(1024),
 	expiry_time TIMESTAMP,
 	user_id INTEGER REFERENCES account (id)
 );

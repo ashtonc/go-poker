@@ -26,7 +26,7 @@ func Game(env *models.Env) http.Handler {
 		gameslug := vars["gameslug"]
 		action := vars["action"]
 
-		pagedata := getPageData(env, "sessionid", "Game")
+		pagedata := getPageData(env, r, "sessionid", "Game")
 		template := env.Templates["WatchGame"]
 
 		gameListing := env.Games[gameslug]
@@ -36,7 +36,7 @@ func Game(env *models.Env) http.Handler {
 			return
 		}
 
-		pagedata.GameListing = gameListing
+		pagedata.GamePage = gameListing
 
 		// Choose our template based on the action
 		if action == "play" {
