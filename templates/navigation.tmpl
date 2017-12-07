@@ -21,6 +21,13 @@
 						</a>
 				{{- end }}
 				</li>
+				{{ with .Identity -}}
+					{{ if .LoggedIn -}}
+					<li><a href="{{ $siteroot }}/logout/">Logout</a></li>
+					{{- else -}}
+					<li><a href="{{ $siteroot }}/login/">Login</a></li>
+					{{- end }}
+				{{- end }}
 			</ul>
 		</div>
 {{- end }}
