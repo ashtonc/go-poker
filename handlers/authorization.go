@@ -65,41 +65,23 @@ func Login(env *models.Env) http.Handler {
 		}
 
 		template.Execute(w, pagedata)
-
-		/*
-			if r.Method == "POST" {
-				fmt.Printf("POST for Login\n")
-				// this code gets username and password from the POST form
-				userAccount := database.FindByUsername(env, username)
-				//name := userAccount.Name
-
-				// Query the database to check if account even exists (via FindByUsername?)
-				if username == "" || password == "" {
-					fmt.Printf("One or more fields were left blank.\n")
-					template.Execute(w, pagedata)
-				} else if userAccount.Username != username {
-					fmt.Printf("This user does not exist.\n")
-					template.Execute(w, pagedata)
-				} else if CheckPasswordHash(password, userAccount.HashedPassword) != true {
-					fmt.Printf("The password is incorrect.\n")
-					template.Execute(w, pagedata)
-				} else {
-					fmt.Printf("Login successful.\n")
-
-					// .. check credentials ..
-						setSession(username, name, w)
-						sessions.CreateSession(env, username)
-
-					http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
-				}
-			}
-		*/
 	})
 }
 
 func Logout(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		token, err := getSessionToken(env, r)
+		if err != nil {
+			log.Print(err)
+		}
+
 		clearSession(w)
+
+		err = RevokeSession(env, token)
+		if err != nil {
+			log.Print(err)
+		}
+
 		http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 	})
 }
@@ -134,8 +116,8 @@ func Register(env *models.Env) http.Handler {
 
 			err := database.AddUser(env, user)
 			if err != nil {
-				log.Print(err)
 				// Couldn't be added(?)
+				log.Print(err)
 			}
 
 			token, err := database.CreateSession(env, username, time.Now().AddDate(0, 1, 0))
@@ -161,63 +143,53 @@ func Register(env *models.Env) http.Handler {
 		template.Execute(w, pagedata)
 
 		/*
-			// the user should only be able to register if they are not logged in
-			if _, err := r.Cookie("session"); err == nil {
-				fmt.Printf("The user is already logged in, so this page should not be available. Redirecting to play page.\n")
-				http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
-			} else {
-
-				if r.Method == "GET" {
-
-					// Execute the template with our page data
-					template := env.Templates["Register"]
-					template.Execute(w, pagedata)
-				} else if r.Method == "POST" {
-					template := env.Templates["Register"]
 					isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString // only accounts with letters are permitted
-
-					fmt.Printf("User attempted to register.\n")
-					// extract form data
-					r.ParseForm()
-					username := r.PostFormValue("username")
-					password := r.PostFormValue("password")
-					name := r.PostFormValue("name")
-					email := r.PostFormValue("email")
-					password_repeat := r.PostFormValue("password-repeat")
 
 					// validate user input
 					if len(username) < 5 || !isAlpha(username) {
 						template.Execute(w, pagedata)
 						fmt.Printf("Incorrect input for username.\n")
-					} else if len(name) < 1 || !isAlpha(name) {
-						template.Execute(w, pagedata)
-						fmt.Printf("Incorrect input for name.\n")
-					} else if len(email) < 1 {
-						template.Execute(w, pagedata)
-						fmt.Printf("Incorrect input for email.\n")
-					} else if len(password) < 6 {
-						template.Execute(w, pagedata)
-						fmt.Printf("Incorrect input for password.\n")
-					} else if password != password_repeat {
-						template.Execute(w, pagedata)
-						fmt.Printf("The password field should match the password repeat field.\n")
-					} else if (database.FindByUsername(env, username)).Username == username {
-						template.Execute(w, pagedata)
-						fmt.Printf("This account name already exists.\n")
-					} else {
-						fmt.Printf("User has correctly registered!\n")
-						password_hash, _ := HashPassword(password)
-						err := database.UserRegister(env, username, name, email, password_hash)
-						if err != nil {
-							panic("No database found")
-						}
-						// .. check credentials ..
-							setSession(username, name, w)
-							sessions.CreateSession(env, username)
-
-						http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
 					}
 
+					if len(name) < 1 || !isAlpha(name) {
+						template.Execute(w, pagedata)
+						fmt.Printf("Incorrect input for name.\n")
+					}
+
+					if len(email) < 1 {
+						template.Execute(w, pagedata)
+						fmt.Printf("Incorrect input for email.\n")
+					}
+
+					if len(password) < 6 {
+						template.Execute(w, pagedata)
+						fmt.Printf("Incorrect input for password.\n")
+					}
+
+					if password != password_repeat {
+						template.Execute(w, pagedata)
+						fmt.Printf("The password field should match the password repeat field.\n")
+					}
+
+					if (database.FindByUsername(env, username)).Username == username {
+						template.Execute(w, pagedata)
+						fmt.Printf("This account name already exists.\n")
+					}
+
+
+					fmt.Printf("User has correctly registered!\n")
+					password_hash, _ := HashPassword(password)
+					err := database.UserRegister(env, username, name, email, password_hash)
+					if err != nil {
+						panic("No database found")
+					}
+					// .. check credentials ..
+						setSession(username, name, w)
+						sessions.CreateSession(env, username)
+
+						http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+
+					}
 				}
 			}
 		*/

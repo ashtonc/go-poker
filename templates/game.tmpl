@@ -19,8 +19,10 @@
 					<div class="stack">{{ .Money }}</div>
 				</div>
 				<div class="hand">
-					{{ range $index, $hand := .Hand -}}
+					{{ range $index, $card := .Hand -}}
+					{{ with .Card }}
 					<div class="card card-{{ $index }} {{ .Face }} {{ .Suit }}"></div>
+					{{ end }}
 					{{- end }}
 				</div>
 				{{ end }}

@@ -17,18 +17,21 @@ func ViewLobby(env *models.Env) http.Handler {
 		}
 
 		if len(lobby.Games) > 0 {
-			// Sort the games here
+			sort.Slice(lobby.Games, func(i, j int) bool {
+				return lobby.Games[i].NameAxis < lobby.Games[j].Name
+			})
+
 			lobby.Empty = false
 		} else {
 			lobby.Empty = true
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData(env, r, "sessionid", "ViewLobby")
+		pagedata := getPageData(env, r, "sessionid", "Lobby")
 		pagedata.Lobby = &lobby
 
 		// Execute the template with our page data
-		template := env.Templates["ViewLobby"]
+		template := env.Templates["Lobby"]
 		template.Execute(w, pagedata)
 	})
 }

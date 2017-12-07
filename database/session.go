@@ -53,21 +53,9 @@ func CreateSession(env *models.Env, username string, expiry time.Time) (string, 
 	return token, err
 }
 
-func RevokeSession(env *models.Env, username string) error {
-	var userid int
-
-	sqlStatement := `SELECT id FROM account WHERE username = $1`
-	row := env.Database.QueryRow(sqlStatement, username)
-	err := row.Scan(&userid)
-	if err != nil {
-		return err
-	}
-
-	sqlStatement = `DELETE FROM user_session WHERE user_id = $1`
-	_, err = env.Database.Exec(sqlStatement, userid)
-	if err != nil {
-		return err
-	}
+func RevokeSession(env *models.Env, sessionid string) error {
+	sqlStatement = `DELETE FROM user_session WHERE token = $1`
+	_, err = env.Database.Exec(sqlStatement, sessionid)
 
 	return err
 }
