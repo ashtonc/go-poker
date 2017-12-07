@@ -39,9 +39,9 @@ type Game struct {
 	Phase          int        `json:"-"`
 	Pot            int        `json:"pot"`
 	Deck           []Card     `json:"-"`
-	Seats          [6]Seat    `json:"seats"`
-	Players        []Player   `json:"-"`
-	Sitters        []Player   `json:"-"`
+	Seats          [6]*Seat    `json:"seats"`
+	Players        []*Player   `json:"-"`
+	Sitters        []*Player   `json:"-"`
 	Current_Player string     `json:"-"`
 	Current_Bet    int        `json:"-"`
 	Bet_Counter    int        `json:"-"`
@@ -72,8 +72,8 @@ type Seat struct {
 }
 
 type Player struct {
-	Name        string  `json:"-"`
 	Username    string  `json:"username"`
+	Name        string  `json:"-"`
 	PictureSlug string  `json:"pictureslug"`
 	Money       int     `json:"money"`
 	Hand        []Card  `json:"hand"`
@@ -85,21 +85,13 @@ type Player struct {
 	Card_Hist   [14]int `json:"-"`
 	Seat        int     `json:"-"`
 }
-
+/*
 type Card struct {
 	Face string `json:"face"`
 	Suit string `json:"suit"`
 	Rank int    `json:"-"`
 }
-
-func newCard(face string, suit string, cardTypes []string) *Card {
-	crd := new(Card)
-	crd.Face = face
-	crd.Suit = suit
-	rank := getIndex(cardTypes, face)
-	crd.Rank = rank
-	return crd
-}
+*/
 
 /*
 func getIndex(array []string, item string) int {
@@ -111,6 +103,7 @@ func getIndex(array []string, item string) int {
 	return -1
 }
 */
+
 
 func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	game := new(Game)
@@ -128,11 +121,12 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 		var seat Seat
 		seat.Number = i + 1
 		seat.Occupied = false
-		game.Seats[i] = seat
+		game.Seats[i] = &seat
 	}
 
 	return game, nil
 }
+
 
 func (p *Player) pay_bet(amount int, pot int) int {
 	p.Money -= amount
@@ -250,3 +244,18 @@ func (p *Player) second_best_pair() int {
 //	index := getIndex(p.Hand, card)
 //	p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
 //}
+
+type Card struct {
+	Face string `json: "face"`
+	Suit string `json: "suit"`
+	Rank int    `json: "rank"`
+}
+
+func newCard(face string, suit string, cardTypes []string) *Card {
+	crd := new(Card)
+	crd.Face = face
+	crd.Suit = suit
+	rank := getIndex(cardTypes, face)
+	crd.Rank = rank
+	return crd
+}

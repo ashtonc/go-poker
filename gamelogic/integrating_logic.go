@@ -195,7 +195,7 @@ func (g *Game)find_winner() (error, *Player) {
 	//function assumes only one players remains in the game
 	for i, p := range g.Players {
 		if p.Folded == false {
-			return nil, &g.Players[i]
+			return nil, g.Players[i]
 		}
 	}
 	//just to make Go happy

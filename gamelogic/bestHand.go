@@ -187,7 +187,7 @@ func (g *Game)DetermineWinner(score_board map[string][]int) *Player {
 	//	fmt.Printf("%s: %v \n", key, value)
 	//}
 	best := 0
-	var winner Player
+	var winner *Player
 	if len(score_board["straight_flush"]) == 1 {
 		win := score_board["straight_flush"][0]
 		winner = g.Players[win]
@@ -277,7 +277,7 @@ func (g *Game)DetermineWinner(score_board map[string][]int) *Player {
 						win := find_best_nothing(contenders, g.Players)
 						winner = g.Players[win]
 						fmt.Printf("current winner: %s \n", winner.Name)
-						return &winner
+						return winner
 					}
 				}
 			}
@@ -298,7 +298,7 @@ func (g *Game)DetermineWinner(score_board map[string][]int) *Player {
 			} else if rank == best && best > 0 {
 				index := find_best_nothing(contenders, g.Players)
 				winner = g.Players[index]
-				return &winner
+				return winner
 			}
 		}
 	} else {
@@ -306,10 +306,10 @@ func (g *Game)DetermineWinner(score_board map[string][]int) *Player {
 		index := find_best_nothing(contenders, g.Players)
 		winner = g.Players[index]
 	}
-	return &winner
+	return winner
 }
 
-func find_best_nothing(indexes []int, players []Player) int {
+func find_best_nothing(indexes []int, players []*Player) int {
 
 	for i := 4; i > 0; i-- {
 		win_indx := 0

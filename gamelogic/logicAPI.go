@@ -26,7 +26,7 @@ func (g *Game) Join(name string, buyin int, seatNumber int) error {
 	player.Discarded = false
 	player.Folded = false
 	player.Called = false
-	g.Sitters = append(g.Sitters, *player)
+	g.Sitters = append(g.Sitters, player)
 	g.Seats[seatNumber].Occupied = true
 	g.Seats[seatNumber].Occupier = player
 	return nil
