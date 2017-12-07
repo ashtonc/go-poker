@@ -89,6 +89,7 @@ func (hub *Hub) onDisconnect(client *Client) {
 func (hub *Hub) onMessage(data []byte, client *Client) {
 	kind := gjson.GetBytes(data, "kind").Int()
 
+	// Call the game logic here
 	switch kind {
 	case KindTakeSeat:
 

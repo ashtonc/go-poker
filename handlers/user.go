@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/crypto/bcrypt"
 
 	"poker/database"
 	"poker/models"
@@ -33,19 +34,55 @@ func User(env *models.Env) http.Handler {
 		// Create our pagedata model
 		if action == "edit" {
 			pagedata = getPageData(env, r, []byte("sessionid"), "EditUser")
+
+			if pagedata.Identity.Username != username {
+				http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+			}
+
 			template = env.Templates["EditUser"]
 
-			log.Print("Editing player " + username + ".")
+			if r.Method == "POST" {
+				r.ParseForm()
+
+				user, err := database.GetUser(env, username)
+				if err != nil {
+					log.Print(err)
+				} else {
+					err = bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(r.PostFormValue("password")))
+					if err != nil {
+						// Wrong password
+						log.Print(err)
+					} else {
+						user.Name = r.PostFormValue("name")
+						user.Email = r.PostFormValue("email")
+						user.Description = r.PostFormValue("description")
+
+						if r.PostFormValue("newpassword") == r.PostFormValue("newpassword-repeat") && r.PostFormValue("newpassword") != "" {
+							newHashedPassword, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("newpassword")), 8)
+							if err != nil {
+								log.Print(err)
+							} else {
+								user.HashedPassword = newHashedPassword
+							}
+						}
+
+						err = database.UpdateUser(env, user)
+						if err != nil {
+							log.Print(err)
+						}
+					}
+				}
+
+				userPage, _ = database.GetUserPage(env, username)
+			}
 		} else {
 			pagedata = getPageData(env, r, []byte("sessionid"), "ViewUser")
 			template = env.Templates["ViewUser"]
-
-			log.Print("Displaying player " + username + ".")
 		}
+
 		pagedata.UserPage = userPage
 
 		// Execute the template with our page data
 		template.Execute(w, pagedata)
-
 	})
 }

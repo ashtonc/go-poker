@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS account CASCADE;
 
 CREATE TABLE account (
 	id SERIAL PRIMARY KEY,
-	username VARCHAR(32),
+	username VARCHAR(32) UNIQUE,
 	name VARCHAR(256),
 	email VARCHAR(128),
 	picture_slug VARCHAR(128),

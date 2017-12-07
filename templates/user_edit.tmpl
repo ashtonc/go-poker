@@ -1,26 +1,31 @@
 {{ define "title" }} | Edit | {{ with .UserPage }}{{ .Username }}{{ end }}{{ end }}
 {{ define "content" -}}
 		{{ with .UserPage -}}
+		<h1>{{ .Username }}</h1>
 		<form method="POST">
 			<div>
-				<label for="username">Username:</label>
-				<input id="username" type="text" value="{{ .Username }}">
-			</div>
-			<div>
 				<label for="name">Name:</label>
-				<input id="name" type="text" value="{{ .Name }}">
+				<input name="name" type="text" value="{{ .Name }}">
 			</div>
 			<div>
 				<label for="email">Email:</label>
-				<input id="email" type="text" value="{{ .Email }}">
+				<input name="email" type="text" value="{{ .Email }}">
+			</div>
+			<div>
+				<label for="email">Description:</label>
+				<input name="description" type="text" value="{{ .Description }}">
+			</div>
+			<div>
+				<label for="password">Current Password:</label>
+				<input name="password" type="password">
 			</div>
 			<div>
 				<label for="password">New Password:</label>
-				<input id="new-password" type="password">
+				<input name="newpassword" type="password">
 			</div>
 			<div>
 				<label for="password-repeat">Repeat Password:</label>
-				<input id="new-password-repeat" type="password">
+				<input name="newpassword-repeat" type="password">
 			</div>
 			<div>
 				<input type="submit" value="Edit">
