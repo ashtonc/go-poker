@@ -8,7 +8,7 @@ import (
 	"poker/models"
 )
 
-func GetSession(env *models.Env, sessionid string) (*models.Session, error) {
+func GetSession(env *models.Env, sessionid []byte) (*models.Session, error) {
 	var session models.Session
 	var user models.User
 	var userid int
@@ -33,9 +33,9 @@ func GetSession(env *models.Env, sessionid string) (*models.Session, error) {
 	return &session, err
 }
 
-func CreateSession(env *models.Env, username string, expiry time.Time) (string, error) {
+func CreateSession(env *models.Env, username string, expiry time.Time) ([]byte, error) {
 	var userid int
-	token := string(securecookie.GenerateRandomKey(512))
+	token := securecookie.GenerateRandomKey(512)
 
 	sqlStatement := `SELECT id FROM account WHERE username = $1`
 	row := env.Database.QueryRow(sqlStatement, username)
@@ -53,21 +53,9 @@ func CreateSession(env *models.Env, username string, expiry time.Time) (string, 
 	return token, err
 }
 
-func RevokeSession(env *models.Env, username string) error {
-	var userid int
-
-	sqlStatement := `SELECT id FROM account WHERE username = $1`
-	row := env.Database.QueryRow(sqlStatement, username)
-	err := row.Scan(&userid)
-	if err != nil {
-		return err
-	}
-
-	sqlStatement = `DELETE FROM user_session WHERE user_id = $1`
-	_, err = env.Database.Exec(sqlStatement, userid)
-	if err != nil {
-		return err
-	}
+func RevokeSession(env *models.Env, sessionid []byte) error {
+	sqlStatement := `DELETE FROM user_session WHERE token = $1`
+	_, err := env.Database.Exec(sqlStatement, sessionid)
 
 	return err
 }

@@ -137,14 +137,11 @@ func Game(env *models.Env) http.Handler {
 				break
 			}
 		}
-
 		// Execute the template with our page data
 		template.Execute(w, pagedata)
 	})
 
 }
-
-
 
 
 

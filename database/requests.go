@@ -20,6 +20,18 @@ func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
 	return &page, err
 }
 
+func GetUser(env *models.Env, username string) (*models.User, error) {
+	var user models.User
+	user.Username = username
+
+	sqlStatement := `SELECT name, email, description, picture_slug, password_hash FROM account WHERE username = $1;`
+
+	row := env.Database.QueryRow(sqlStatement, username)
+	err := row.Scan(&user.Name, &user.Email, &user.PictureSlug, &user.Description, &user.HashedPassword)
+
+	return &user, err
+}
+
 func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
 	gameMap := make(map[string]*models.GameListing)
 
@@ -75,15 +87,14 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
-func UserRegister(env *models.Env, username string, name string, email string, password_hash string) error {
+func AddUser(env *models.Env, user *models.User) error {
+	sqlStatement := `INSERT INTO account (username, name, email, picture_slug, description, password_hash) VALUES ($1, $2, $3, $4, $5, $6)`
 
-	sqlStatement := `  
-	INSERT INTO account (username, name, email, password_hash) 
-	VALUES ($1, $2, $3, $4)`
-	_, err := env.Database.Exec(sqlStatement, username, name, email, password_hash)
+	_, err := env.Database.Exec(sqlStatement, user.Username, user.Name, user.Email, user.PictureSlug, user.Description, user.HashedPassword)
 	if err != nil {
-		panic(err)
+		log.Print(err)
 	}
+
 	return err
 }
 

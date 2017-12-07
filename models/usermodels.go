@@ -10,11 +10,11 @@ type User struct {
 	Email          string
 	PictureSlug    string
 	Description    string
-	HashedPassword string
+	HashedPassword []byte
 }
 
 type Session struct {
-	Token  string
+	Token  []byte
 	Expiry time.Time
 	User   *User
 }
