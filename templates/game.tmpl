@@ -27,15 +27,20 @@
 				{{ else }}
 				<div class="player-info">
 					<div class="image"></div>
-					<div class="name"></div>
+					<div class="name">
+						<form action="sit" method="post">
+							<input type="hidden" value="{{ .Number }}" name="seat" />
+							<button type="submit" class="">Join!</button>
+						</form>
+					</div>
 					<div class="stack"></div>
 				</div>
 				<div class="hand">
-					<div class="card card-1 none"><div class="back"></div></div>
-					<div class="card card-1 none"><div class="back"></div></div>
-					<div class="card card-1 none"><div class="back"></div></div>
-					<div class="card card-1 none"><div class="back"></div></div>
-					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"></div>
+					<div class="card card-1 none"></div>
+					<div class="card card-1 none"></div>
+					<div class="card card-1 none"></div>
+					<div class="card card-1 none"></div>
 				</div>
 				{{ end }}
 				<div class="timer"></div>
