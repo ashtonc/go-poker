@@ -32,12 +32,12 @@ func User(env *models.Env) http.Handler {
 
 		// Create our pagedata model
 		if action == "edit" {
-			pagedata = getPageData(env, r, "sessionid", "EditUser")
+			pagedata = getPageData(env, r, []byte("sessionid"), "EditUser")
 			template = env.Templates["EditUser"]
 
 			log.Print("Editing player " + username + ".")
 		} else {
-			pagedata = getPageData(env, r, "sessionid", "ViewUser")
+			pagedata = getPageData(env, r, []byte("sessionid"), "ViewUser")
 			template = env.Templates["ViewUser"]
 
 			log.Print("Displaying player " + username + ".")

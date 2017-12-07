@@ -17,12 +17,12 @@ CREATE TABLE account (
 	email VARCHAR(128),
 	picture_slug VARCHAR(128),
 	description TEXT,
-	password_hash VARCHAR(1024)
+	password_hash BYTEA
 );
 
 CREATE TABLE user_session (
 	id SERIAL PRIMARY KEY,
-	token VARCHAR(1024),
+	token BYTEA,
 	expiry_time TIMESTAMP,
 	user_id INTEGER REFERENCES account (id)
 );

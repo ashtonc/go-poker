@@ -8,7 +8,7 @@ import (
 	"poker/models"
 )
 
-func getPageData(env *models.Env, r *http.Request, sessionid string, page string) models.PageData {
+func getPageData(env *models.Env, r *http.Request, sessionid []byte, page string) models.PageData {
 	var pagedata models.PageData
 	pagedata.SiteRoot = env.SiteRoot
 
@@ -31,7 +31,6 @@ func getPageData(env *models.Env, r *http.Request, sessionid string, page string
 
 	token, err := getSessionToken(env, r)
 	if err != nil {
-		log.Print(err)
 		return pagedata
 	}
 
@@ -49,9 +48,9 @@ func getPageData(env *models.Env, r *http.Request, sessionid string, page string
 	return pagedata
 }
 
-func setSessionToken(env *models.Env, w http.ResponseWriter, r *http.Request, token string) error {
+func setSessionToken(env *models.Env, w http.ResponseWriter, r *http.Request, token []byte) error {
 	value := map[string]string{
-		"token": token,
+		"token": string(token),
 	}
 
 	encoded, err := env.CookieHandler.Encode("poker-470-session", value)
@@ -70,18 +69,18 @@ func setSessionToken(env *models.Env, w http.ResponseWriter, r *http.Request, to
 	return err
 }
 
-func getSessionToken(env *models.Env, r *http.Request) (string, error) {
+func getSessionToken(env *models.Env, r *http.Request) ([]byte, error) {
 	cookie, err := r.Cookie("poker-470-session")
 	if err == nil {
 		value := make(map[string]string)
 		if err = env.CookieHandler.Decode("poker-470-session", cookie.Value, &value); err == nil {
-			return value["token"], err
+			return []byte(value["token"]), err
 		}
 
-		return "", err
+		return []byte(""), err
 	}
 
-	return "", err
+	return []byte(""), err
 }
 
 func clearSession(w http.ResponseWriter) {

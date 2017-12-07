@@ -15,7 +15,7 @@ import (
 func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Populate the data needed for the page
-		pagedata := getPageData(env, r, "sessionid", "PageLogin")
+		pagedata := getPageData(env, r, []byte("sessionid"), "PageLogin")
 		template := env.Templates["Login"]
 
 		// If the user is already logged in, send them to the home page
@@ -77,7 +77,7 @@ func Logout(env *models.Env) http.Handler {
 
 		clearSession(w)
 
-		err = RevokeSession(env, token)
+		err = database.RevokeSession(env, token)
 		if err != nil {
 			log.Print(err)
 		}
@@ -90,7 +90,7 @@ func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData(env, r, "sessionid", "PageLogin")
+		pagedata := getPageData(env, r, []byte("sessionid"), "PageLogin")
 		template := env.Templates["Register"]
 
 		// If the user is already logged in, send them to the home page
@@ -111,16 +111,21 @@ func Register(env *models.Env) http.Handler {
 			user.Description = "temp"
 
 			if r.PostFormValue("password") == r.PostFormValue("password-repeat") {
-				user.HashedPassword = bcrypt.GenerateFromPassword([]byte(r.PostFormValue("password")), 16)
+				hashedPassword, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("password")), 16)
+				if err != nil {
+					// problem
+				}
+
+				user.HashedPassword = hashedPassword
 			}
 
-			err := database.AddUser(env, user)
+			err := database.AddUser(env, &user)
 			if err != nil {
 				// Couldn't be added(?)
 				log.Print(err)
 			}
 
-			token, err := database.CreateSession(env, username, time.Now().AddDate(0, 1, 0))
+			token, err := database.CreateSession(env, user.Username, time.Now().AddDate(0, 1, 0))
 			if err != nil {
 				// Couldn't create a session
 				log.Print(err)

@@ -29,7 +29,7 @@ func Game(env *models.Env) http.Handler {
 		gameslug := vars["gameslug"]
 		action := vars["action"]
 
-		pagedata := getPageData(env, r, "sessionid", "Game")
+		pagedata := getPageData(env, r, []byte("sessionid"), "Game")
 		template := env.Templates["WatchGame"]
 
 		gameListing := env.Games[gameslug]
