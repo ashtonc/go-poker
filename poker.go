@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/websocket"
 
 	_ "poker/connection"
@@ -38,13 +39,19 @@ func main() {
 		},
 	}
 
+	// Create a cookie handler
+	var hashKey = []byte("secret-hash-key")
+	var blockKey = []byte("secret-block-key")
+	var cookieHandler = securecookie.New(hashKey, blockKey)
+
 	// Populate our environment
 	env := &models.Env{
-		Database:  db,
-		Port:      ":8000",
-		Templates: templates,
-		SiteRoot:  "/poker",
-		Upgrader:  &upgrader,
+		Database:      db,
+		Port:          ":8000",
+		Templates:     templates,
+		SiteRoot:      "/poker",
+		Upgrader:      &upgrader,
+		CookieHandler: cookieHandler,
 	}
 
 	// Close the database after main finishes

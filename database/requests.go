@@ -2,7 +2,6 @@ package database
 
 import (
 	"log"
-	"time"
 
 	_ "github.com/lib/pq"
 
@@ -45,18 +44,6 @@ func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
 
 	return gameMap, err
 }
-
-func GetSession(env *models.Env, sessionid string) (*models.Session, error) {
-	var session models.Session
-
-	sqlStatement := `SELECT account.username, user_session.expiry_time FROM account, user_session WHERE account.id = user_session.user_id AND user_session.token = $1;`
-
-	row := env.Database.QueryRow(sqlStatement, sessionid)
-	err := row.Scan(&session.Username, &session.Expiry)
-
-	return &session, err
-}
-
 func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	var leaderboard models.Leaderboard
 
@@ -71,7 +58,7 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 
 	for rows.Next() {
 		var username string
-		var cash int64
+		var cash int
 		err = rows.Scan(&username, &cash)
 		if err != nil {
 			log.Fatal(err)
@@ -100,8 +87,8 @@ func UserRegister(env *models.Env, username string, name string, email string, p
 	return err
 }
 
-func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
-	var userAccount models.UserAccount
+func FindByUsername(env *models.Env, inputUsername string) models.User {
+	var userAccount models.User
 
 	sqlStatement := `SELECT username, name, email, password_hash FROM account WHERE username=$1`
 
@@ -110,60 +97,11 @@ func FindByUsername(env *models.Env, inputUsername string) models.UserAccount {
 		panic(err)
 	}
 	for rows.Next() {
-		err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.Password)
+		err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.HashedPassword)
 		if err != nil {
 			panic(err)
 		}
 	}
 
 	return userAccount
-}
-
-// Saves the already created sessions object in the database
-func AddSessionData(env *models.Env, session models.Session) error {
-
-	
-
-	/*
-	This function should only create an entry in this table:
-
-	CREATE TABLE user_session (
-		id SERIAL PRIMARY KEY,
-		token VARCHAR(256),
-		expiry_time TIMESTAMP,
-		user_id INTEGER REFERENCES account (id)
-	);
-	*/
-
-	return nil
-}
-
-func GetUserID(env *models.Env, inputUsername string) models.UserIDSearch {
-	var userData models.UserIDSearch
-
-	sqlStatement := `SELECT id FROM account WHERE username=$1`
-
-	rows, err := env.Database.Query(sqlStatement, inputUsername)
-	if err != nil {
-		panic(err)
-	}
-	for rows.Next() {
-		err = rows.Scan(&userData.UserId)
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	return userData
-}
-
-func NewSession(env *models.Env, token string, expiry_time time.Time, user_id int) error {
-	sqlStatement := `  
-	INSERT INTO user_session (token, expiry_time, user_id) 
-	VALUES ($1, $2, $3)`
-	_, err := env.Database.Exec(sqlStatement, token, expiry_time, user_id)
-	if err != nil {
-		panic(err)
-	}
-	return err
 }

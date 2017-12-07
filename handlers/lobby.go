@@ -24,7 +24,7 @@ func ViewLobby(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData(env, "sessionid", "ViewLobby")
+		pagedata := getPageData(env, r, "sessionid", "ViewLobby")
 		pagedata.Lobby = &lobby
 
 		// Execute the template with our page data
