@@ -10,7 +10,7 @@ import (
 	//for test
 	"fmt"
 	"log"
-	"math/rand"
+	//"math/rand"
 )
 
 func RedirectGame(env *models.Env) http.Handler {
@@ -51,16 +51,16 @@ func Game(env *models.Env) http.Handler {
 		game.Stakes.MinBet = 0
 		game.Stakes.Ante = 1
 		//create players for the game
-		p1err := game.Join("Ashton", 100, 0)
+		p1err := game.Join("Ashton", 100, 1)
 		if p1err != nil {
 			fmt.Printf("Player 1 was not added to the game! \n")
 		}
-		p2err := game.Join("Adam", 100, 1)
+		p2err := game.Join("Adam", 100, 2)
 		if p2err != nil {
 			fmt.Printf("Player 2 was not added to the game! \n")
 			log.Fatal(p2err)
 		}
-		p3err := game.Join("Matthew", 100, 2)
+		p3err := game.Join("Matthew", 100, 3)
 		if p3err != nil {
 			fmt.Printf("Player 3 was not added to the game! \n")
 			log.Fatal(p3err)
@@ -81,9 +81,9 @@ func Game(env *models.Env) http.Handler {
 			if winner != nil {
 				fmt.Printf("A winner is %s \n", winner.Name)
 				break
-			}
+			/*}
 			if game.Phase == 0 || game.Phase == 2 || game.Phase == 4 {
-				player := game.Get_current_player_name()
+				/*player := game.Get_current_player_name()
 				decision := rand.Float32()
 				if decision < 0.25 {
 					fmt.Printf("Bet \n")
@@ -129,9 +129,9 @@ func Game(env *models.Env) http.Handler {
 				err := game.Discard(player, discard...)
 				if err != nil {
 					log.Fatal(err)
-				}
-			} else {
-				//game.Phase == 5
+				} */
+			} 
+			if game.Phase == 5{
 				winner := game.Showdown()
 				fmt.Printf("A winner is %s", winner.Name)
 				break
