@@ -51,16 +51,16 @@ func Game(env *models.Env) http.Handler {
 		game.Stakes.MinBet = 0
 		game.Stakes.Ante = 1
 		//create players for the game
-		p1err := game.Join("Ashton", 100, 0)
+		p1err := game.Join("Ashton", "ashton", "picture1.png", 100, 0)
 		if p1err != nil {
 			fmt.Printf("Player 1 was not added to the game! \n")
 		}
-		p2err := game.Join("Adam", 100, 1)
+		p2err := game.Join("Adam", "adam", "picture2.png", 100, 1)
 		if p2err != nil {
 			fmt.Printf("Player 2 was not added to the game! \n")
 			log.Fatal(p2err)
 		}
-		p3err := game.Join("Matthew", 100, 2)
+		p3err := game.Join("Matthew", "matt", "picture2.png", 100, 2)
 		if p3err != nil {
 			fmt.Printf("Player 3 was not added to the game! \n")
 			log.Fatal(p3err)
@@ -142,8 +142,6 @@ func Game(env *models.Env) http.Handler {
 	})
 
 }
-
-
 
 func GameAction(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
