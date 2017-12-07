@@ -14,7 +14,8 @@ const (
 	NAVIGATION_GAME        = 2
 	NAVIGATION_LEADERBOARD = 3
 	NAVIGATION_USER        = 4
-	NAVIGATION_ADMIN       = 5
+	NAVIGATION_LOGIN       = 5
+	NAVIGATION_ADMIN       = 6
 )
 
 // The pagedata struct is used to fill data into the templates

@@ -21,13 +21,15 @@
 						</a>
 				{{- end }}
 				</li>
+				<li{{ if eq .NavigationLevel 5 }} class="nav-current">{{ else }}>{{ end }}
 				{{ with .Identity -}}
 					{{ if .LoggedIn -}}
-					<li><a href="{{ $siteroot }}/logout/">Logout</a></li>
+					<a href="{{ $siteroot }}/logout/">Logout</a>
 					{{- else -}}
-					<li><a href="{{ $siteroot }}/login/">Login</a></li>
+					<a href="{{ $siteroot }}/login/">Login</a>
 					{{- end }}
 				{{- end }}
+				</li>
 			</ul>
 		</div>
 {{- end }}

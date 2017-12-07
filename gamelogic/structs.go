@@ -12,7 +12,7 @@ import (
 )
 
 func Init_card_cat() ([]string, []string) {
-	cardTypes := []string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"}
+	cardTypes := []string{"2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "Ace"}
 	suites := []string{"hearts", "spades", "clubs", "diamonds"}
 	return cardTypes, suites
 }
@@ -39,9 +39,9 @@ type Game struct {
 	Phase          int        `json:"-"`
 	Pot            int        `json:"pot"`
 	Deck           []Card     `json:"-"`
-	Seats          [6]*Seat    `json:"seats"`
-	Players        []*Player   `json:"-"`
-	Sitters        []*Player   `json:"-"`
+	Seats          [6]*Seat   `json:"seats"`
+	Players        []*Player  `json:"-"`
+	Sitters        []*Player  `json:"-"`
 	Current_Player string     `json:"-"`
 	Current_Bet    int        `json:"-"`
 	Bet_Counter    int        `json:"-"`
@@ -85,6 +85,7 @@ type Player struct {
 	Card_Hist   [14]int `json:"-"`
 	Seat        int     `json:"-"`
 }
+
 /*
 type Card struct {
 	Face string `json:"face"`
@@ -103,7 +104,6 @@ func getIndex(array []string, item string) int {
 	return -1
 }
 */
-
 
 func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	game := new(Game)
@@ -127,7 +127,6 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 	return game, nil
 }
 
-
 func (p *Player) pay_bet(amount int, pot int) int {
 	p.Money -= amount
 	pot += amount
@@ -140,8 +139,8 @@ func (p *Player) stay_in(difference int) bool {
 	reader := bufio.NewReader(os.Stdin)
 	if difference > p.Money {
 		p.Folded = true
-		return false
 		fmt.Print("%s is unable to meet the raised bet and is out of the game \n", p.Name)
+		return false
 	}
 	fmt.Printf("The bet has been rased by %d \n", difference)
 	fmt.Printf("Will %s stay in the game? (Y/N) \n", p.Name)

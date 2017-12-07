@@ -9,7 +9,7 @@ import (
 	"fmt"
 )
 
-func (g *Game) Join(name string, buyin int, seatNumber int) error {
+func (g *Game) Join(name string, username string, pictureslug string, buyin int, seatNumber int) error {
 	if g.Seats[seatNumber].Occupied == true {
 		return errors.New("Seat is already Occupied")
 	}
@@ -21,6 +21,8 @@ func (g *Game) Join(name string, buyin int, seatNumber int) error {
 	}
 	player := new(Player)
 	player.Name = name
+	player.Username = username
+	player.PictureSlug = pictureslug
 	player.Money = buyin
 	player.Seat = seatNumber
 	player.Discarded = false
@@ -99,7 +101,7 @@ func (g *Game) Bet(p_name string, bet int) error {
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
 	}
-	if p_name != g.Current_Player{
+	if p_name != g.Current_Player {
 		return nil
 	}
 	if error == nil {
@@ -135,7 +137,7 @@ func (g *Game) Call(p_name string) error {
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
 	}
-	if p_name != g.Current_Player{
+	if p_name != g.Current_Player {
 		return nil
 	}
 	pindex, err := g.GetPlayerIndex(p_name)
@@ -176,7 +178,7 @@ func (g *Game) Fold(player_name string) error {
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
 	}
-	if player_name != g.Current_Player{
+	if player_name != g.Current_Player {
 		return nil
 	}
 	pindex, err := g.GetPlayerIndex(player_name)
@@ -205,7 +207,7 @@ func (g *Game) Check(player_name string) error {
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
 	}
-	if player_name != g.Current_Player{
+	if player_name != g.Current_Player {
 		return nil
 	}
 	pindex, err := g.GetPlayerIndex(player_name)
@@ -236,7 +238,7 @@ func (g *Game) Discard(playerID string, cardIndexes ...int) error {
 	if g.Phase != 1 && g.Phase != 3 {
 		return errors.New("Game is not in a  phase!")
 	}
-	if playerID != g.Current_Player{
+	if playerID != g.Current_Player {
 		return nil
 	}
 	check := getHighestInt(cardIndexes)

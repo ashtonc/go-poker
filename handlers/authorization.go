@@ -15,7 +15,7 @@ import (
 func Login(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Populate the data needed for the page
-		pagedata := getPageData(env, r, []byte("sessionid"), "PageLogin")
+		pagedata := getPageData(env, r, []byte("sessionid"), "Login")
 		template := env.Templates["Login"]
 
 		// If the user is already logged in, send them to the home page
@@ -90,7 +90,7 @@ func Register(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// Populate the data needed for the page
-		pagedata := getPageData(env, r, []byte("sessionid"), "PageLogin")
+		pagedata := getPageData(env, r, []byte("sessionid"), "Register")
 		template := env.Templates["Register"]
 
 		// If the user is already logged in, send them to the home page
