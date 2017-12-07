@@ -104,21 +104,52 @@ func GameAction(env *models.Env) http.Handler {
 			if action == "bet" {
 				// Get their bet amount
 				// Tell the game they bet n amount
+				bet, _ := strconv.Atoi(r.PostFormValue("bet"))
 
-				//game.Bet(username, betamount)
+				game.Bet(username, bet)
 
-			}
-
-			if action == "call" {
-				// Tell the game they called
-				game.Call(username)
 			}
 
 			if action == "discard" {
 				// Get the indices of the cards that they discarded
 				// Tell the game they discarded n cards
-				game.Discard(username, 1, 3, 4)
+
+				var discarded []int
+
+				c1 := r.PostFormValue("card1discard")
+				if c1 != "" {
+					discarded = append(discarded, 1)
+				}
+
+				c2 := r.PostFormValue("card2discard")
+				if c2 != "" {
+					discarded = append(discarded, 2)
+				}
+
+				c3 := r.PostFormValue("card3discard")
+				if c3 != "" {
+					discarded = append(discarded, 3)
+				}
+
+				c4 := r.PostFormValue("card4discard")
+				if c4 != "" {
+					discarded = append(discarded, 4)
+				}
+
+				c5 := r.PostFormValue("card5discard")
+				if c5 != "" {
+					discarded = append(discarded, 5)
+				}
+
+				log.Print(discarded)
+
+				game.Discard(username, discarded...)
 			}
+		}
+
+		if action == "call" {
+			// Tell the game they called
+			game.Call(username)
 		}
 
 		if action == "leave" {
