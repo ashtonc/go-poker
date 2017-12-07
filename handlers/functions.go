@@ -19,8 +19,10 @@ func getPageData(env *models.Env, r *http.Request, sessionid []byte, page string
 		pagedata.NavigationLevel = models.NAVIGATION_GAME
 	case "Leaderboard":
 		pagedata.NavigationLevel = models.NAVIGATION_LEADERBOARD
-	case "ViewUser", "EditUser", "Login", "Register":
+	case "ViewUser", "EditUser", "Register":
 		pagedata.NavigationLevel = models.NAVIGATION_USER
+	case "Login":
+		pagedata.NavigationLevel = models.NAVIGATION_LOGIN
 	case "Admin":
 		pagedata.NavigationLevel = models.NAVIGATION_ADMIN
 	}
