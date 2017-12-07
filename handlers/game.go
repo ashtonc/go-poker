@@ -45,7 +45,24 @@ func Game(env *models.Env) http.Handler {
 		/* Put game code here */
 		/* ****************** */
 
-		// game := gameListing.game
+		game := gameListing.Game
+		game.Stakes.MaxBet = 20
+		game.Stakes.MinBet = 0
+		game.Stakes.Ante = 1
+		p1err := game.Join("Ashton", "Ashton", " ", 100, 0)
+		if p1err != nil {
+			fmt.Printf("Player 1 was not added to the game! \n")
+		}
+		p2err := game.Join("Adam", "Adam",  " ", 100, 1)
+		if p2err != nil {
+			fmt.Printf("Player 2 was not added to the game! \n")
+			log.Print(p2err)
+		}
+		p3err := game.Join("Matthew", "Matthew", " ", 100, 2)
+		if p3err != nil {
+			fmt.Printf("Player 3 was not added to the game! \n")
+			log.Print(p3err)
+		//Start a new round
 
 		/* ******************* */
 		/* Stop game code here */
@@ -55,7 +72,7 @@ func Game(env *models.Env) http.Handler {
 		if action == "play" {
 			template = env.Templates["PlayGame"]
 		}
-
+}
 		// Execute the template with our page data
 		template.Execute(w, pagedata)
 	})
@@ -126,6 +143,15 @@ func GameAction(env *models.Env) http.Handler {
 			// Get the indices of the cards that they discarded
 			// Tell the game they discard n cards (we can figure out the seat from their session)
 			game.Discard(username, 1, 3, 4)
+		}
+
+		if action == "start_round"{
+			fmt.Printf("Start round \n")
+			dealterToken := 0
+			newErr := game.NewRound(dealterToken)
+			if newErr != nil {
+				log.Print(newErr)
+				}
 		}
 
 		// Have the default here (back to game)

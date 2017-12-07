@@ -1,7 +1,7 @@
 {{ define "game" -}}
 		{{ $siteroot := .SiteRoot -}}
 		{{ with .GamePage -}}
-        <h1>{{ .Name }}</h1>
+        <h1>{{ .Name }}   <input type="button" id = "start_round" value="Start"></h1>
 		{{ with .Game -}}
 		{{ $deckSize := len .Deck }}
 		<div id="game">
