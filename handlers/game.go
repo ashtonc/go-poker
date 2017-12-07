@@ -91,23 +91,14 @@ func GameAction(env *models.Env) http.Handler {
 				// If the seat is occupied, tell them to get out of here
 
 				seat, _ := strconv.Atoi(r.PostFormValue("seat"))
+				buyin, _ := strconv.Atoi(r.PostFormValue("buyin"))
+				seat--
 
-				log.Print(username + " joined seat " + r.PostFormValue("seat"))
+				log.Print("Game " + gameslug + ": " + username + " joined seat " + r.PostFormValue("seat") + " with a buyin of " + r.PostFormValue("buyin"))
 
-				if seat <= 6 && seat >= 1 {
-					game.Join(pagedata.Identity.Name, username, "img", 100, seat)
+				if seat <= 5 && seat >= 0 && buyin > 0 {
+					game.Join(pagedata.Identity.Name, username, "img.png", buyin, seat)
 				}
-			}
-
-			if action == "leave" {
-				// Tell the game the player left
-				// Send them to the game lobby
-				game.Leave(username)
-			}
-
-			if action == "check" {
-				// Tell the game they checked
-				game.Check(username)
 			}
 
 			if action == "bet" {
@@ -123,16 +114,27 @@ func GameAction(env *models.Env) http.Handler {
 				game.Call(username)
 			}
 
-			if action == "fold" {
-				// Tell the game they folded
-				game.Fold(username)
-			}
-
 			if action == "discard" {
 				// Get the indices of the cards that they discarded
 				// Tell the game they discarded n cards
 				game.Discard(username, 1, 3, 4)
 			}
+		}
+
+		if action == "leave" {
+			// Tell the game the player left
+			// Send them to the game lobby
+			game.Leave(username)
+		}
+
+		if action == "check" {
+			// Tell the game they checked
+			game.Check(username)
+		}
+
+		if action == "fold" {
+			// Tell the game they folded
+			game.Fold(username)
 		}
 
 		// Have the default here (back to game)
