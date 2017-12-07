@@ -45,9 +45,6 @@ type Game struct {
 	Current_Player string     `json:"-"`
 	Current_Bet    int        `json:"-"`
 	Bet_Counter    int        `json:"-"`
-	Ante           int        `json:"-"`
-	Max_bet        int        `json:"-"`
-	Min_bet        int        `json:"-"`
 	Dealer_Token   int        `json:"-"`
 	Timer          time.Timer `json:"-"`
 	Winner         *Player    `json:"-"`
