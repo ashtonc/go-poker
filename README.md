@@ -1,81 +1,57 @@
 # Group 15 - Five Card Draw
 
-This is the repository for the term project of group 15. It will be an implementation of poker (specifically five-card-draw).
+This is the repository for the term project of group 15. It is an implementation of poker (specifically five-card-draw).
 
 To view our site, simply clone the respository, `vagrant up`, and visit `localhost:8000/poker/`.
 
 The view the server log, `vagrant ssh` into the server, `sudo su` to switch to root, and `tmux a` to attach the server console.
 
-## To do
+## Features
 
-* Site
-	* [**DONE**] Add games to the database
-	* [**DONE**] View games from the lobby (fix it) - assigned a seat?
-* Websockets
-	* [**DONE**] Client can establish a connection to the server (websockets, js + go)
-	* Client can send empty messages of each kind (js)
-	* Server can recieve these messages (go)
-	* Server can send game states (go) to all clients
-	* Client can recieve game states (js)
-	* Page is updated based on those game states (js)
-	* Client can send content in their messages (js)
-* Games
-	* Updated database after each round
-	* Make sure the game methods work?
-	* Design it properly
-* Fixes
-	* [**DONE**] Store password hashes instead of plain text ( :) )
-	* Maybe leaderboard (less important)
-	* [**DONE**] Make registration work
-	* Make sessions work
+Our site doesn't currently work very well. While it opens and there are a few things that can be done, it is far from a working site.
 
-## Project Checkpoint
+### Working Features
 
-The majority of the work that has been completed on our website is not yet integrated together. We have designs that aren't yet visible, we have game logic that can't yet be interacted with, we have pages that can't be visited, etc. With that said, here is a list of what has been worked on:
+Our site has the following working features:
 
-* Vagrant provisioning, including nginx and postgres
-* Basic routing and our basic URL scheme
-* Basic templates for all pages (some are empty)
-* Basic page designs (see the pages and designs directories)
-* Basic database schema (missing space for information about each game)
-* Poker game logic (being tested)
+* Users can register and log in.
+* Users can edit their account and view public information about other accounts.
+* There exists a game lobby where instantiated games (currently just taken from the database) can be viewed or joined.
+* Each button on the game page makes a request that updates the state of the game, then the user is redirected back to the game page. Consider this a win for users that have Javascript disabled.
+* The game template will show the current state of the game, including player cards and pots, if the game object that is passed in is in the middle of a game.
 
-What remains to be finished:
+### Broken Features
 
-* Integrating the design CSS into the actual pages
-* Cohesive models for each game so that it can be managed in memory
-* Full database integration (currently only viewing the user pages right now)
-* Registration and authentication on the website
-* Creation of the game page template (will be a nightmare)
-* Connection between the game page and the game logic 
-* Websockets integration sending json representations of the game state to the client to prevent clients from having to refresh the page
+Our site has a number of things that are in the code but are not reflected on the actual site itself.
 
-The following pages can be viewed on our website:
+* There exists a leaderboard (/poker/leaderboard/) but it has been taken off the navigation bar because game statistics are not currently saved in the database. Theoretically, it shows users sorted by their total cash (or perhaps best hand). Currently, there are no entries, and it simply says that there is nobody on the leaderboard.
+* Working game logic. Using api calls to individual instantiations of a game, it is possible to run through a full round of five-card draw. This isn't well reflected on the game page because the code used to update the page with information about the game hasn't been written.
+* Websocket connection. It is possible to send a JSON representation of the game state to clients, and possible for the server to receive JSON representation of game moves, but this code was taken out because the page could not be updated using this information.
 
-* `/poker/`: the home page
-* `/poker/game/`: not yet finished
-* `/poker/user/{any username with a-z, A-Z, 0-9, -, _, .}`: will currently redirect you to the home page because it cannot find that user in the database yet
-* `/poker/user/{any username with a-z, A-Z, 0-9, -, _, .}/edit`: filled with dummy data for now but you can get the idea
-* `/poker/leaderboard/`: example page is up
-* `/poker/login/`: example page is up
-* `/poker/register/`: example page is up
+## Authorization
 
-Repository information:
+It is easy to register for an account, but there also exists a few accounts that can be accessed:
 
-* `database` contains files that connect to the postgres database and retrieve data from that database
-* `design` (and `design/pages`) contains our mockups of each page that will exist
-* `gamelogic` contains the poker logic that will run the game on the server
-* `handlers` contains the handlers for each individual page
-* `models` will contain the structs/models for the other packages
-* `sfx` contains preliminary sound effects to be integrated into the game
-* `static` contains static content server at `/poker/assets/` on the server
-* `templates` contains our templates
-* `poker.go` is the main file that is run
-* The other files are related to provisioning
+* user: ashton pw: 470
+* user: adam pw: 470
+* user: matthew pw: 470
+* user: clayton pw: 470
+* user: rimple pw: 470
+* user: greg pw: 470
 
-## Technologies
+## External Libraries
+
+We used the following external libraries:
 
 * Routing: https://github.com/gorilla/mux
 * Database: https://github.com/lib/pq
-* Session management: https://github.com/gorilla/sessions (not yet)
+* Cookies: https://github.com/gorilla/securecookie
+* Bcrypt: https://godoc.org/golang.org/x/crypto/bcrypt
 * Websockets: https://github.com/gorilla/websocket
+* UUID generation for websockets: https://github.com/satori/go.uuid
+* Convenient JSON parser: https://github.com/tidwall/gjson
+
+We also referenced several code bases:
+
+* Golang websocket drawing app: https://outcrawl.com/realtime-collaborative-drawing-go/
+* HTML5 playing cards: https://github.com/pakastin/deck-of-cards

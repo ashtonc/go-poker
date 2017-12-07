@@ -8,9 +8,11 @@
 				<li{{ if eq .NavigationLevel 2 }} class="nav-current">{{ else }}>{{ end }}
 					<a href="{{ .SiteRoot -}}/game/">Play</a>
 				</li>
+				<!--
 				<li{{ if eq .NavigationLevel 3 }} class="nav-current">{{ else }}>{{ end }}
 					<a href="{{ .SiteRoot -}}/leaderboard/">Leaderboard</a>
 				</li>
+				-->
 				<li{{ if eq .NavigationLevel 4 }} class="nav-current">{{ else }}>{{ end }}
 				{{ with .Identity -}}
 					{{ if .LoggedIn -}}
