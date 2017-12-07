@@ -37,6 +37,7 @@ func User(env *models.Env) http.Handler {
 
 			if pagedata.Identity.Username != username {
 				http.Redirect(w, r, env.SiteRoot+"/", http.StatusTemporaryRedirect)
+				return
 			}
 
 			template = env.Templates["EditUser"]
