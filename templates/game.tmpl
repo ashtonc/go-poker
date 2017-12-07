@@ -1,5 +1,6 @@
 {{ define "game" -}}
 		{{ $siteroot := .SiteRoot -}}
+		{{ $loggedin := .Identity.LoggedIn }}
 		{{ with .GamePage -}}
         <h1>{{ .Name }}</h1>
 		{{ with .Game -}}
@@ -28,11 +29,13 @@
 				<div class="player-info">
 					<div class="image"></div>
 					<div class="name">
+						{{ if $loggedin }}
 						<form action="sit" method="post">
 							<input type="hidden" value="{{ .Number }}" name="seat">
 							<input type="number" placeholder="Buyin" name="buyin">
 							<button type="submit" class="">Join!</button>
 						</form>
+						{{ end }}
 					</div>
 					<div class="stack"></div>
 				</div>
