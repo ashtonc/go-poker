@@ -35,7 +35,7 @@ func GetSession(env *models.Env, sessionid string) (*models.Session, error) {
 
 func CreateSession(env *models.Env, username string, expiry time.Time) (string, error) {
 	var userid int
-	token := string(securecookie.GenerateRandomKey(512))
+	token := securecookie.GenerateRandomKey(512)
 
 	sqlStatement := `SELECT id FROM account WHERE username = $1`
 	row := env.Database.QueryRow(sqlStatement, username)

@@ -1,9 +1,8 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
-
-	"golang.org/x/crypto/bcrypt"
 
 	"poker/database"
 	"poker/models"
@@ -32,11 +31,13 @@ func getPageData(env *models.Env, r *http.Request, sessionid string, page string
 
 	token, err := getSessionToken(env, r)
 	if err != nil {
+		log.Print(err)
 		return pagedata
 	}
 
 	session, err := database.GetSession(env, token)
 	if err != nil {
+		log.Print(err)
 		return pagedata
 	}
 
@@ -92,14 +93,4 @@ func clearSession(w http.ResponseWriter) {
 	}
 
 	http.SetCookie(w, cookie)
-}
-
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 4)
-	return string(bytes), err
-}
-
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
 }
