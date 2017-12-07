@@ -11,7 +11,7 @@ import (
 	"poker/models"
 	//for test
 	"fmt"
-	"log"
+	//"log"
 	//"math/rand"
 
 )
