@@ -31,6 +31,7 @@ func (g *Game) Join(name string, username string, pictureslug string, buyin int,
 	g.Sitters = append(g.Sitters, player)
 	g.Seats[seatNumber].Occupied = true
 	g.Seats[seatNumber].Occupier = player
+	g.Seats[seatNumber].Winner = false
 	return nil
 }
 
@@ -287,3 +288,5 @@ func (g *Game) Showdown() *Player {
 	winner.Money += g.Pot
 	return winner
 }
+
+

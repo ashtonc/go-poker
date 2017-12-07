@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-
+	"time"
 	"poker/connection"
 	"poker/models"
 )
@@ -42,7 +42,6 @@ func Game(env *models.Env) http.Handler {
 		/* Put game code here */
 		/* ****************** */
 
-		// game := gameListing.game
 
 		/* ******************* */
 		/* Stop game code here */
@@ -90,7 +89,8 @@ func GameAction(env *models.Env) http.Handler {
 				log.Print("Start round \n")
 				_ = game.NewRound(game.Dealer_Token)
 			
-			}
+				}
+
 
 			if action == "sit" {
 				// Tell the game the player joined, and what seat they are trying to sit in
@@ -113,6 +113,15 @@ func GameAction(env *models.Env) http.Handler {
 				bet, _ := strconv.Atoi(r.PostFormValue("bet"))
 
 				game.Bet(username, bet)
+				if game.Phase == 5{
+					winner := game.Showdown()
+					log.Print(winner)
+					game.Seats[winner.Seat].Winner = true
+					game.Dealer_Token +=1
+					<-time.After(4 * time.Second)
+    					go game.NewRound(game.Dealer_Token)
+					////// game.EndRound()
+				}
 
 			}
 
@@ -167,6 +176,16 @@ func GameAction(env *models.Env) http.Handler {
 		if action == "fold" {
 			// Tell the game they folded
 			game.Fold(username)
+			_, winner:= game.Winner_check()
+			if winner != nil{
+				log.Print(winner)
+				game.Seats[winner.Seat].Winner = true
+				game.Dealer_Token +=1
+				<-time.After(4 * time.Second)
+					go game.NewRound(game.Dealer_Token)
+
+				///////game.EndRound()
+			}
 		}
 
 		// Have the default here (back to game)
