@@ -21,7 +21,7 @@ const (
 	KindDiscard
 )
 
-// Server to players
+// Server to players (all)
 
 type GamestateMessage struct {
 	Kind  int             `json:"kind"`
@@ -41,14 +41,11 @@ type PlayerSitMessage struct {
 }
 
 func NewPlayerSits(buyin int) *PlayerSitMessage {
-
 	// Add player to the game
-
 	return &PlayerSitMessage{
 		Kind: KindPlayerSits,
 		// Seat from the updated game object
 	}
-
 }
 
 type PlayerLeaveMessage struct {

@@ -2,7 +2,10 @@
 		{{ $siteroot := .SiteRoot -}}
 		{{ $loggedin := .Identity.LoggedIn }}
 		{{ with .GamePage -}}
-        <h1>{{ .Name }}   <input type="button" id = "start_round" value="Start"></h1>
+        <h1>{{ .Name }}</h1>
+		<form action="start" method="get">
+			<button type="submit" class="">Start Round</button>
+		</form>
 		{{ with .Game -}}
 		{{ $deckSize := len .Deck }}
 		<div id="game">

@@ -85,12 +85,6 @@ func GameAction(env *models.Env) http.Handler {
 		if r.Method == "POST" {
 			r.ParseForm()
 
-			if action == "start_round"{
-				log.Print("Start round \n")
-				_ = game.NewRound(game.Dealer_Token)
-			
-				}
-
 
 			if action == "sit" {
 				// Tell the game the player joined, and what seat they are trying to sit in
@@ -186,6 +180,12 @@ func GameAction(env *models.Env) http.Handler {
 
 				///////game.EndRound()
 			}
+		}
+
+		if action == "start" {
+			// Start the game I suppose
+			log.Print("Start round \n")
+			_ = game.NewRound(game.Dealer_Token)
 		}
 
 		// Have the default here (back to game)

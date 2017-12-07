@@ -113,10 +113,10 @@ func Register(env *models.Env) http.Handler {
 			if r.PostFormValue("password") == r.PostFormValue("password-repeat") {
 				hashedPassword, err := bcrypt.GenerateFromPassword([]byte(r.PostFormValue("password")), 16)
 				if err != nil {
-					// problem
+					log.Print(err)
+				} else {
+					user.HashedPassword = hashedPassword
 				}
-
-				user.HashedPassword = hashedPassword
 			}
 
 			err := database.AddUser(env, &user)

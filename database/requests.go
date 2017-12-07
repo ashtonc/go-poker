@@ -8,30 +8,6 @@ import (
 	"poker/models"
 )
 
-func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
-	var page models.UserPage
-
-	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username = $1;`
-
-	row := env.Database.QueryRow(sqlStatement, userName)
-	err := row.Scan(&page.Name, &page.Email, &page.Description, &page.PictureSlug)
-	page.Username = userName
-
-	return &page, err
-}
-
-func GetUser(env *models.Env, username string) (*models.User, error) {
-	var user models.User
-	user.Username = username
-
-	sqlStatement := `SELECT name, email, description, picture_slug, password_hash FROM account WHERE username = $1;`
-
-	row := env.Database.QueryRow(sqlStatement, username)
-	err := row.Scan(&user.Name, &user.Email, &user.PictureSlug, &user.Description, &user.HashedPassword)
-
-	return &user, err
-}
-
 func GetGames(env *models.Env) (map[string]*models.GameListing, error) {
 	gameMap := make(map[string]*models.GameListing)
 
@@ -87,6 +63,30 @@ func GetLeaderboard(env *models.Env) (*models.Leaderboard, error) {
 	return &leaderboard, err
 }
 
+func GetUserPage(env *models.Env, userName string) (*models.UserPage, error) {
+	var page models.UserPage
+
+	sqlStatement := `SELECT name, email, description, picture_slug FROM account WHERE username = $1;`
+
+	row := env.Database.QueryRow(sqlStatement, userName)
+	err := row.Scan(&page.Name, &page.Email, &page.Description, &page.PictureSlug)
+	page.Username = userName
+
+	return &page, err
+}
+
+func GetUser(env *models.Env, username string) (*models.User, error) {
+	var user models.User
+	user.Username = username
+
+	sqlStatement := `SELECT name, email, description, picture_slug, password_hash FROM account WHERE username = $1;`
+
+	row := env.Database.QueryRow(sqlStatement, username)
+	err := row.Scan(&user.Name, &user.Email, &user.PictureSlug, &user.Description, &user.HashedPassword)
+
+	return &user, err
+}
+
 func AddUser(env *models.Env, user *models.User) error {
 	sqlStatement := `INSERT INTO account (username, name, email, picture_slug, description, password_hash) VALUES ($1, $2, $3, $4, $5, $6)`
 
@@ -98,21 +98,13 @@ func AddUser(env *models.Env, user *models.User) error {
 	return err
 }
 
-func FindByUsername(env *models.Env, inputUsername string) models.User {
-	var userAccount models.User
+func UpdateUser(env *models.Env, user *models.User) error {
+	sqlStatement := `UPDATE account SET (name, email, description, password_hash) = ($1, $2, $3, $4)`
 
-	sqlStatement := `SELECT username, name, email, password_hash FROM account WHERE username=$1`
-
-	rows, err := env.Database.Query(sqlStatement, inputUsername)
+	_, err := env.Database.Exec(sqlStatement, user.Name, user.Email, user.Description, user.HashedPassword)
 	if err != nil {
-		panic(err)
-	}
-	for rows.Next() {
-		err = rows.Scan(&userAccount.Username, &userAccount.Name, &userAccount.Email, &userAccount.HashedPassword)
-		if err != nil {
-			panic(err)
-		}
+		log.Print(err)
 	}
 
-	return userAccount
+	return err
 }
