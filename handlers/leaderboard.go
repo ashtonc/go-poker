@@ -17,7 +17,7 @@ func Leaderboard(env *models.Env) http.Handler {
 		}
 
 		// Populate the data needed for the page
-		pagedata := getPageData(env, r, "sessionid", "Leaderboard")
+		pagedata := getPageData(env, r, []byte("sessionid"), "Leaderboard")
 		pagedata.Leaderboard = leaderboard
 
 		// Execute the template with our page data

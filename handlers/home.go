@@ -16,7 +16,7 @@ func HomeRedirect(env *models.Env) http.Handler {
 func Home(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Populate the data needed for the page (these should nearly all be external functions)
-		pagedata := getPageData(env, r, "sessionid", "Home")
+		pagedata := getPageData(env, r, []byte("sessionid"), "Home")
 
 		// Execute the template with our page data
 		template := env.Templates["Home"]

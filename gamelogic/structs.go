@@ -245,9 +245,9 @@ func (p *Player) second_best_pair() int {
 //}
 
 type Card struct {
-	Face string `json: "face"`
-	Suit string `json: "suit"`
-	Rank int    `json: "rank"`
+	Face string `json:"face"`
+	Suit string `json:"suit"`
+	Rank int    `json:"-"`
 }
 
 func newCard(face string, suit string, cardTypes []string) *Card {

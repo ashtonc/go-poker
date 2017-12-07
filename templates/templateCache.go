@@ -15,7 +15,7 @@ func BuildTemplateCache() map[string]*template.Template {
 		"ViewUser":    BuildWithError("templates/base.tmpl", "templates/head_base.tmpl", "templates/navigation.tmpl", "templates/user_view.tmpl"),
 		"EditUser":    BuildWithError("templates/base.tmpl", "templates/head_base.tmpl", "templates/navigation.tmpl", "templates/user_edit.tmpl"),
 		"PlayGame":    BuildWithError("templates/base.tmpl", "templates/head_game.tmpl", "templates/navigation.tmpl", "templates/game_play.tmpl", "templates/game.tmpl"),
-		"ViewLobby":   BuildWithError("templates/base.tmpl", "templates/head_base.tmpl", "templates/navigation.tmpl", "templates/game_lobby.tmpl"),
+		"Lobby":       BuildWithError("templates/base.tmpl", "templates/head_base.tmpl", "templates/navigation.tmpl", "templates/game_lobby.tmpl"),
 		"WatchGame":   BuildWithError("templates/base.tmpl", "templates/head_game.tmpl", "templates/navigation.tmpl", "templates/game_watch.tmpl", "templates/game.tmpl"),
 		"Leaderboard": BuildWithError("templates/base.tmpl", "templates/head_base.tmpl", "templates/navigation.tmpl", "templates/leaderboard.tmpl"),
 	}

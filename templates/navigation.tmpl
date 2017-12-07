@@ -14,7 +14,7 @@
 				<li{{ if eq .NavigationLevel 4 }} class="nav-current">{{ else }}>{{ end }}
 				{{ with .Identity -}}
 					{{ if .LoggedIn -}}
-						<a href="{{ $siteroot }}/user/{{ .Username }}/view">{{ .Username }}
+						<a href="{{ $siteroot }}/user/{{ .Username }}/view">Profile
 					{{- else -}}
 						<a href="{{ $siteroot }}/register/">Register
 					{{- end }}
