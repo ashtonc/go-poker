@@ -99,6 +99,9 @@ func (g *Game) Bet(p_name string, bet int) error {
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
 	}
+	if p_name != g.Current_Player{
+		return nil
+	}
 	if error == nil {
 		if g.Players[pindex].Folded == true {
 			return errors.New("Player has already folded and so cannot bet")
@@ -131,6 +134,9 @@ func (g *Game) Call(p_name string) error {
 
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
+	}
+	if p_name != g.Current_Player{
+		return nil
 	}
 	pindex, err := g.GetPlayerIndex(p_name)
 	if err == nil {
@@ -170,6 +176,9 @@ func (g *Game) Fold(player_name string) error {
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
 	}
+	if player_name != g.Current_Player{
+		return nil
+	}
 	pindex, err := g.GetPlayerIndex(player_name)
 	if err == nil {
 		if g.Players[pindex].Folded == true {
@@ -195,6 +204,9 @@ func (g *Game) Fold(player_name string) error {
 func (g *Game) Check(player_name string) error {
 	if g.Phase != 0 && g.Phase != 2 && g.Phase != 4 {
 		return errors.New("Game is not in a betting phase!")
+	}
+	if player_name != g.Current_Player{
+		return nil
 	}
 	pindex, err := g.GetPlayerIndex(player_name)
 	if err == nil {
@@ -223,6 +235,9 @@ func (g *Game) Check(player_name string) error {
 func (g *Game) Discard(playerID string, cardIndexes ...int) error {
 	if g.Phase != 1 && g.Phase != 3 {
 		return errors.New("Game is not in a  phase!")
+	}
+	if playerID != g.Current_Player{
+		return nil
 	}
 	check := getHighestInt(cardIndexes)
 	pindex, err := g.GetPlayerIndex(playerID)
