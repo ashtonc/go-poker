@@ -1,3 +1,4 @@
+
 package handlers
 
 import (
@@ -15,7 +16,6 @@ func RedirectGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
 		// http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
-
 		// Else, send them to the lobby
 		http.Redirect(w, r, env.SiteRoot+"/lobby/", http.StatusTemporaryRedirect)
 	})
@@ -52,7 +52,10 @@ func Game(env *models.Env) http.Handler {
 		// Choose our template based on the action
 		template := env.Templates["WatchGame"]
 		if action == "play" {
-			template = env.Templates["PlayGame"]
+				if pagedata.Identity.LoggedIn == true {
+				template = env.Templates["PlayGame"]
+			}
+		}
 		}
 
 		// Execute the template with our page data
@@ -110,9 +113,7 @@ func GameAction(env *models.Env) http.Handler {
 				game.Bet(username, bet)
 				if game.Phase == 5 {
 					game.EndRound()
-
 				}
-
 			}
 
 			if action == "discard" {
@@ -164,7 +165,6 @@ func GameAction(env *models.Env) http.Handler {
 			game.Check(username)
 			if game.Phase == 5 {
 				game.EndRound()
-				////// game.EndRound()
 			}
 		}
 
@@ -184,7 +184,6 @@ func GameAction(env *models.Env) http.Handler {
 				<-time.After(8 * time.Second)
 				go game.NewRound(game.Dealer_Token)
 
-				///////game.EndRound()
 			}
 
 		}
@@ -214,3 +213,4 @@ func WebsocketConnection(env *models.Env) http.Handler {
 		game.Hub.HandleWebSocket(env.Upgrader, w, r)
 	})
 }
+

@@ -41,9 +41,12 @@ func getPageData(env *models.Env, r *http.Request, sessionid []byte, page string
 	}
 
 	pagedata.Identity.LoggedIn = true
+	pagedata.Identity.PictureSlug = "greg.jpg"
+
 	pagedata.Identity.AccountType = models.TYPE_USER_ACCOUNT
 	pagedata.Identity.Username = session.User.Username
 	pagedata.Identity.Name = session.User.Name
+	pagedata.Identity.PictureSlug = session.User.PictureSlug
 
 	return pagedata
 }

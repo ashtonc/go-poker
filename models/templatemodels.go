@@ -1,3 +1,4 @@
+
 package models
 
 import (
@@ -67,3 +68,4 @@ type LeaderboardEntry struct {
 	Cash     int
 	BestHand []*gamelogic.Card
 }
+

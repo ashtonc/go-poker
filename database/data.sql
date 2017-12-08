@@ -1,10 +1,10 @@
 INSERT INTO account (username, name, email, picture_slug, description, password_hash) VALUES
-	('adam', 'Adam Labecki', 'adam@email.com', 'picture1.png', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
-	('ashton', 'Ashton Charbonneau', 'ashton@email.com', 'picture2.png', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
-	('matthew', 'Matthew Tan', 'matthew@email.com', 'picture3.png', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
-	('clayton', 'Clayton Jian', 'clayton@email.com', 'picture4.png', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
-	('rimple', 'Rimpledeep Chahal', 'rimple@email.com', 'picture5.png', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
-	('greg', 'Greg Baker', 'greg@email.com', 'picture6.png', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy');
+	('adam', 'Adam Labecki', 'adam@email.com', 'adam.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
+	('ashton', 'Ashton Charbonneau', 'ashton@email.com', 'ashton.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
+	('matthew', 'Matthew Tan', 'matthew@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
+	('clayton', 'Clayton Jian', 'clayton@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
+	('rimple', 'Rimpledeep Chahal', 'rimple@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
+	('greg', 'Greg Baker', 'greg@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy');
 
 INSERT INTO game_status (id, description) VALUES
 	(1, 'open'),
