@@ -140,6 +140,6 @@ tbody tr:nth-child(even) {
 	padding: 0.2em;
 }
 
-.main-list li:hover {
-	background-color: #242424;
+.main-list li a:hover {
+	text-decoration: none;
 }
