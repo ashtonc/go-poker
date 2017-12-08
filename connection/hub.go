@@ -77,6 +77,13 @@ func (hub *Hub) broadcast(message interface{}, ignore *Client) {
 	}
 }
 
+func (hub *Hub) SendAll(message interface{}) {
+	data, _ := json.Marshal(message)
+	for _, c := range hub.clients {
+		c.outbound <- data
+	}
+}
+
 func (hub *Hub) onConnect(client *Client) {
 	log.Print(client.socket.RemoteAddr(), " connected to the game.")
 	hub.send(GetGamestate(hub.game), client)

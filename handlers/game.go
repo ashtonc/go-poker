@@ -112,10 +112,10 @@ func GameAction(env *models.Env) http.Handler {
 					winner := game.Showdown()
 					log.Print(winner)
 					game.Seats[winner.Seat].Winner = true
-					game.Dealer_Token +=1
+					game.Dealer_Token += 1
 					<-time.After(8 * time.Second)
-						log.Print("New round...")
-    					go game.NewRound(game.Dealer_Token)
+					log.Print("New round...")
+					go game.NewRound(game.Dealer_Token)
 
 				}
 
@@ -154,16 +154,16 @@ func GameAction(env *models.Env) http.Handler {
 		if action == "call" {
 			// Tell the game they called
 			game.Call(username)
-			if game.Phase == 5{
-					winner := game.Showdown()
-					log.Print(winner)
-					game.Seats[winner.Seat].Winner = true
-					game.Dealer_Token +=1
-					<-time.After(8 * time.Second)
-						log.Print("New round...")
-    					go game.NewRound(game.Dealer_Token)
-					////// game.EndRound()
-				}
+			if game.Phase == 5 {
+				winner := game.Showdown()
+				log.Print(winner)
+				game.Seats[winner.Seat].Winner = true
+				game.Dealer_Token += 1
+				<-time.After(8 * time.Second)
+				log.Print("New round...")
+				go game.NewRound(game.Dealer_Token)
+				////// game.EndRound()
+			}
 		}
 
 		if action == "leave" {
@@ -175,16 +175,16 @@ func GameAction(env *models.Env) http.Handler {
 		if action == "check" {
 			// Tell the game they checked
 			game.Check(username)
-			if game.Phase == 5{
-					winner := game.Showdown()
-					log.Print(winner)
-					game.Seats[winner.Seat].Winner = true
-					game.Dealer_Token +=1
-					<-time.After(8 * time.Second)
-						log.Print("New round...")
-    					go game.NewRound(game.Dealer_Token)
-					////// game.EndRound()
-				}
+			if game.Phase == 5 {
+				winner := game.Showdown()
+				log.Print(winner)
+				game.Seats[winner.Seat].Winner = true
+				game.Dealer_Token += 1
+				<-time.After(8 * time.Second)
+				log.Print("New round...")
+				go game.NewRound(game.Dealer_Token)
+				////// game.EndRound()
+			}
 		}
 
 		if action == "fold" {
@@ -194,13 +194,13 @@ func GameAction(env *models.Env) http.Handler {
 			if winner != nil {
 				log.Print(winner)
 				game.Seats[winner.Seat].Winner = true
-				game.Dealer_Token +=1
+				game.Dealer_Token += 1
 				<-time.After(8 * time.Second)
-					go game.NewRound(game.Dealer_Token)
-
+				go game.NewRound(game.Dealer_Token)
 
 				///////game.EndRound()
 			}
+
 		}
 
 		if action == "start" {
@@ -208,6 +208,8 @@ func GameAction(env *models.Env) http.Handler {
 			log.Print("Start round \n")
 			_ = game.NewRound(game.Dealer_Token)
 		}
+
+		gameListing.Hub.SendAll(game)
 
 		// Have the default here (back to game)
 		http.Redirect(w, r, env.SiteRoot+"/game/"+gameslug+"/play", http.StatusTemporaryRedirect)
@@ -219,7 +221,7 @@ func WebsocketConnection(env *models.Env) http.Handler {
 		vars := mux.Vars(r)
 		gameslug := vars["gameslug"]
 
-		// Choose the correct hub based on the session of the user, or I guess the game...
+		// Choose the correct hub based on the game
 		game := env.Games[gameslug]
 
 		// Get the user id from their session
