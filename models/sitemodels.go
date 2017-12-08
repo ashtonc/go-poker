@@ -7,6 +7,9 @@ import (
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/websocket"
 	_ "github.com/lib/pq"
+
+	"poker/connection"
+	"poker/gamelogic"
 )
 
 // Env serves as an environment that contains "global" variables. See
@@ -19,4 +22,17 @@ type Env struct {
 	Games         map[string]*GameListing
 	Upgrader      *websocket.Upgrader
 	CookieHandler *securecookie.SecureCookie
+}
+
+// GameListing lists the information about an instantiated game
+type GameListing struct {
+	Name        string
+	Slug        string
+	Status      string
+	Ante        int
+	MinBet      int
+	MaxBet      int
+	PlayerCount int
+	Game        *gamelogic.Game
+	Hub         *connection.Hub
 }

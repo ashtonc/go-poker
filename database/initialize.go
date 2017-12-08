@@ -7,6 +7,7 @@ import (
 	// Wraps database/sql for postgres
 	_ "github.com/lib/pq"
 
+	"poker/connection"
 	"poker/gamelogic"
 	"poker/models"
 )
@@ -42,6 +43,10 @@ func InitializeGames(env *models.Env, gameMap map[string]*models.GameListing) {
 		}
 
 		listing.Game = game
+
+		// Create a new websockets hub
+		hub := connection.NewHub()
+		listing.Hub = hub
 	}
 
 	env.Games = gameMap

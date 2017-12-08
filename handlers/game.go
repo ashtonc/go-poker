@@ -4,11 +4,11 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
-	"poker/connection"
+
 	"poker/models"
-	"time"
 )
 
 func RedirectGame(env *models.Env) http.Handler {
@@ -194,10 +194,13 @@ func GameAction(env *models.Env) http.Handler {
 
 func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Choose the correct hub based on the session of the user, not just a new one..
-		hub := connection.NewHub()
+		vars := mux.Vars(r)
+		gameslug := vars["gameslug"]
+
+		// Choose the correct hub based on the session of the user, or I guess the game...
+		game := env.Games[gameslug]
 
 		// Get the user id from their session
-		hub.HandleWebSocket(env, w, r)
+		game.Hub.HandleWebSocket(env.Upgrader, w, r)
 	})
 }
