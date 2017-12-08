@@ -30,10 +30,6 @@ execute 'get-websockets' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/websocket'
 end
-execute 'get-sessions' do
-  environment 'GOPATH' => '/go'
-  command 'go get -u github.com/gorilla/sessions'
-end
 execute 'get-securecookie' do
   environment 'GOPATH' => '/go'
   command 'go get -u github.com/gorilla/securecookie'
