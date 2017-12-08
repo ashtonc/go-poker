@@ -3,12 +3,29 @@
 body {
 	color: white;
 	background-color: black;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100%;
+	background-position: bottom;
+	background-image: url("/poker/assets/img/background-transparent.min.png");
 }
 
 h1 {
 	text-align: center;
 }
 
+.content {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+#profile-picture {
+	text-align: center;
+}
+
+a:visited, a:link {
+    color: white;
+}
 
 /* Forms */
 
@@ -117,4 +134,12 @@ tbody tr:nth-child(odd) {
 
 tbody tr:nth-child(even) {
 	background-color: #555555;
+}
+
+.main-list li {
+	padding: 0.2em;
+}
+
+.main-list li a:hover {
+	text-decoration: none;
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 
 	"poker/database"
@@ -38,7 +37,6 @@ func getPageData(env *models.Env, r *http.Request, sessionid []byte, page string
 
 	session, err := database.GetSession(env, token)
 	if err != nil {
-		log.Print(err)
 		return pagedata
 	}
 

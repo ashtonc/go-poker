@@ -1,39 +1,45 @@
 {{ define "title" }} | Play{{ end }}
 {{ define "content" -}}
 		{{ template "game" . }}
-		<div id="discard">
+		<div id="game-menu">
+			<div>
+				<form action="start" method="get">
+					<button type="submit" class="">Start Round</button>
+				</form>
+			</div>
 			<div>
 				<form action="discard" method="post">
-					<div>
-						<label for="card1discard">Card 1</label>
-						<input type="checkbox" name="card1discard" value="card1discard">
-					</div>
-					<div>
-						<label for="card1discard">Card 2</label>
-						<input type="checkbox" name="card2discard" value="card2discard">
-					</div>
-					<div>
-						<label for="card1discard">Card 3</label>
-						<input type="checkbox" name="card3discard" value="card3discard">
-					</div>
-					<div>
-						<label for="card1discard">Card 4</label>
-						<input type="checkbox" name="card4discard" value="card4discard">
-					</div>
-					<div>
-						<label for="card1discard">Card 5</label>
-						<input type="checkbox" name="card5discard" value="card5discard">
-					</div>
+					<ul>
+						<li>
+							<label for="card1discard">Card 1</label>
+							<input type="checkbox" name="card1discard" value="card1discard">
+						</li>
+						<li>
+							<label for="card1discard">Card 2</label>
+							<input type="checkbox" name="card2discard" value="card2discard">
+						</li>
+						<li>
+							<label for="card1discard">Card 3</label>
+							<input type="checkbox" name="card3discard" value="card3discard">
+						</li>
+						<li>
+							<label for="card1discard">Card 4</label>
+							<input type="checkbox" name="card4discard" value="card4discard">
+						</li>
+						<li>
+							<label for="card1discard">Card 5</label>
+							<input type="checkbox" name="card5discard" value="card5discard">
+						</li>
+					</ul>
 					<div>
 						<button type="submit" class="">Discard</button>
 					</div>
 				</form>
 			</div>
-		</div>
-		<div id="betting">
 			<div>
-				<form action="start" method="get">
-					<button type="submit" class="">Start Round</button>
+				<form action="bet" method="post">
+					<input name="bet" type="number">
+					<button type="submit">Raise</button>
 				</form>
 			</div>
 			<div>
@@ -44,12 +50,6 @@
 			<div>
 				<form action="call" method="get">
 					<button type="submit" class="">Call</button>
-				</form>
-			</div>
-			<div>
-				<form action="bet" method="post">
-					<input name="bet" type="number">
-					<button type="submit">Raise</button>
 				</form>
 			</div>
 			<div>

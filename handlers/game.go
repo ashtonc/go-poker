@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"time"
 	"poker/connection"
 	"poker/models"
+	"time"
 )
 
 func RedirectGame(env *models.Env) http.Handler {
@@ -42,6 +42,8 @@ func Game(env *models.Env) http.Handler {
 		/* Put game code here */
 		/* ****************** */
 
+		// game := gameListing.game
+		// do some game tests...
 
 		/* ******************* */
 		/* Stop game code here */
@@ -85,7 +87,6 @@ func GameAction(env *models.Env) http.Handler {
 		if r.Method == "POST" {
 			r.ParseForm()
 
-
 			if action == "sit" {
 				// Tell the game the player joined, and what seat they are trying to sit in
 				// If the seat is occupied, tell them to get out of here
@@ -107,7 +108,7 @@ func GameAction(env *models.Env) http.Handler {
 				bet, _ := strconv.Atoi(r.PostFormValue("bet"))
 
 				game.Bet(username, bet)
-				if game.Phase == 5{
+				if game.Phase == 5 {
 					winner := game.Showdown()
 					log.Print(winner)
 					game.Seats[winner.Seat].Winner = true
@@ -115,7 +116,7 @@ func GameAction(env *models.Env) http.Handler {
 					<-time.After(8 * time.Second)
 						log.Print("New round...")
     					go game.NewRound(game.Dealer_Token)
-					////// game.EndRound()
+
 				}
 
 			}
@@ -127,26 +128,24 @@ func GameAction(env *models.Env) http.Handler {
 				var discarded []int
 
 				if r.PostFormValue("card1discard") != "" {
-					discarded = append(discarded, 1)
+					discarded = append(discarded, 0)
 				}
 
 				if r.PostFormValue("card2discard") != "" {
-					discarded = append(discarded, 2)
+					discarded = append(discarded, 1)
 				}
 
 				if r.PostFormValue("card3discard") != "" {
-					discarded = append(discarded, 3)
+					discarded = append(discarded, 2)
 				}
 
 				if r.PostFormValue("card4discard") != "" {
-					discarded = append(discarded, 4)
+					discarded = append(discarded, 3)
 				}
 
 				if r.PostFormValue("card5discard") != "" {
-					discarded = append(discarded, 5)
+					discarded = append(discarded, 4)
 				}
-
-				log.Print(discarded)
 
 				game.Discard(username, discarded...)
 			}
@@ -191,13 +190,14 @@ func GameAction(env *models.Env) http.Handler {
 		if action == "fold" {
 			// Tell the game they folded
 			game.Fold(username)
-			_, winner:= game.Winner_check()
-			if winner != nil{
+			_, winner := game.Winner_check()
+			if winner != nil {
 				log.Print(winner)
 				game.Seats[winner.Seat].Winner = true
 				game.Dealer_Token +=1
 				<-time.After(8 * time.Second)
 					go game.NewRound(game.Dealer_Token)
+
 
 				///////game.EndRound()
 			}
@@ -216,10 +216,7 @@ func GameAction(env *models.Env) http.Handler {
 
 func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//vars := mux.Vars(r)
-		//gameslug := vars["gameslug"]
-
-		// Choose the correct hub based on the session of the user
+		// Choose the correct hub based on the session of the user, not just a new one..
 		hub := connection.NewHub()
 
 		// Get the user id from their session

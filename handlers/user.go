@@ -52,7 +52,7 @@ func User(env *models.Env) http.Handler {
 					err = bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(r.PostFormValue("password")))
 					if err != nil {
 						// Wrong password
-						log.Print(err)
+						log.Print("Incorrect password.")
 					} else {
 						user.Name = r.PostFormValue("name")
 						user.Email = r.PostFormValue("email")

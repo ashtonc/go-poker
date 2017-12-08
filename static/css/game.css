@@ -5,6 +5,7 @@
 	margin: 0 auto;
 	text-align: center;
 	box-sizing: border-box;
+	border-radius: 64px;
 }
 
 #deck {
@@ -15,8 +16,6 @@
 	border-radius: 5px;
 	margin: 1px;
 }
-
-#pot {}
 
 #game-info {
 	padding: 1em;
@@ -115,9 +114,41 @@
 }
 
 /* Menu */
-
 #game-menu {
-	width: 95%;
-	max-width: none;
-	box-sizing: border-box;
+	text-align: center;
+	margin: auto;
+}
+
+#game-menu div {
+	display: block;
+	width: 600px;
+	max-width: 90%;
+	margin: auto;
+}
+
+#game-menu form {
+	margin: 10px;
+}
+
+#game-menu ul {
+	list-style-type: none;
+}
+
+#game-menu ul li {
+	display: inline-block;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+#game-menu ul li input {
+	width: 10px;
+}
+
+#game-menu label {
+	display: inline;
+	margin-bottom: 0.5em;
+}
+
+#game-menu form div {
+	display: inline;
 }
