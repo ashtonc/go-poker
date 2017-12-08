@@ -51,10 +51,9 @@ func Game(env *models.Env) http.Handler {
 
 		// Choose our template based on the action
 		template := env.Templates["WatchGame"]
-		if action == "play" {
-			if pagedata.Identity.LoggedIn == true {
-				template = env.Templates["PlayGame"]
-			}
+
+		if action == "play" && pagedata.Identity.LoggedIn == true {
+			template = env.Templates["PlayGame"]
 		}
 
 		// Execute the template with our page data
@@ -178,8 +177,8 @@ func GameAction(env *models.Env) http.Handler {
 				game.Seats[winner.Seat].Winner = true
 				game.Dealer_Token += 1
 				for i := range game.Players {
-					//var empty_hand []Card
-					//	slice = slice[:0]
+					// var empty_hand []Card
+					// slice = slice[:0]
 					game.Players[i].Hand = game.Players[i].Hand[:0]
 				}
 				<-time.After(8 * time.Second)
