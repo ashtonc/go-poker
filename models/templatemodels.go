@@ -1,4 +1,3 @@
-
 package models
 
 import (
@@ -35,6 +34,7 @@ type Identity struct {
 	LoggedIn    bool
 	AccountType int
 	Username    string
+	PictureSlug string
 	Name        string
 }
 
@@ -68,4 +68,3 @@ type LeaderboardEntry struct {
 	Cash     int
 	BestHand []*gamelogic.Card
 }
-

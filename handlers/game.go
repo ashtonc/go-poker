@@ -1,4 +1,3 @@
-
 package handlers
 
 import (
@@ -16,6 +15,7 @@ func RedirectGame(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// If someone is stitting at a table, send them to that table
 		// http.Redirect(w, r, env.SiteRoot+"/game/example/play", http.StatusTemporaryRedirect)
+
 		// Else, send them to the lobby
 		http.Redirect(w, r, env.SiteRoot+"/lobby/", http.StatusTemporaryRedirect)
 	})
@@ -52,10 +52,9 @@ func Game(env *models.Env) http.Handler {
 		// Choose our template based on the action
 		template := env.Templates["WatchGame"]
 		if action == "play" {
-				if pagedata.Identity.LoggedIn == true {
+			if pagedata.Identity.LoggedIn == true {
 				template = env.Templates["PlayGame"]
 			}
-
 		}
 
 		// Execute the template with our page data
@@ -101,7 +100,7 @@ func GameAction(env *models.Env) http.Handler {
 				log.Print("Game " + gameslug + ": " + username + " joined seat " + r.PostFormValue("seat") + " with a buyin of " + r.PostFormValue("buyin"))
 
 				if seat <= 5 && seat >= 0 && buyin > 0 {
-					game.Join(pagedata.Identity.Name, username, "img.png", buyin, seat)
+					game.Join(pagedata.Identity.Name, username, pagedata.Identity.PictureSlug, buyin, seat)
 				}
 			}
 
@@ -113,7 +112,9 @@ func GameAction(env *models.Env) http.Handler {
 				game.Bet(username, bet)
 				if game.Phase == 5 {
 					game.EndRound()
+
 				}
+
 			}
 
 			if action == "discard" {
@@ -176,16 +177,14 @@ func GameAction(env *models.Env) http.Handler {
 				log.Print(winner)
 				game.Seats[winner.Seat].Winner = true
 				game.Dealer_Token += 1
-				for i := range game.Players{
+				for i := range game.Players {
 					//var empty_hand []Card
-				//	slice = slice[:0]
+					//	slice = slice[:0]
 					game.Players[i].Hand = game.Players[i].Hand[:0]
 				}
 				<-time.After(8 * time.Second)
 				go game.NewRound(game.Dealer_Token)
-
 			}
-
 		}
 
 		if action == "start" {
@@ -213,4 +212,3 @@ func WebsocketConnection(env *models.Env) http.Handler {
 		game.Hub.HandleWebSocket(env.Upgrader, w, r)
 	})
 }
-

@@ -1,14 +1,10 @@
-<<<<<<< HEAD
 package gamelogic
 
 import (
-	_ "bufio"
 	"errors"
-	_ "os"
-	_ "time"
-	"time"
-	"log"
 	"fmt"
+	"log"
+	"time"
 )
 
 func (g *Game) Join(username string, name string, pictureslug string, buyin int, seatNumber int) error {
@@ -76,7 +72,7 @@ func (g *Game) NewRound(dealterToken int) error {
 		return errors.New("A round of Poker requires at least two players")
 	}
 	dealterToken += 1
-	if dealterToken < 0{
+	if dealterToken < 0 {
 		dealterToken = 0
 	}
 	g.Phase = 0
@@ -109,18 +105,18 @@ func (g *Game) NewRound(dealterToken int) error {
 			g.Deck = g.Deck[1:]
 			g.Players[i].Hand = append(g.Players[i].Hand, card)
 			//fmt.Printf(" Player %d is %s \n", i, g.Players[i].Name)
-			fmt.Printf(" %s is delt a %s of %s \n ", g.Players[i].Name, card.Face, card.Suit)
+			fmt.Printf(" %s is dealt a %s of %s \n ", g.Players[i].Name, card.Face, card.Suit)
 		}
 		d++
 	}
 	return nil
 }
 
-// Eachetting round lasts until each player has either: (a) folded (b) called
+// Each betting round lasts until each player has either: (a) folded (b) called
 func (g *Game) Bet(p_name string, bet int) error {
 	log.Print("Bet is being made")
 	pindex, err := g.GetPlayerIndex(p_name)
-	if err != nil{
+	if err != nil {
 		log.Print("Error!!!")
 		log.Print(err)
 		return errors.New("No player of that name!")
@@ -198,7 +194,7 @@ func (g *Game) Call(p_name string) error {
 		g.Pot += balance
 		fmt.Printf("Bet counter before: %d \n", g.Bet_Counter)
 		g.Bet_Counter -= 1
-		if g.Bet_Counter < 0{
+		if g.Bet_Counter < 0 {
 			g.Bet_Counter = 0
 		}
 		fmt.Printf("Bet counter after: %d \n", g.Bet_Counter)
@@ -304,7 +300,7 @@ func (g *Game) Discard(playerID string, cardIndexes ...int) error {
 			//g.Phase += 1
 			//g.Current_Player = g.Players[g.Dealer_Token].Name
 			//return nil
-		log.Print("290")
+			log.Print("290")
 		} else if check > len(g.Players[pindex].Hand) {
 			log.Print("292")
 			return errors.New("Index is out of range for player's hand")
@@ -340,17 +336,16 @@ func (g *Game) Showdown() *Player {
 	return winner
 }
 
-func (game *Game) EndRound(){
-		winner := game.Showdown()
-		log.Print(winner)
-		game.Seats[winner.Seat].Winner = true
-		for i := range game.Players{
-			var empty_hand []Card
-			game.Players[i].Hand = empty_hand
+func (game *Game) EndRound() {
+	winner := game.Showdown()
+	log.Print(winner)
+	game.Seats[winner.Seat].Winner = true
+	for i := range game.Players {
+		var empty_hand []Card
+		game.Players[i].Hand = empty_hand
 
-		}
-		<-time.After(8 * time.Second)
-			log.Print("New round...")
-			go game.NewRound(game.Dealer_Token)
+	}
+	<-time.After(8 * time.Second)
+	log.Print("New round...")
+	go game.NewRound(game.Dealer_Token)
 }
-
