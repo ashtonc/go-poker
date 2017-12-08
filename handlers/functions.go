@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package handlers
 
 import (
@@ -95,4 +94,3 @@ func clearSession(w http.ResponseWriter) {
 
 	http.SetCookie(w, cookie)
 }
-
