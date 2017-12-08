@@ -136,8 +136,8 @@ tbody tr:nth-child(even) {
 	border-radius: 15px;
 }
 
-.home-ul {
-	list-style-type: none
+#home-ul {
+	list-style-type: none;
 }
 
 a {
