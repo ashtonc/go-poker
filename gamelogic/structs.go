@@ -122,6 +122,7 @@ func GameInit(ante int, min_bet int, max_bet int) (*Game, error) {
 		var seat Seat
 		seat.Number = i + 1
 		seat.Occupied = false
+		seat.Winner = false
 		game.Seats[i] = &seat
 	}
 

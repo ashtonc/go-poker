@@ -112,7 +112,8 @@ func GameAction(env *models.Env) http.Handler {
 					log.Print(winner)
 					game.Seats[winner.Seat].Winner = true
 					game.Dealer_Token +=1
-					<-time.After(4 * time.Second)
+					<-time.After(8 * time.Second)
+						log.Print("New round...")
     					go game.NewRound(game.Dealer_Token)
 					////// game.EndRound()
 				}
@@ -154,6 +155,16 @@ func GameAction(env *models.Env) http.Handler {
 		if action == "call" {
 			// Tell the game they called
 			game.Call(username)
+			if game.Phase == 5{
+					winner := game.Showdown()
+					log.Print(winner)
+					game.Seats[winner.Seat].Winner = true
+					game.Dealer_Token +=1
+					<-time.After(8 * time.Second)
+						log.Print("New round...")
+    					go game.NewRound(game.Dealer_Token)
+					////// game.EndRound()
+				}
 		}
 
 		if action == "leave" {
@@ -165,6 +176,16 @@ func GameAction(env *models.Env) http.Handler {
 		if action == "check" {
 			// Tell the game they checked
 			game.Check(username)
+			if game.Phase == 5{
+					winner := game.Showdown()
+					log.Print(winner)
+					game.Seats[winner.Seat].Winner = true
+					game.Dealer_Token +=1
+					<-time.After(8 * time.Second)
+						log.Print("New round...")
+    					go game.NewRound(game.Dealer_Token)
+					////// game.EndRound()
+				}
 		}
 
 		if action == "fold" {
@@ -175,7 +196,7 @@ func GameAction(env *models.Env) http.Handler {
 				log.Print(winner)
 				game.Seats[winner.Seat].Winner = true
 				game.Dealer_Token +=1
-				<-time.After(4 * time.Second)
+				<-time.After(8 * time.Second)
 					go game.NewRound(game.Dealer_Token)
 
 				///////game.EndRound()
