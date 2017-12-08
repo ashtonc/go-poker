@@ -115,7 +115,7 @@ func (g *Game) NewRound(dealterToken int) error {
 	return nil
 }
 
-// Eachetting round lasts until each player has either: (a) folded (b) called
+// Each betting round lasts until each player has either: (a) folded (b) called
 func (g *Game) Bet(p_name string, bet int) error {
 	log.Print("Bet is being made")
 	pindex, err := g.GetPlayerIndex(p_name)

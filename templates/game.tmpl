@@ -12,7 +12,7 @@
 				<p>Deck Size: {{ $deckSize }}</p>
 			</div>
 			{{ range .Seats -}}
-			<div class="seat player-{{ .Number }} {{ if .Winner }}winner{{ else }}{{ end }} {{ if .Occupied }}occupied{{ else }}empty{{ end }}">
+			<div class="seat player-{{ .Number }} {{ if .Winner }}winner{{ end }} {{ if .Occupied }}occupied{{ else }}empty{{ end }}">
 				{{ if .Occupied}}
 				{{ with .Occupier -}}
 				<div class="player-info">
