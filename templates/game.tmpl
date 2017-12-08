@@ -7,8 +7,9 @@
 		{{ $deckSize := len .Deck }}
 		<div id="game">
 			<div id="game-info">
-				<div id="deck">Cards: {{ $deckSize }}</div>
-				<div id="pot">{{ .Pot }}</div>
+				<div class="card"><div class="back"></div></div>
+				<p>Pot: {{ .Pot }}</p>
+				<p>Deck Size: {{ $deckSize }}</p>
 			</div>
 			{{ range .Seats -}}
 			<div class="seat player-{{ .Number }} {{ if .Occupied }}occupied{{ else }}empty{{ end }}">
@@ -21,7 +22,7 @@
 				</div>
 				<div class="hand">
 					{{ range $index, $card := .Hand -}}
-					<div class="card card-{{ $index }} {{ .Suit }} rank{{ .Face }}"></div>
+					<div class="card card-{{ $index }} {{ .Suit }} rank{{ .Face }}"><div class="face"></div></div>
 					{{ end -}}
 				</div>
 				{{ end }}
@@ -40,11 +41,11 @@
 					<div class="stack"></div>
 				</div>
 				<div class="hand">
-					<div class="card card-1 none"></div>
-					<div class="card card-1 none"></div>
-					<div class="card card-1 none"></div>
-					<div class="card card-1 none"></div>
-					<div class="card card-1 none"></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
+					<div class="card card-1 none"><div class="back"></div></div>
 				</div>
 				{{ end }}
 				<div class="timer"></div>
