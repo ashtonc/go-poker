@@ -8,6 +8,7 @@ body {
 	background-size: 100%;
 	background-position: bottom;
 	background-image: url("/poker/assets/img/background-transparent.min.png");
+	box-sizing: border-box;
 }
 
 h1 {
@@ -23,9 +24,11 @@ h1 {
 	text-align: center;
 }
 
-a:visited, a:link {
-    color: white;
+a:visited,
+a:link {
+	color: white;
 }
+
 
 /* Forms */
 

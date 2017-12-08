@@ -47,11 +47,11 @@
 	height: 150px;
 	background: #202020;
 	margin-bottom: 5px;
-    overflow: hidden;
+	overflow: hidden;
 }
 
 .player-info .image img {
-    min-height: 100%;
+	min-height: 100%;
 	min-width: 100%;
 	opacity: 0.5;
 }
@@ -79,7 +79,7 @@
 	margin: 1px;
 }
 
-.folded{
+.folded {
 	opacity: 0.3;
 }
 
@@ -89,42 +89,45 @@
 	width: 100%;
 }
 
-.startTimer{
-    -webkit-animation-name: fillBar;
-        animation-name: fillBar;
-    -webkit-animation-duration: 2s;
-            animation-duration: 2s;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in;
-    -webkit-animation-iteration-count: 1;
-            animation-iteration-count: 1;
-    -webkit-animation-direction: alternate;
-            animation-direction: alternate;
-    background-color: red; 
+.startTimer {
+	-webkit-animation-name: fillBar;
+	animation-name: fillBar;
+	-webkit-animation-duration: 2s;
+	animation-duration: 2s;
+	-webkit-animation-timing-function: ease-in;
+	animation-timing-function: ease-in;
+	-webkit-animation-iteration-count: 1;
+	animation-iteration-count: 1;
+	-webkit-animation-direction: alternate;
+	animation-direction: alternate;
+	background-color: red;
 }
 
 @-webkit-keyframes fillBar {
-    0% {
-      width: 100%;
-    }
-    100% {
-      width: 0%;
-    }
-}
-@keyframes fillBar {
-    0% {
-      width: 100%;
-    }
-    100% {
-      width: 0%;
-    }
+	0% {
+		width: 100%;
+	}
+	100% {
+		width: 0%;
+	}
 }
 
-.yourTurn{
+@keyframes fillBar {
+	0% {
+		width: 100%;
+	}
+	100% {
+		width: 0%;
+	}
+}
+
+.yourTurn {
 	outline: 5px solid blue;
 }
 
+
 /* Menu */
+
 #game-menu {
 	text-align: center;
 	margin: auto;
