@@ -29,9 +29,13 @@
 	padding: 1em;
 }
 
-.empty {}
+.empty {
+	opacity: 0.5;
+}
 
-.occupied {}
+.winner {
+	border: 5px solid gold;
+}
 
 .player-info {
 	display: inline-block;

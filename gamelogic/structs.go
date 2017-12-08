@@ -69,7 +69,7 @@ type Seat struct {
 	Number   int     `json:"number"`
 	Occupied bool    `json:"occupied"`
 	Occupier *Player `json:"player,omitempty"`
-	Winner bool 	`json: "Winner"`
+	Winner   bool    `json: "Winner"`
 }
 
 type Player struct {
