@@ -20,7 +20,7 @@ Our site has the following working features:
 * Each button on the game page makes a request that updates the state of the game, then the user is redirected back to the game page. Consider this a win for users that have Javascript disabled.
 * The game template will show the current state of the game, including player cards and pots, if the game object that is passed in is in the middle of a game.
 
-### Broken Features
+### Hidden/Broken Features
 
 Our site has a number of things that are in the code but are not reflected on the actual site itself.
 
@@ -28,16 +28,28 @@ Our site has a number of things that are in the code but are not reflected on th
 * Working game logic. Using api calls to individual instantiations of a game, it is possible to run through a full round of five-card draw. This isn't well reflected on the game page because the code used to update the page with information about the game hasn't been written.
 * Websocket connection. It is possible to send a JSON representation of the game state to clients, and possible for the server to receive JSON representation of game moves, but this code was taken out because the page could not be updated using this information.
 
+### Missing features
+
+Some things were not completed for this submission.
+
+* Page updates. Given a JSON game state, the client should be able to update the page without refreshing.
+* Complete websocket methods. Though it is possible to send a complete gamestate to the client through our websocket connection, the client page hasn't been updated such that the buttons on the page would send their requests or interactions.
+* Proper css. Our pages look pretty messy right now.
+* Some proper form validation and some error handling is missing.
+* A number of optimizations haven't really been made (proper caching, minification, etc).
+* Some security features are lacking, most notably CSRF.
+* Proper server log fixing. Some errors are printed without context, which isn't helpful.
+
 ## Authorization
 
 It is easy to register for an account, but there also exists a few accounts that can be accessed:
 
-* user: ashton pw: 470
-* user: adam pw: 470
-* user: matthew pw: 470
-* user: clayton pw: 470
-* user: rimple pw: 470
-* user: greg pw: 470
+* user: ashton; pw: 470
+* user: adam; pw: 470
+* user: matthew; pw: 470
+* user: clayton; pw: 470
+* user: rimple; pw: 470
+* user: greg; pw: 470
 
 ## External Libraries
 

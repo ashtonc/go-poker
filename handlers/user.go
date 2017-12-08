@@ -82,6 +82,9 @@ func User(env *models.Env) http.Handler {
 		}
 
 		pagedata.UserPage = userPage
+		if userPage.Username == pagedata.Identity.Username {
+			pagedata.UserPage.MatchesIdentity = true
+		}
 
 		// Execute the template with our page data
 		template.Execute(w, pagedata)

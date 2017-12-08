@@ -99,9 +99,9 @@ func AddUser(env *models.Env, user *models.User) error {
 }
 
 func UpdateUser(env *models.Env, user *models.User) error {
-	sqlStatement := `UPDATE account SET (name, email, description, password_hash) = ($1, $2, $3, $4)`
+	sqlStatement := `UPDATE account SET (name, email, description, password_hash) = ($1, $2, $3, $4) WHERE username = $5`
 
-	_, err := env.Database.Exec(sqlStatement, user.Name, user.Email, user.Description, user.HashedPassword)
+	_, err := env.Database.Exec(sqlStatement, user.Name, user.Email, user.Description, user.HashedPassword, user.Username)
 	if err != nil {
 		log.Print(err)
 	}
