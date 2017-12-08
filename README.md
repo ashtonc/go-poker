@@ -27,22 +27,26 @@ Our site has a number of things that are in the code but are not reflected on th
 * There exists a leaderboard (/poker/leaderboard/) but it has been taken off the navigation bar because game statistics are not currently saved in the database. Theoretically, it shows users sorted by their total cash (or perhaps best hand). Currently, there are no entries, and it simply says that there is nobody on the leaderboard.
 * Working game logic. Using api calls to individual instantiations of a game, it is possible to run through a full round of five-card draw. This isn't well reflected on the game page because the code used to update the page with information about the game hasn't been written.
 * Websocket connection. It is possible to send a JSON representation of the game state to clients, and possible for the server to receive JSON representation of game moves, but this code was taken out because the page could not be updated using this information.
+* Users have an image associated with their account that should be displayed on the game page. The form for submitting that image was not finished, but most of the supporting code exists to handle those images.
 
 ### Missing features
 
-Some things were not completed for this submission.
+Many things were not completed for this submission.
 
 * Page updates. Given a JSON game state, the client should be able to update the page without refreshing.
 * Complete websocket methods. Though it is possible to send a complete gamestate to the client through our websocket connection, the client page hasn't been updated such that the buttons on the page would send their requests or interactions.
 * Proper css. Our pages look pretty messy right now.
 * Some proper form validation and some error handling is missing.
 * A number of optimizations haven't really been made (proper caching, minification, etc).
-* Some security features are lacking, most notably CSRF.
+* Some security features are lacking, most notably CSRF. SQL injection and XSS should not be an issue, however.
 * Proper server log fixing. Some errors are printed without context, which isn't helpful.
+* Player stats. Joining a game should reduce the players wallet by the buyin amount, and finishing the game should update the the players total amount of money and potentially their best historical hand.
+* Proper page headers. Different pages should have different headers (vary would be useful, for example).
+* Proper error handling. 404 pages should be styled, and some pages should have different http responses than they currently have.
 
 ## Authorization
 
-It is easy to register for an account, but there also exists a few accounts that can be accessed:
+It is easy to register for an account, but there also exist a few premade accounts that can be accessed:
 
 * user: ashton; pw: 470
 * user: adam; pw: 470
