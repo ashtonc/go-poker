@@ -1,6 +1,6 @@
 INSERT INTO account (username, name, email, picture_slug, description, password_hash) VALUES
-	('adam', 'Adam Labecki', 'adam@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
-	('ashton', 'Ashton Charbonneau', 'ashton@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
+	('adam', 'Adam Labecki', 'adam@email.com', 'adam.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
+	('ashton', 'Ashton Charbonneau', 'ashton@email.com', 'ashton.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
 	('matthew', 'Matthew Tan', 'matthew@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
 	('clayton', 'Clayton Jian', 'clayton@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
 	('rimple', 'Rimpledeep Chahal', 'rimple@email.com', 'greg.jpg', 'Description goes here...', '$2a$04$Hca3lE0CmRxwluksV5y59eCvW7MNRppOp493fiS0asRceHUJL5.Wy'),
