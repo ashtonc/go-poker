@@ -101,6 +101,9 @@ func (g *Game) NewRound(dealterToken int) error {
 	d := 0
 	for d < 5 {
 		for i := 0; i < len(g.Players); i++ {
+			if len(g.Players[i].Hand) >= 5{
+				continue
+			}
 			card := draw(g.Deck)
 			g.Deck = g.Deck[1:]
 			g.Players[i].Hand = append(g.Players[i].Hand, card)
@@ -345,6 +348,7 @@ func (game *Game) EndRound() {
 		game.Players[i].Hand = empty_hand
 
 	}
+	game.Players = game.Players[:0]
 	<-time.After(8 * time.Second)
 	log.Print("New round...")
 	go game.NewRound(game.Dealer_Token)
