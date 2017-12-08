@@ -52,7 +52,9 @@ func Game(env *models.Env) http.Handler {
 		// Choose our template based on the action
 		template := env.Templates["WatchGame"]
 		if action == "play" {
-			template = env.Templates["PlayGame"]
+			if pagedata.Identity.LoggedIn == true {
+				template = env.Templates["PlayGame"]
+			}
 		}
 
 		// Execute the template with our page data
@@ -98,7 +100,7 @@ func GameAction(env *models.Env) http.Handler {
 				log.Print("Game " + gameslug + ": " + username + " joined seat " + r.PostFormValue("seat") + " with a buyin of " + r.PostFormValue("buyin"))
 
 				if seat <= 5 && seat >= 0 && buyin > 0 {
-					game.Join(pagedata.Identity.Name, username, "img.png", buyin, seat)
+					game.Join(pagedata.Identity.Name, username, pagedata.Identity.PictureSlug, buyin, seat)
 				}
 			}
 
