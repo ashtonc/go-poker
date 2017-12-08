@@ -127,23 +127,23 @@ func GameAction(env *models.Env) http.Handler {
 				var discarded []int
 
 				if r.PostFormValue("card1discard") != "" {
-					discarded = append(discarded, 1)
+					discarded = append(discarded, 0)
 				}
 
 				if r.PostFormValue("card2discard") != "" {
-					discarded = append(discarded, 2)
+					discarded = append(discarded, 1)
 				}
 
 				if r.PostFormValue("card3discard") != "" {
-					discarded = append(discarded, 3)
+					discarded = append(discarded, 2)
 				}
 
 				if r.PostFormValue("card4discard") != "" {
-					discarded = append(discarded, 4)
+					discarded = append(discarded, 3)
 				}
 
 				if r.PostFormValue("card5discard") != "" {
-					discarded = append(discarded, 5)
+					discarded = append(discarded, 4)
 				}
 
 				game.Discard(username, discarded...)
