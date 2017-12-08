@@ -1,10 +1,10 @@
 {{ define "game" -}}
 		{{ $siteroot := .SiteRoot -}}
-		{{ $loggedin := .Identity.LoggedIn }}
+		{{ $loggedin := .Identity.LoggedIn -}}
 		{{ with .GamePage -}}
         <h1>{{ .Name }}</h1>
 		{{ with .Game -}}
-		{{ $deckSize := len .Deck }}
+		{{ $deckSize := len .Deck -}}
 		<div id="game">
 			<div id="game-info">
 				<div class="card"><div class="back"></div></div>
@@ -13,7 +13,7 @@
 			</div>
 			{{ range .Seats -}}
 			<div class="seat player-{{ .Number }} {{ if .Winner }}winner{{ end }} {{ if .Occupied }}occupied{{ else }}empty{{ end }}">
-				{{ if .Occupied}}
+				{{ if .Occupied -}}
 				{{ with .Occupier -}}
 				<div class="player-info">
 					<div class="image"><img src="{{ $siteroot }}/assets/img/{{ .PictureSlug }}"></div>
@@ -21,22 +21,22 @@
 					<div class="stack">{{ .Money }}</div>
 				</div>
 				<div class="hand">
-					{{ range $index, $card := .Hand }}
+					{{- range $index, $card := .Hand }}
 					<div class="card card-{{ $index }} {{ .Suit }} rank{{ .Face }}"><div class="face"></div></div>
-					{{ end }}
+					{{- end }}
 				</div>
-				{{ end }}
-				{{ else }}
+				{{- end }}
+				{{- else -}}
 				<div class="player-info">
 					<div class="image"></div>
 					<div class="name">
-						{{ if $loggedin }}
+						{{ if $loggedin -}}
 						<form action="sit" method="post">
 							<input type="hidden" value="{{ .Number }}" name="seat">
 							<input type="number" placeholder="Buyin" name="buyin">
 							<button type="submit" onClick="location.href=location.href">Join!</button>
 						</form>
-						{{ end }}
+						{{- end }}
 					</div>
 					<div class="stack"></div>
 				</div>
@@ -47,7 +47,7 @@
 					<div class="card card-1 none"><div class="back"></div></div>
 					<div class="card card-1 none"><div class="back"></div></div>
 				</div>
-				{{ end }}
+				{{- end }}
 				<div class="timer"></div>
 			</div>
 			{{ end -}}

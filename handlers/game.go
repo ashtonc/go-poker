@@ -111,9 +111,7 @@ func GameAction(env *models.Env) http.Handler {
 				game.Bet(username, bet)
 				if game.Phase == 5 {
 					game.EndRound()
-
 				}
-
 			}
 
 			if action == "discard" {
