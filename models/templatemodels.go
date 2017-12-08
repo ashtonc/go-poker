@@ -34,6 +34,7 @@ type Identity struct {
 	LoggedIn    bool
 	AccountType int
 	Username    string
+	PictureSlug string
 	Name        string
 }
 

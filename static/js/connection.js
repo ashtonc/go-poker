@@ -27,7 +27,7 @@ function WebSocketTest() {
 
 		ws.onmessage = function (event) {
 			console.log("Message recieved.")
-			location.reload(true);
+			location.href=location.href;
 			/*
 			alert(received_msg);
 			var messages = event.data.split('\n');
@@ -40,6 +40,7 @@ function WebSocketTest() {
 
 		ws.onclose = function () {
 			console.log("Websocket connection closed.")
+			location.href=location.href;
 		};
 
 	} else {
@@ -75,6 +76,6 @@ function onMessage(message) {
 
 			break;
 	}
-	
-	location.reload(true);
+
+	location.href=location.href;
 }

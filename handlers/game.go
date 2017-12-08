@@ -98,7 +98,7 @@ func GameAction(env *models.Env) http.Handler {
 				log.Print("Game " + gameslug + ": " + username + " joined seat " + r.PostFormValue("seat") + " with a buyin of " + r.PostFormValue("buyin"))
 
 				if seat <= 5 && seat >= 0 && buyin > 0 {
-					game.Join(pagedata.Identity.Name, username, "img.png", buyin, seat)
+					game.Join(pagedata.Identity.Name, username, pagedata.Identity.PictureSlug, buyin, seat)
 				}
 			}
 
