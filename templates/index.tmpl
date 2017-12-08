@@ -1,16 +1,21 @@
 {{ define "title" }}{{ end }}
 {{ define "content" -}}
-            <h1>Welcome to Poker470!</h1>
-		<ul class="home-ul">
-            <li class="home"><a href="{{ .SiteRoot }}/">Home</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/login/">Login</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/logout/">Logout</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/register/">Register</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/user/greg/view">View User</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/user/greg/edit">Edit User</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/lobby/">Lobby</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/game/limit-10/play">Play Game</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/game/limit-10/watch">Watch Game</a></li>
-            <li class="home"><a href="{{ .SiteRoot }}/leaderboard/">Leaderboard</a></li>
-        </ul>
+			<div class="content">
+            <h1>Poker 470</h1>
+            <p>Welcome to Poker 470! Please feel free to register for an account or login using the navigation bar.</p>
+            <p>At any point, feel free to visit the lobby to join or watch a game.</p>
+            <p>Our site has the following pages:</p>
+            <ul class="main-list">
+                <li><a href="{{ .SiteRoot }}/">Home</a></li>
+                <li><a href="{{ .SiteRoot }}/login/">Login</a></li>
+                <li><a href="{{ .SiteRoot }}/logout/">Logout</a></li>
+                <li><a href="{{ .SiteRoot }}/register/">Register</a></li>
+                <li><a href="{{ .SiteRoot }}/user/greg/view">View User</a></li>
+                <li><a href="{{ .SiteRoot }}/user/greg/edit">Edit User</a> (you must be logged in as Greg to view this page)</li>
+                <li><a href="{{ .SiteRoot }}/lobby/">Lobby</a></li>
+                <li><a href="{{ .SiteRoot }}/game/limit-10/play">Play Game</a></li>
+                <li><a href="{{ .SiteRoot }}/game/limit-10/watch">Watch Game</a></li>
+                <li><a href="{{ .SiteRoot }}/leaderboard/">Leaderboard</a></li>
+            </ul>
+            </div>
 {{- end }}

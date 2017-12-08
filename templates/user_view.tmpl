@@ -1,22 +1,24 @@
 {{ define "title" }} | {{ with .UserPage }}{{ .Username }}{{ end }}{{ end }}
 {{ define "content" -}}
 			{{ $siteroot := .SiteRoot -}}
+			<div class="content">
 			{{ if .UserPage }}
 			{{ with .UserPage -}}
-			<h1>{{ .Username }}</h1>
-			<p>Name: {{ .Name }}</p>
-			<p>Email: {{ .Email }}</p>
-			<div id="profile-picture">
-				<img src="{{ $siteroot }}/static/img/{{ .PictureSlug }}">
-			</div>
-			<p>Description: {{ .Description }}</p>
-			<p>Best hand:</p>
-			<p>Total cash:</p>
-			{{- if .MatchesIdentity }}
-			<a href="{{ $siteroot }}/user/{{ .Username }}/edit">Edit</a>
-			{{- end }}
-			{{- end }}
+				<h1>{{ .Username }}</h1>
+				<div id="profile-picture">
+					<img src="{{ $siteroot }}/static/img/{{ .PictureSlug }}">
+				</div>
+				<p>Name: {{ .Name }}</p>
+				<p>Email: {{ .Email }}</p>
+				<p>Description: {{ .Description }}</p>
+				<p>Best hand:</p>
+				<p>Total cash:</p>
+				{{- if .MatchesIdentity }}
+				<a href="{{ $siteroot }}/user/{{ .Username }}/edit">Edit</a>
+				{{- end }}
+				{{- end }}
 			{{ else }}
 			<p>User not found.</p>
 			{{ end }}
+			</div>
 {{- end }}
