@@ -336,4 +336,17 @@ func (g *Game) Showdown() *Player {
 	return winner
 }
 
+func (game *Game) EndRound(){
+		winner := game.Showdown()
+		log.Print(winner)
+		game.Seats[winner.Seat].Winner = true
+		for i := range g.Players{
+			var empty_hand []int
+			game.Players[i].Hand = empty_hand
+
+		}
+		<-time.After(8 * time.Second)
+			log.Print("New round...")
+			go game.NewRound(game.Dealer_Token)
+}
 

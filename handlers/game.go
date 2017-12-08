@@ -109,13 +109,7 @@ func GameAction(env *models.Env) http.Handler {
 
 				game.Bet(username, bet)
 				if game.Phase == 5 {
-					winner := game.Showdown()
-					log.Print(winner)
-					game.Seats[winner.Seat].Winner = true
-					game.Dealer_Token +=1
-					<-time.After(8 * time.Second)
-						log.Print("New round...")
-    					go game.NewRound(game.Dealer_Token)
+					game.EndRound()
 
 				}
 
