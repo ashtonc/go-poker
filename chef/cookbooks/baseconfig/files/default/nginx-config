@@ -7,7 +7,6 @@ server {
 		autoindex on;
 		try_files $uri =404;
 		sendfile off;
-		expires -1;
 	}
 
 	# All other requests are forwarded to the Go server

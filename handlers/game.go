@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"time"
 	"poker/connection"
 	"poker/models"
+	"time"
 )
 
 func RedirectGame(env *models.Env) http.Handler {
@@ -42,6 +42,8 @@ func Game(env *models.Env) http.Handler {
 		/* Put game code here */
 		/* ****************** */
 
+		// game := gameListing.game
+		// do some game tests...
 
 		/* ******************* */
 		/* Stop game code here */
@@ -85,7 +87,6 @@ func GameAction(env *models.Env) http.Handler {
 		if r.Method == "POST" {
 			r.ParseForm()
 
-
 			if action == "sit" {
 				// Tell the game the player joined, and what seat they are trying to sit in
 				// If the seat is occupied, tell them to get out of here
@@ -107,13 +108,13 @@ func GameAction(env *models.Env) http.Handler {
 				bet, _ := strconv.Atoi(r.PostFormValue("bet"))
 
 				game.Bet(username, bet)
-				if game.Phase == 5{
+				if game.Phase == 5 {
 					winner := game.Showdown()
 					log.Print(winner)
 					game.Seats[winner.Seat].Winner = true
-					game.Dealer_Token +=1
+					game.Dealer_Token += 1
 					<-time.After(4 * time.Second)
-    					go game.NewRound(game.Dealer_Token)
+					go game.NewRound(game.Dealer_Token)
 					////// game.EndRound()
 				}
 
@@ -145,8 +146,6 @@ func GameAction(env *models.Env) http.Handler {
 					discarded = append(discarded, 5)
 				}
 
-				log.Print(discarded)
-
 				game.Discard(username, discarded...)
 			}
 		}
@@ -170,13 +169,13 @@ func GameAction(env *models.Env) http.Handler {
 		if action == "fold" {
 			// Tell the game they folded
 			game.Fold(username)
-			_, winner:= game.Winner_check()
-			if winner != nil{
+			_, winner := game.Winner_check()
+			if winner != nil {
 				log.Print(winner)
 				game.Seats[winner.Seat].Winner = true
-				game.Dealer_Token +=1
+				game.Dealer_Token += 1
 				<-time.After(4 * time.Second)
-					go game.NewRound(game.Dealer_Token)
+				go game.NewRound(game.Dealer_Token)
 
 				///////game.EndRound()
 			}
@@ -195,10 +194,7 @@ func GameAction(env *models.Env) http.Handler {
 
 func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//vars := mux.Vars(r)
-		//gameslug := vars["gameslug"]
-
-		// Choose the correct hub based on the session of the user
+		// Choose the correct hub based on the session of the user, not just a new one..
 		hub := connection.NewHub()
 
 		// Get the user id from their session
