@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/websocket"
 
-	_ "poker/connection"
 	"poker/database"
 	"poker/handlers"
 	"poker/models"
