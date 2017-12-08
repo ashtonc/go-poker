@@ -72,7 +72,7 @@ func Logout(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token, err := getSessionToken(env, r)
 		if err != nil {
-			log.Print(err)
+			// They don't exist
 		}
 
 		clearSession(w)
