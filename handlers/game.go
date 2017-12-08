@@ -52,7 +52,9 @@ func Game(env *models.Env) http.Handler {
 		// Choose our template based on the action
 		template := env.Templates["WatchGame"]
 		if action == "play" {
-			template = env.Templates["PlayGame"]
+			if pagedata.Identity.LoggedIn == true {
+				template = env.Templates["PlayGame"]
+			}
 		}
 
 		// Execute the template with our page data
