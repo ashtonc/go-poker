@@ -28,6 +28,8 @@ Our site has a number of things that are in the code but are not reflected on th
 * Working game logic. Using api calls to individual instantiations of a game, it is possible to run through a full round of five-card draw. This isn't well reflected on the game page because the code used to update the page with information about the game hasn't been written.
 * Websocket connection. It is possible to send a JSON representation of the game state to clients, and possible for the server to receive JSON representation of game moves, but this code was taken out because the page could not be updated using this information.
 * Users have an image associated with their account that should be displayed on the game page. The form for submitting that image was not finished, but most of the supporting code exists to handle those images.
+* Not particularly valuable, but the site root can be changed from `/poker` to something else if desired.
+* Bcrypt runs a bit slow on the virtual machine.
 
 ### Missing features
 

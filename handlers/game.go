@@ -194,10 +194,7 @@ func GameAction(env *models.Env) http.Handler {
 
 func WebsocketConnection(env *models.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//vars := mux.Vars(r)
-		//gameslug := vars["gameslug"]
-
-		// Choose the correct hub based on the session of the user
+		// Choose the correct hub based on the session of the user, not just a new one..
 		hub := connection.NewHub()
 
 		// Get the user id from their session
