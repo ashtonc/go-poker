@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 function WebSocketTest() {
 	if ("WebSocket" in window) {
-		alert("WebSocket is supported by your Browser!");
+		console.log("WebSocket is supported by your Browser!");
 
 		var wsPath = "ws://" + location.hostname + ":" + location.port;
 		var pathArray = location.pathname.split('/');
@@ -22,26 +22,28 @@ function WebSocketTest() {
 		var ws = new WebSocket(wsPath);
 
 		ws.onopen = function () {
-			alert("WS opened.");
+			console.log("Websocket connection opened.")
 		};
 
 		ws.onmessage = function (event) {
+			console.log("Message recieved.")
+			location.reload(true);
+			/*
 			alert(received_msg);
 			var messages = event.data.split('\n');
 			for (var i = 0; i < messages.length; i++) {
 				var message = JSON.parse(messages[i]);
 				onMessage(message);
 			}
+			*/
 		};
 
 		ws.onclose = function () {
-			// websocket is closed.
-			alert("Connection closed.");
+			console.log("Websocket connection closed.")
 		};
 
 	} else {
-		// The browser doesn't support WebSocket
-		alert("WebSocket NOT supported by your Browser!");
+		console.log("WebSocket not supported by your browser.");
 	}
 }
 
@@ -73,4 +75,6 @@ function onMessage(message) {
 
 			break;
 	}
+	
+	location.reload(true);
 }

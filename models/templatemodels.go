@@ -55,18 +55,6 @@ type Lobby struct {
 	Games []*GameListing
 }
 
-// GameListing lists the information about an instantiated game
-type GameListing struct {
-	Name        string
-	Slug        string
-	Status      string
-	Ante        int
-	MinBet      int
-	MaxBet      int
-	PlayerCount int
-	Game        *gamelogic.Game
-}
-
 // Leaderboard wraps LeaderboardEntry
 type Leaderboard struct {
 	Empty   bool

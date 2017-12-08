@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	// "github.com/gorilla/websocket"
+
+	"github.com/gorilla/websocket"
 	"github.com/tidwall/gjson"
 
 	"poker/gamelogic"
-	"poker/models"
 )
 
-func (hub *Hub) HandleWebSocket(env *models.Env, w http.ResponseWriter, r *http.Request) {
-	socket, err := env.Upgrader.Upgrade(w, r, nil)
+func (hub *Hub) HandleWebSocket(upgrader *websocket.Upgrader, w http.ResponseWriter, r *http.Request) {
+	socket, err := upgrader.Upgrade(w, r, nil)
 
 	if err != nil {
 		log.Print(err)
@@ -74,6 +74,13 @@ func (hub *Hub) broadcast(message interface{}, ignore *Client) {
 		if c != ignore {
 			c.outbound <- data
 		}
+	}
+}
+
+func (hub *Hub) SendAll(message interface{}) {
+	data, _ := json.Marshal(message)
+	for _, c := range hub.clients {
+		c.outbound <- data
 	}
 }
 
