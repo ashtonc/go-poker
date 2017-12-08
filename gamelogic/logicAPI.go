@@ -5,7 +5,7 @@ import (
 	"errors"
 	_ "os"
 	_ "time"
-	// 	"time"
+	"time"
 	"log"
 	"fmt"
 )
@@ -197,6 +197,9 @@ func (g *Game) Call(p_name string) error {
 		g.Pot += balance
 		fmt.Printf("Bet counter before: %d \n", g.Bet_Counter)
 		g.Bet_Counter -= 1
+		if g.Bet_Counter < 0{
+			g.Bet_Counter = 0
+		}
 		fmt.Printf("Bet counter after: %d \n", g.Bet_Counter)
 		g.Current_Player = g.Next_Player()
 		if g.Bet_Counter == 0 {
@@ -340,8 +343,8 @@ func (game *Game) EndRound(){
 		winner := game.Showdown()
 		log.Print(winner)
 		game.Seats[winner.Seat].Winner = true
-		for i := range g.Players{
-			var empty_hand []int
+		for i := range game.Players{
+			var empty_hand []Card
 			game.Players[i].Hand = empty_hand
 
 		}

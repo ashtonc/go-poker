@@ -177,8 +177,9 @@ func GameAction(env *models.Env) http.Handler {
 				game.Seats[winner.Seat].Winner = true
 				game.Dealer_Token += 1
 				for i := range game.Players{
-					var empty_hand []int
-					game.Players[i].Hand = empty_hand
+					//var empty_hand []Card
+				//	slice = slice[:0]
+					game.Players[i].Hand = game.Players[i].Hand[:0]
 				}
 				<-time.After(8 * time.Second)
 				go game.NewRound(game.Dealer_Token)
